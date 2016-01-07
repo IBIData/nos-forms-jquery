@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Nos-Forms jQuery</title>
+        
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="/nosform-jquery.min.css">
+    </head>
+    <body>
+        
+        <div class="container">
+            <form id="myform" class="form">
+                <h2>My Form</h2>
+            </form>
+        </div>
+       
+        
+
+        
+        
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+        <script src="/nosform-jquery.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+        
+        <script>
+            $(function() {
+                
+                $.get('contact-form.json', function (data) {
+                    
+                    $("#myform").nosForm({
+                        fields: data,
+                        submit: function (formdata) {
+                            console.log(formdata);
+                        }
+                    });
+                    
+                })
+                
+                
+            });
+        </script>
+    </body>
+</html>

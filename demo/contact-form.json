@@ -1,0 +1,214 @@
+[
+    {
+        "name": "txtexample",
+        "id": "txtid",
+        "type": "text",
+        "label": "Simple Text Field Example",
+        "required": true,
+        "classname": "form-control",
+        "formGroup": true,
+        "placeholder": "Your Name",
+        "minlength": 5,
+        "maxlength": 60
+    },
+    {
+        "name": "numberexample",
+        "id": "numberid",
+        "type": "number",
+        "label": "Number Example",
+        "required": true,
+        "placeholder": "A Number",
+        "classname": "form-control",
+        "formGroup": true,
+        "min": 5,
+        "max": 10,
+        "step": 1
+    },
+    {
+        "name": "emailexample",
+        "type": "email",
+        "label": "Email Example",
+        "required": true,
+        "classname": "form-control",
+        "formGroup": true,
+        "placeholder": "Your Email",
+        "minlength": 1
+    },
+    {
+        "name": "telexample",
+        "type": "tel",
+        "label": "Phone Number Example",
+        "required": true,
+        "classname": "form-control",
+        "formGroup": true,
+        "placeholder": "Your Phone Number",
+        "mask": "999-999-9999",
+        "minlength": 1,
+        "maxlength": 12
+    },
+    {
+        "name": "zipexample",
+        "id": "zipid",
+        "type": "zip",
+        "label": "Zip Code Example",
+        "required": true,
+        "classname": "form-control",
+        "formGroup": true,
+        "placeholder": "Zip Code",
+        "mask": "99999?-9999"
+    },
+    {
+        "name": "dateexample",
+        "type": "date",
+        "label": "Date Example",
+        "required": true,
+        "classname": "form-control",
+        "formGroup": true,
+        "placeholder": "Date",
+        "minlength": 1,
+        "maxlength": 60
+    },
+    {
+        "name": "urlexample",
+        "id": "urlid",
+        "type": "url",
+        "label": "URL Example",
+        "required": true,
+        "classname": "form-control",
+        "formGroup": true,
+        "minlength": 1,
+        "maxlength": 60,
+        "placeholder": "http://www.example.com"
+    },
+    {
+        "name": "colorexample",
+        "id": "colorid",
+        "type": "color",
+        "label": "Color Picker Example",
+        "required": true,
+        "classname": "",
+        "formGroup": true,
+        "value": "#E7E7E8"
+    },
+    {
+        "name": "rangeexample",
+        "id": "rangeid",
+        "type": "range",
+        "label": "Range Example",
+        "required": false,
+        "classname": "",
+        "formGroup": true,
+        "min": 1,
+        "max": 100,
+        "step": 1,
+        "value": 25
+    },
+    {
+        "name": "fileupload",
+        "type": "file",
+        "label": "File Upload Example",
+        "formGroup": true,
+        "classname": "",
+        "required": true,
+        "accept": "image/*",
+        "multiple": true
+    },
+    {
+        "name": "stateSelect",
+        "type": "state",
+        "label": "State",
+        "classname": "form-control",
+        "formGroup": true,
+        "required": true,
+        "selected": "",
+        "defaultSelected": "Select One...",
+        "usTerritory": true,
+        "canada": true
+    },
+    {
+        "name": "select",
+        "type": "select",
+        "label": "Select Option",
+        "classname": "form-control",
+        "formGroup": true,
+        "required": true,
+        "multiple": false,
+        "selected": "",
+        "options": {
+            "": "Select One...",
+            "value1": "First Value",
+            "value2": "Second Value",
+            "value3": "Third Value",
+            "value4": "Fourth Value"
+        }
+    },
+    {
+        "name": "mycb",
+        "type": "checkbox",
+        "label": "Check a Box",
+        "formGroup": true,
+        "required": true,
+        "inline": false,
+        "checked": [
+            "value2",
+            "value3"
+        ],
+        "options": {
+            "value1": "First Option",
+            "value2": "Second Option",
+            "value3": "Third Option"
+        }
+    },
+    {
+        "name": "myRadio",
+        "type": "radio",
+        "label": "Radio",
+        "formGroup": true,
+        "required": true,
+        "inline": true,
+        "checked": "",
+        "options": {
+            "value1": "First Option",
+            "value2": "Second Option",
+            "value3": "Third Option"
+        }
+    },
+    {
+        "name": "txtmessage",
+        "type": "textarea",
+        "label": "Message",
+        "required": true,
+        "classname": "form-control",
+        "formGroup": true,
+        "placeholder": "Your message",
+        "minlength": 5,
+        "maxlength": 200,
+        "rows": 8
+    },
+    {
+        "name": "submit",
+        "type": "submit",
+        "classname": "btn btn-success",
+        "formGroup": true,
+        "stacked": false,
+        "value": "Submit"
+    },
+    {
+        "name": "myreset",
+        "type": "reset",
+        "classname": "btn btn-danger",
+        "formGroup": true,
+        "stacked": false,
+        "value": "Reset"
+    },
+    {
+        "name": "imageexample",
+        "id": "imageid",
+        "type": "image",
+        "required": false,
+        "classname": "",
+        "formGroup": true,
+        "src": "http://placehold.it/50x40",
+        "alt": "Picture of a cat"
+    }
+]

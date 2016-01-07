@@ -1,0 +1,11 @@
+# GIT IGNORE
+node_modules
+.vscode
+
+
+# Windows detritus
+
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
