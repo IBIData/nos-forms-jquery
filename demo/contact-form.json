@@ -207,7 +207,6 @@
         "name": "imageexample",
         "id": "imageid",
         "type": "image",
-        "required": false,
         "classname": "",
         "formGroup": true,
         "inline": false,

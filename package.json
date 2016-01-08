@@ -33,7 +33,7 @@
   "readmeFilename": "README.md",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://jjwilly16@bitbucket.org/IBIData/nos-forms-jquery.git"
   },
   "scripts": {
     "test": "grunt travis --verbose"
