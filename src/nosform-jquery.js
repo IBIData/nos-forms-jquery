@@ -13,19 +13,25 @@
 
         // The plugin constructor
         function Nos ( element, options ) {
+                
+                // need access to this later
                 var self = this;
+                
+                // form element
                 this.form = $(element);
+                
+                // final plugin settings
                 this.settings = $.extend({}, defaults, options);
+                
+                // need access to this later
                 var userdata = this.settings;
-                this._defaults = defaults;
-                this._name = pluginName;
                 
                 // Store arrays of element types
                 // These are used to determine which function will be called from the 'getElements' object below
                 this.elements = {
-                    text: ['text', 'email', 'tel', 'password', 'number', 'hidden', 'zip', 'date', 'week', 'image', 'time', 'month', 'datetime-local', 'search', 'url', 'range', 'color'],
+                    text: ['text', 'email', 'tel', 'password', 'number', 'hidden', 'zip', 'date', 'week', 'time', 'month', 'datetime-local', 'search', 'url', 'range', 'color'],
                     textarea: ['textarea'],
-                    buttons: ['submit', 'reset', 'button'],
+                    buttons: ['submit', 'reset', 'button', 'image'],
                     select: ['select'],
                     file: ['file'],
                     check: ['checkbox', 'radio'],
@@ -34,32 +40,51 @@
                 
                 // toggles browser validation on/off based on user input - default is 'off'
                 this.htmlValidation = function () {
+                    
                     !this.settings.htmlValidation && this.form.attr('novalidate', '');
+                    
                 };
                 
                 // takes user form object and converts to string fragments for creating html
                 this.getAttrs = function (input) {
+                    
                     return $.extend({}, input, {
+                        
                         type: input.type && ' type="' + input.type + '"' || '',
+                        
                         name: input.name && ' name="' + input.name + '"' || '',
+                        
                         id: (input.id || input.name) && ' id="' + (input.id || input.name) + '"' || '',
+                        
                         minlength: input.minlength && ' minlength="' + input.minlength + '"' || '',
+                        
                         maxlength: input.maxlength && ' maxlength="' + input.maxlength + '"' || '',
+                        
                         required: input.required && ' required' || '',
-                        value: $.inArray(input.type, this.elements.buttons) === -1 ? (input.value && ' value="' + input.value + '"' || '') : input.value,
-                        classname: input.classname && ' class="' + input.classname + '"' || '',
+                        
+                        value: input.value && ' value="' + input.value + '"' || '',
+                        
                         placeholder: input.placeholder && ' placeholder="' + input.placeholder + '"' || '',
-                        rows: input.rows && ' rows="' + input.rows + '"' || '',
-                        min: input.min && ' min="' + input.min + '"' || '',
-                        max: input.max && ' max="' + input.max + '"' || '',
-                        step: input.step && ' step="' + input.step + '"' || '',
-                        size: input.size && ' size="' + input.size + '"' || '',
+                        
+                        classname: input.classname && ' class="' + input.classname + '"' || '',
+                        
                         multiple: input.multiple && ' multiple' || '',
-                        src: input.src && ' src="' + input.src + '"' || '',
-                        alt: input.alt && ' alt="' + input.alt + '"' || '',
-                        accept: input.accept && ' accept="' + input.accept + '"' || '',
+                        
+                        autofocus: input.autofocus && ' autofocus' || '',
+                        
+                        disabled: input.disabled && ' disabled' || '',
+                        
+                        readonly: input.readonly && ' readonly' || '',
+                        
+                        title: input.title && ' title="' + input.title + '"' || '',
+                        
+                        size: input.size && ' size="' + input.size + '"' || '',
+                        
+                        // stores user error messages
                         message: self.getUserErrorMessages(input)
+                        
                     });
+                    
                 },
                 
                 // assigns an object to the 'message' property above
@@ -76,7 +101,9 @@
                 
                 // Group of functions used to return a form element
                 this.getElements = {
+                    
                     self: this,
+                    
                     // returns bootstrap form-group div
                     formGroup: function () {
                         return {
@@ -84,35 +111,25 @@
                             end: '</div>'
                         };
                     },
+                    
                     div: function (classname) {
                         return {
                             start: '<div class="' + classname + '">',
                             end: '</div>'
                         };
                     },
-                    fieldset: function (input) {
+                    
+                    fieldset: function (id) {
                         return {
-                            start: '<fieldset id="' + input + '">',
+                            start: '<fieldset id="' + id + '">',
                             end: '</fieldset>'
                         };
                     },
+                    
                     label: function (input) {
-                        return '<label for="' + input.name + '">' + input.label + '</label>';
-                    },
-                    styles: {
-                        counter: 0,
-                        buttonGroup: function (input) {
-                            ++this.counter;
-                            var stacked, margin;
-                            input.stacked ? (stacked = 'block', margin = '0') : (stacked = 'inline-block', margin = '15px');
-                            var bg = $('<style>.nos-form-group {margin-bottom: ' + margin + ';display: ' + stacked + ';}</style>');
-                            this.counter === 1 && $('head').append(bg);
-                            return {
-                                start: '<div class="nos-form-group nos-group">',
-                                end: '</div>&nbsp;'
-                            };
-                            
-                        }
+                        var required;
+                        input.required ? required = ' class="required-field"' : ''; 
+                        return '<label for="' + (input.id || input.name) + '"' + required + '>' + input.label + '</label>';
                     },
                     
                     // returns text-based elements
@@ -120,10 +137,16 @@
                         var formgroup, label;
                         input.formGroup ? formgroup = this.formGroup() : formgroup = '';
                         input.label ? label = this.label(input) : label = '';
-                        var el = this.self.getAttrs(input);
+                        var el = $.extend(this.self.getAttrs(input), {
+                            pattern: input.pattern && ' pattern="' + input.pattern + '"' || '',
+                            autocomplete: input.autocomplete && ' autocomplete="' + input.autocomplete + '"' || '',
+                            step: input.step && ' step="' + input.step + '"' || '',
+                            min: input.min && ' min="' + input.min + '"' || '',
+                            max: input.max && ' max="' + input.max + '"' || ''
+                        });
                         var element = (formgroup.start || '') + label + 
                             '<input' + el.type + el.name + el.id + el.minlength + el.maxlength + el.placeholder + el.classname + 
-                            el.value + el.min + el.max + el.step + el.size + el.src + el.alt + el.required + '>' + 
+                            el.value + el.title + el.min + el.max + el.step + el.size + el.pattern + el.autocomplete + el.multiple + el.readonly + el.disabled + el.autofocus + el.required + '>' + 
                             (el.message.required || '') + (el.message.minlength || '') + (el.message.valid || '') + (el.message.min || '') + (el.message.max || '') + 
                             (formgroup.end || '');
                         return element;
@@ -131,13 +154,24 @@
                     
                     // returns buttons
                     buttons: function (input) {
-                        var formgroup;
-                        (input.formGroup || input.stacked) ? formgroup = this.styles.buttonGroup(input) : formgroup = '&nbsp;';
+                        var nosgroup = input.formGroup && 'nos-form-group nos-group ' || '',
+                            inline = input.inline && 'nos-inline' || '',
+                            formgroup;
+                        (input.formGroup || input.inline) ? formgroup = this.div(nosgroup + inline) : formgroup = '';
                         var el = $.extend(this.self.getAttrs(input), {
-                            value: input.value 
+                            src: input.src && ' src="' + input.src + '"' || '',
+                            alt: input.alt && ' alt="' + input.alt + '"' || '',
+                            formaction: input.formaction && ' formaction="' + input.formaction + '"' || '',
+                            formenctype: input.formenctype && ' formenctype="' + input.formenctype + '"' || '',
+                            formmethod: input.formmethod && ' formmethod="' + input.formmethod + '"' || '',
+                            formnovalidate: input.formnovalidate && ' formnovalidate' || '',
+                            formtarget: input.formtarget && ' formtarget="' + input.formtarget + '"' || '',
+                            height: input.height && ' height="' + input.height + '"' || '',
+                            width: input.width && ' width="' + input.width + '"' || ''
                         });
                         var element = (formgroup.start || '') + 
-                            '<button' + el.type + el.name + el.id + el.classname + '>' + el.value + '</button>' + 
+                            '<input' + el.type + el.name + el.id + el.classname + el.title + el.src + el.alt + el.height + el.width + 
+                            el.formtarget + el.formmethod + el.formaction + el.formenctype + el.disabled + el.value + el.formnovalidate + '>&nbsp;' + 
                             (formgroup.end || formgroup);
                         return element;
                     },
@@ -147,10 +181,14 @@
                         var formgroup, label;
                         input.formGroup ? formgroup = this.formGroup() : formgroup = '';
                         input.label ? label = this.label(input) : label = '';
-                        var el = this.self.getAttrs(input);
+                        var el = $.extend(this.self.getAttrs(input), {
+                            rows: input.rows && ' rows="' + input.rows + '"' || '',
+                            cols: input.cols && ' cols="' + input.cols + '"' || '',
+                            wrap: input.wrap && ' wrap="' + input.wrap + '"' || ''
+                        });
                         var element = (formgroup.start || '') + label + 
                             '<textarea' + 
-                            el.name + el.id + el.minlength + el.maxlength + el.placeholder + el.classname + el.value + el.rows + el.required + 
+                            el.name + el.id + el.title + el.minlength + el.maxlength + el.placeholder + el.classname + el.value + el.rows + el.cols + el.wrap + el.readonly + el.disabled + el.autofocus + el.required + 
                             '></textarea>' + 
                             (el.message.required || '') + (el.message.minlength || '') + 
                             (formgroup.end || '');
@@ -170,7 +208,7 @@
                         });
                         var element = (formgroup.start || '') + label + 
                             '<select' + 
-                            el.name + el.id + el.classname + el.multiple + el.required + '>' + 
+                            el.name + el.id + el.classname + el.multiple + el.title + el.size + el.readonly + el.disabled + el.autofocus + el.required + '>' + 
                             options + 
                             '</select>' + 
                             (el.message.required || '') +  
@@ -205,7 +243,7 @@
                             }
                             element += (div.start || '') + 
                                     '<label' + el.inline + '><input' +
-                                    el.type + el.name + el.id+k+'" ' + el.classname + ' value="' + k + '"' + checked + el.required + 
+                                    el.type + el.name + el.title + el.id+k+'" ' + el.classname + ' value="' + k + '"' + checked + el.disabled + el.autofocus + el.required + 
                                     '>' + 
                                     v + 
                                     '</label>' + 
@@ -215,7 +253,6 @@
                         element += (fieldset.end || '') + 
                         (el.message.required || '') +  
                         (formgroup.end || '');
-                            
                         return element;
                     },
                     
@@ -225,10 +262,12 @@
                             div = this.div(input.classname);
                         input.formGroup ? formgroup = this.formGroup() : formgroup = '';
                         input.label ? label = this.label(input) : label = '';
-                        var el = this.self.getAttrs(input);
+                        var el = $.extend(this.self.getAttrs(input), {
+                            accept: input.accept && ' accept="' + input.accept + '"' || '',
+                        });
                         var element = (formgroup.start || '') + label + 
                             (div.start || '') + 
-                            '<input' + el.type + el.name + el.id + el.accept + el.multiple + el.required + 
+                            '<input' + el.type + el.name + el.id + el.title + el.accept + el.multiple + el.disabled + el.autofocus + el.required + 
                             '>' +  
                             (el.message.required || '') + 
                             (div.end || '') + 
@@ -237,6 +276,7 @@
                     },
                     
                     // returns select box with 50 states/territories/Canadian Provinces
+                    // the user specifies what to include, and this function will combine the appropriate objects to create the select element
                     state: function (input) {
                         var formgroup, label;
                         input.formGroup ? formgroup = this.formGroup() : formgroup = '';
@@ -245,6 +285,7 @@
                         var states = {"Alabama": "AL","Alaska": "AK","Arizona": "AZ","Arkansas": "AR","California": "CA","Colorado": "CO","Connecticut": "CT","Delaware": "DE","District Of Columbia": "DC","Florida": "FL","Georgia": "GA","Hawaii": "HI","Idaho": "ID","Illinois": "IL","Indiana": "IN","Iowa": "IA","Kansas": "KS","Kentucky": "KY","Louisiana": "LA","Maine": "ME","Maryland": "MD","Massachusetts": "MA","Michigan": "MI","Minnesota": "MN","Mississippi": "MS","Missouri": "MO","Montana": "MT","Nebraska": "NE","Nevada": "NV","New Hampshire": "NH","New Jersey": "NJ","New Mexico": "NM","New York": "NY","North Carolina": "NC","North Dakota": "ND","Ohio": "OH","Oklahoma": "OK","Oregon": "OR","Pennsylvania": "PA","Rhode Island": "RI","South Carolina": "SC","South Dakota": "SD","Tennessee": "TN","Texas": "TX","Utah": "UT","Vermont": "VT","Virginia": "VA","Washington": "WA","West Virginia": "WV","Wisconsin": "WI","Wyoming": "WY"};
                         var provinces = {"Alberta": "AB","British Columbia": "BC","Manitoba": "MB","New Brunswick": "NB","Newfoundland and Labrador": "NL","Nova Scotia": "NS","Northwest Territories": "NT","Nunavut": "NU","Ontario": "ON","Prince Edward Island": "PE","Quebec": "QC","Saskatchewan": "SK","Yukon": "YT"};
                         
+                        // this function orders our state object alphabetically by key
                         function sortObject(obj, order) {
                             var key,
                                 i,
@@ -271,6 +312,8 @@
                             return tempObj;
                         }
                         
+                        // function to combine the objects and call the sort function once that is done
+                        // after object is complete, we create the html
                         var stateObj = sortObject($.extend(states, (input.usTerritory && territories), (input.canada && provinces))),
                             options = '<option value="">' + (input.defaultSelected || "Select One...") + '</option>';
                         var el = this.self.getAttrs(input);
@@ -280,7 +323,7 @@
                             options += '<option value="' + v + '" ' + selectedOption + '>' + k + '</option>';
                         });
                         var element = (formgroup.start || '') + label + 
-                            '<select ' + el.name + el.id + el.classname + el.multiple + el.required + 
+                            '<select ' + el.name + el.id + el.classname + el.size + el.multiple + el.readonly + el.disabled + el.autofocus + el.required + 
                             '>' + 
                             options + 
                             '</select>' + 
@@ -292,16 +335,21 @@
                 
                 // field validation functions
                 this.validator = {
+                    
                     email: function (email) {
                         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                         return re.test(email);
                     },
+                    
                     phone: function (tel) {
                         return /^[(]{0,1}[0-9]{3}[)]{0,1}[-\s\.]{0,1}[0-9]{3}[-\s\.]{0,1}[0-9]{4}$/.test(tel);
                     },
+                    
                     zipcode: function (zip) {
                         return /^\d{5}(-\d{4})?$/.test(zip);
                     },
+                    
+                    // sanitizes text-based form inputs
                     sanitize: function (input) {
                         var output = input.replace(/<script[^>]*?>.*?<\/script>/gi, '').
                             replace(/<[\/\!]*?[^<>]*?>/gi, '').
@@ -309,27 +357,34 @@
                             replace(/<![\s\S]*?--[ \t\n\r]*>/gi, '');
                         return output;
                     }
+                    
                 };
                 
                 // field validation messages
                 this.userErrorMessage = {
+                    
                     required: function (el) {
-                        return '<span style="display: none;" class="help-block nosform-help msg-required-' + el.name + '">' + (el.label || el.placeholder) + ' is a required field</span>';
+                        return '<span style="display: none;" class="help-block nos-help msg-required-' + el.name + '">' + (el.label || el.placeholder) + ' is a required field</span>';
                     },
+                    
                     valid: function (el) {
-                        return '<span style="display: none;" class="help-block nosform-help msg-invalid-' + el.name + '">' + (el.label || el.placeholder) + ' must be valid</span>';
+                        return '<span style="display: none;" class="help-block nos-help msg-invalid-' + el.name + '">' + (el.label || el.placeholder) + ' must be valid</span>';
                     },
+                    
                     minlength: function (el) {
-                        return '<span style="display: none;" class="help-block nosform-help msg-minlength-' + el.name + '">' + (el.label || el.placeholder) + ' must be a minimum of ' + el.minlength + ' characters</span>';
+                        return '<span style="display: none;" class="help-block nos-help msg-minlength-' + el.name + '">' + (el.label || el.placeholder) + ' must be a minimum of ' + el.minlength + ' characters</span>';
                     },
+                    
                     min: function (el) {
-                        return '<span style="display: none;" class="help-block nosform-help msg-min-' + el.name + '">' + (el.label || el.placeholder) + ' must be a minimum of ' + el.min + '</span>';
+                        return '<span style="display: none;" class="help-block nos-help msg-min-' + el.name + '">' + (el.label || el.placeholder) + ' must be a minimum of ' + el.min + '</span>';
                     },
+                    
                     max: function (el) {
-                        return '<span style="display: none;" class="help-block nosform-help msg-max-' + el.name + '">' + (el.label || el.placeholder) + ' must be no more than ' + el.max + '</span>';
+                        return '<span style="display: none;" class="help-block nos-help msg-max-' + el.name + '">' + (el.label || el.placeholder) + ' must be no more than ' + el.max + '</span>';
                     }
                 };
                 
+                // validation that runs on form submit
                 this.submitValidation = function (data) {
                     
                     var form = $(data).serializeArray(),
@@ -427,7 +482,7 @@
                     });
                     
                     // send form submit object back to user if all fields are valid
-                    if (!$('input, select, textarea').hasClass('required-field-border') && !$('.nosform-help').is(':visible')) {
+                    if (!$('input, select, textarea').hasClass('required-field-border') && !$('.nos-help').is(':visible')) {
                          userdata.submit(formdata);
                     }
                 };
@@ -438,8 +493,8 @@
                     // resets form
                     function reset () {
                         $(':reset').click(function () {
-                            $(this).closest('form').find(':input:not(:submit, :reset, :button), textarea, select').val('');
-                            $('.nosform-help').slideUp('fast');
+                            $(this).closest('form').find(':input:not(:submit, :reset, :button, :image), textarea, select').val('');
+                            $('.nos-help').slideUp('fast');
                             $('input, select, textarea').removeClass('required-field-border');
                         });
                     }
@@ -497,7 +552,8 @@
                         });
                     }
                     
-                    $.each(fields, function (k, v) {
+                    // calls the validation functions
+                    function callValidation(k, v) {
                         
                         // set mask
                         // I really thought this would take more code...nope
@@ -519,29 +575,87 @@
                         // call minLength function 
                         v.minlength && minLength(v);
                         
+                    }
+                    
+                    // find out if the form is one column or multi-column
+                    // multi-column forms send multiple objects
+                    $.each(fields, function (k, v) {
+                        
+                        if (this.column) {
+                            
+                            $.each(this.column, function (key, value) {
+                                
+                                callValidation(key, value);
+                                
+                            });
+                            
+                        }
+                        
+                        else {
+                            
+                            callValidation(k, v);
+                                
+                        }
+                        
                     });
+                    
                 };
                 
                 // builds form
                 this.build = function () {
                     
+                    // create empty form string to build upon
                     var form = '', 
-                        field = this.settings.fields;
+                    
+                        // user supplied json fields
+                        field = (this.settings.fields);
                     
                     // loop through all field objects
                     $.each(field, function () {
-                        
-                       var each = this;
                        
-                       // loop through all element arrays and categorize each element type
-                       $.each(self.elements, function (k) {
+                       // check for a column property
+                       // this signals a multi-column form
+                       if (this.column) {
                            
-                            // when element type is matched to an array, it is sent to be built in the associated 'getElements' function
-                            if ($.inArray(each.type, this) > -1) { 
-                                form += self.getElements[k](each); 
-                            }
+                           // add a div with a supplied class to separate columns
+                           form += '<div class="' + this.classname + '">';
                            
-                       });
+                           $.each(this.column, function () {
+                               
+                               var each = this;
+                               
+                                // loop through all element arrays and categorize each element type
+                                $.each(self.elements, function (k) {
+                                    
+                                    // when element type is matched to an array, it is sent to be built in the associated 'getElements' function
+                                    if ($.inArray(each.type, this) > -1) { 
+                                        form += self.getElements[k](each); 
+                                    }
+                                    
+                                    
+                           
+                                });
+                                
+                           });
+                           
+                           form += '</div>';
+                       }
+                       
+                       // standard one column layout
+                       else {
+                           
+                            var each = this;
+                       
+                            // loop through all element arrays and categorize each element type
+                            $.each(self.elements, function (k) {
+                                
+                                // when element type is matched to an array, it is sent to be built in the associated 'getElements' function
+                                if ($.inArray(each.type, this) > -1) { 
+                                    form += self.getElements[k](each); 
+                                }
+                           
+                            });
+                       }
                        
                     });
                     
@@ -557,8 +671,6 @@
                 // initialize the plugin
                 this.init();
                 
-                
-                
         }
 
         // Avoid Plugin.prototype conflicts
@@ -568,12 +680,16 @@
                     var userdata = this.settings,
                         self = this;
                     
+                    // displays error messages if the config object has incorrect types
                     this.errorMessages();
                     
+                    // toggle the html browser validation
                     this.htmlValidation();
                     
+                    // build the form
                     this.build();
                     
+                    // run validation
                     this.settings.validate && this.validate(this.settings.fields);
                     
                     // form submit function
@@ -588,6 +704,8 @@
                     
                     });
                 },
+                
+                // error messages to warn of incorrect types in the configuration
                 errorMessages: function () {
                     var settings = this.settings;
                     typeof settings.fields !== 'object' && console.warn('Your form data is not an object!');

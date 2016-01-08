@@ -1,4 +1,4 @@
-/*.btn-file {
+.btn-file {
     position: relative;
     overflow: hidden;
 }
@@ -16,7 +16,7 @@
     background: white;
     cursor: inherit;
     display: block;
-}*/
+}
 
 .required-field:after {
     content: " *";
@@ -27,6 +27,14 @@
     border: 1px solid red !important;
 }
 
-.nosform-help {
+.nos-help {
     color: red !important;
+}
+
+.nos-form-group {
+    margin-bottom: 15px;
+}
+
+.nos-inline {
+    display: inline-block !important;
 }

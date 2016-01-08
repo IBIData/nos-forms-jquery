@@ -3,12 +3,14 @@
         "name": "txtexample",
         "id": "txtid",
         "type": "text",
+        "autofocus": true,
         "label": "Simple Text Field Example",
         "required": true,
         "classname": "form-control",
         "formGroup": true,
         "placeholder": "Your Name",
-        "minlength": 5,
+        "pattern": "[A-Za-z]{3}",
+        "minlength": 1,
         "maxlength": 60
     },
     {
@@ -190,7 +192,7 @@
         "type": "submit",
         "classname": "btn btn-success",
         "formGroup": true,
-        "stacked": false,
+        "inline": true,
         "value": "Submit"
     },
     {
@@ -198,7 +200,7 @@
         "type": "reset",
         "classname": "btn btn-danger",
         "formGroup": true,
-        "stacked": false,
+        "inline": true,
         "value": "Reset"
     },
     {
@@ -208,7 +210,8 @@
         "required": false,
         "classname": "",
         "formGroup": true,
+        "inline": false,
         "src": "http://placehold.it/50x40",
-        "alt": "Picture of a cat"
+        "alt": "Placeholder Image"
     }
 ]

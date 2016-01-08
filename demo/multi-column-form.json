@@ -1,0 +1,118 @@
+[
+    {
+        "classname": "col-md-6 col-sm-6 col-xs-12",
+        "column": [
+            {
+                "name": "txtexample",
+                "id": "txtid",
+                "type": "text",
+                "title": "test",
+                "autofocus": true,
+                "label": "Simple Text Field Example",
+                "required": true,
+                "classname": "form-control",
+                "formGroup": true,
+                "placeholder": "Your Name",
+                "minlength": 5,
+                "maxlength": 60
+            },
+            {
+                "name": "numberexample",
+                "id": "numberid",
+                "type": "number",
+                "title": "test",
+                "label": "Number Example",
+                "required": true,
+                "placeholder": "A Number",
+                "classname": "form-control",
+                "formGroup": true,
+                "min": 5,
+                "max": 10,
+                "step": 1
+            },
+            {
+                "name": "emailexample",
+                "type": "email",
+                "title": "test",
+                "label": "Email Example",
+                "required": true,
+                "classname": "form-control",
+                "formGroup": true,
+                "placeholder": "Your Email",
+                "minlength": 1
+            }
+        ]
+    },
+    {
+        "classname": "col-md-6 col-sm-6 col-xs-12",
+        "column": [
+            {
+                "name": "zipexample",
+                "id": "zipid",
+                "type": "zip",
+                "title": "test",
+                "label": "Zip Code Example",
+                "required": true,
+                "classname": "form-control",
+                "formGroup": true,
+                "placeholder": "Zip Code",
+                "mask": "99999?-9999"
+            },
+            {
+                "name": "select",
+                "type": "select",
+                "title": "test",
+                "label": "Select Option",
+                "classname": "form-control",
+                "formGroup": true,
+                "required": true,
+                "multiple": false,
+                "selected": "",
+                "options": {
+                    "": "Select One...",
+                    "value1": "First Value",
+                    "value2": "Second Value",
+                    "value3": "Third Value",
+                    "value4": "Fourth Value"
+                }
+            },
+            {
+                "name": "test",
+                "id": "test",
+                "type": "text",
+                "title": "test",
+                "autofocus": true,
+                "label": "Text Field",
+                "required": true,
+                "classname": "form-control",
+                "formGroup": true,
+                "placeholder": "Your Name",
+                "minlength": 5,
+                "maxlength": 60
+            }
+        ]
+    },
+    {
+        "classname": "col-md-12 col-sm-12 col-xs-12",
+        "column": [
+            {
+                "name": "submit",
+                "type": "submit",
+                "title": "test",
+                "classname": "btn btn-success",
+                "formGroup": true,
+                "inline": true,
+                "value": "Submit"
+            },
+            {
+                "name": "myreset",
+                "type": "reset",
+                "title": "test",
+                "classname": "btn btn-danger",
+                "formGroup": true,
+                "inline": true,
+                "value": "Reset"
+            }
+        ]
+    }
+]

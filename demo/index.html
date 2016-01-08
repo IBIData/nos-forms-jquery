@@ -4,7 +4,7 @@
         <title>Nos-Forms jQuery</title>
         
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="/nosform-jquery.min.css">
+        <link rel="stylesheet" href="/nosform-jquery.css">
     </head>
     <body>
         
@@ -25,7 +25,7 @@
         <script>
             $(function() {
                 
-                $.get('contact-form.json', function (data) {
+                $.get('multi-column-form.json', function (data) {
                     
                     $("#myform").nosForm({
                         fields: data,
@@ -34,8 +34,7 @@
                         }
                     });
                     
-                })
-                
+                });
                 
             });
         </script>
