@@ -1,9 +1,15 @@
 {
   "author": {
-    "name": "Justin Williamson",
-    "email": "jwilly84@gmail.com",
-    "url": "https://github.com/jjwilly16"
+    "name": "IBI Data",
+    "email": "admin@ibidata.com",
+    "url": "http://ibidata.com/"
   },
+  "contributors": [
+      {
+          "name": "Justin Williamson",
+          "email": "jwilliamson@ibidata.com"
+      }
+  ],
   "description": "Build html forms with JSON objects easily with jQuery and Bootstrap",
   "devDependencies": {
     "grunt": "~0.4.5",

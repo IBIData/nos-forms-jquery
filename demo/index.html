@@ -29,6 +29,13 @@
                     
                     $("#myform").nosForm({
                         fields: data,
+                        animationSpeed: 50,
+                        validate: true,
+                        htmlValidation: false,
+                        messages: {
+                            required: 'Oops! You missed something!',
+                            invalid: 'Invalid entry'
+                        },
                         submit: function (formdata) {
                             console.log(formdata);
                         }

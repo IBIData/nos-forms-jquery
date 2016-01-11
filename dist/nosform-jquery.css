@@ -3,7 +3,7 @@
  *  Build html forms with JSON objects easily with jQuery and Bootstrap
  *  
  *
- *  Made by Justin Williamson
+ *  Made by IBI Data
  *  Under MIT License
  */
 .btn-file {
@@ -26,18 +26,39 @@
     display: block;
 }
 
+.form-control {
+    border-radius: 0;
+    box-shadow: none;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.form-control:focus {
+    border-color: #72ABBC;
+    box-shadow: inset 3px 0 0 #72ABBC;
+}
+
 .required-field:after {
     content: " *";
     color: red;
 }
 
-.required-field-border {
-    border: 1px solid red !important;
+.alert {
+    padding: 10px 15px !important;
+    margin-bottom: 0 !important;
+    margin-top: 5px !important;
 }
 
-.nos-help {
-    color: red !important;
+.valid {
+    border: 1px solid green;
 }
+
+.invalid {
+    border: 1px solid red;
+}
+
+/*.nos-help {
+    color: red !important;
+}*/
 
 .nos-form-group {
     margin-bottom: 15px;

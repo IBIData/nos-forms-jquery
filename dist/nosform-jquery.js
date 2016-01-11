@@ -3,20 +3,25 @@
  *  Build html forms with JSON objects easily with jQuery and Bootstrap
  *  
  *
- *  Made by Justin Williamson
+ *  Made by IBI Data
  *  Under MIT License
  */
 /* global jQuery */
 ;(function ( $, window, document, undefined ) {
 
     "use strict";
-
+    
         // Create the defaults
         var pluginName = "nosForm",
             defaults = {
                 fields: {},
+                animationSpeed: 100,
                 validate: true,
-                htmlValidation: false
+                htmlValidation: false,
+                messages: {
+                    required: 'Please fill out all required fields',
+                    invalid: 'Please correct errors'
+                }
             };
 
         // The plugin constructor
@@ -46,51 +51,28 @@
                     state: ['state']
                 };
                 
-                // toggles browser validation on/off based on user input - default is 'off'
-                this.htmlValidation = function () {
-                    
-                    !this.settings.htmlValidation && this.form.attr('novalidate', '');
-                    
-                };
+                
                 
                 // takes user form object and converts to string fragments for creating html
                 this.getAttrs = function (input) {
                     
                     return $.extend({}, input, {
-                        
                         type: input.type && ' type="' + input.type + '"' || '',
-                        
                         name: input.name && ' name="' + input.name + '"' || '',
-                        
                         id: (input.id || input.name) && ' id="' + (input.id || input.name) + '"' || '',
-                        
                         minlength: input.minlength && ' minlength="' + input.minlength + '"' || '',
-                        
                         maxlength: input.maxlength && ' maxlength="' + input.maxlength + '"' || '',
-                        
                         required: input.required && ' required' || '',
-                        
                         value: input.value && ' value="' + input.value + '"' || '',
-                        
                         placeholder: input.placeholder && ' placeholder="' + input.placeholder + '"' || '',
-                        
                         classname: input.classname && ' class="' + input.classname + '"' || '',
-                        
                         multiple: input.multiple && ' multiple' || '',
-                        
                         autofocus: input.autofocus && ' autofocus' || '',
-                        
                         disabled: input.disabled && ' disabled' || '',
-                        
                         readonly: input.readonly && ' readonly' || '',
-                        
                         title: input.title && ' title="' + input.title + '"' || '',
-                        
                         size: input.size && ' size="' + input.size + '"' || '',
-                        
-                        // stores user error messages
-                        message: self.getUserErrorMessages(input)
-                        
+                        message: self.getUserErrorMessages(input) // stores user error messages
                     });
                     
                 },
@@ -99,8 +81,8 @@
                 // this will contain the user error messages that will display on the form
                 this.getUserErrorMessages = function (element) {
                     return $.extend({}, {
-                        required: element.required && self.userErrorMessage.required(element) || '',
-                        valid: (element.type === 'email' || element.type === 'zip' || element.type === 'tel') && self.userErrorMessage.valid(element) || '',
+                        required: element.required && self.userErrorMessage.required(element),
+                        valid: (element.type === 'email' || element.type === 'zip' || element.type === 'tel' || element.pattern) && self.userErrorMessage.valid(element) || '',
                         minlength: (element.minlength && element.minlength > 1) && self.userErrorMessage.minlength(element) || '',
                         min: (element.min && element.min > 1) && self.userErrorMessage.min(element) || '',
                         max: element.max && self.userErrorMessage.max(element) || ''
@@ -341,6 +323,49 @@
                     }
                 };
                 
+                // field validation messages
+                this.userErrorMessage = {
+                    
+                    required: function (el) {
+                        var message;
+                        el.messages ? message = el.messages.required : message = null;
+                        return '<div style="display: none;" class="alert alert-danger nos-help nos-required msg-required-' + el.name + '">' + (message || (el.label || el.placeholder) + ' is a required field') + '</div>';
+                    },
+                    
+                    valid: function (el) {
+                        var message;
+                        el.messages ? message = el.messages.invalid : message = null;
+                        return '<div style="display: none;" class="alert alert-warning nos-help nos-invalid msg-invalid-' + el.name + '">' + (message || (el.label || el.placeholder) + ' must be valid') + '</div>';
+                    },
+                    
+                    minlength: function (el) {
+                        var message;
+                        el.messages ? message = el.messages.minlength : message = null;
+                        return '<div style="display: none;" class="alert alert-warning nos-help nos-invalid msg-minlength-' + el.name + '">' + (message || (el.label || el.placeholder) + ' must be a minimum of ' + el.minlength + ' characters') + '</div>';
+                    },
+                    
+                    min: function (el) {
+                        var message;
+                        el.messages ? message = el.messages.min : message = null;
+                        return '<div style="display: none;" class="alert alert-warning nos-help nos-invalid msg-min-' + el.name + '">' + (message || (el.label || el.placeholder) + ' must have a minimum value of ' + el.min)+ '</div>';
+                    },
+                    
+                    max: function (el) {
+                        var message;
+                        el.messages ? message = el.messages.max : message = null;
+                        return '<div style="display: none;" class="alert alert-warning nos-help nos-invalid msg-max-' + el.name + '">' + (message || (el.label || el.placeholder) + ' must have a maximum value of ' + el.max) + '</div>';
+                    },
+                    
+                    form: {
+                        required: function (form) {
+                            return '<div style="display: none;" class="alert alert-danger nos-help nos-form-required msg-required-' + (form.name || form.id) + '">' + self.settings.messages.required + '</div>';
+                        },
+                        invalid: function (form) {
+                            return '<div style="display: none;" class="alert alert-warning nos-help nos-form-invalid msg-invalid-' + (form.name || form.id) + '">' + self.settings.messages.invalid + '</div>';
+                        }
+                    }
+                };
+                
                 // field validation functions
                 this.validator = {
                     
@@ -368,30 +393,6 @@
                     
                 };
                 
-                // field validation messages
-                this.userErrorMessage = {
-                    
-                    required: function (el) {
-                        return '<span style="display: none;" class="help-block nos-help msg-required-' + el.name + '">' + (el.label || el.placeholder) + ' is a required field</span>';
-                    },
-                    
-                    valid: function (el) {
-                        return '<span style="display: none;" class="help-block nos-help msg-invalid-' + el.name + '">' + (el.label || el.placeholder) + ' must be valid</span>';
-                    },
-                    
-                    minlength: function (el) {
-                        return '<span style="display: none;" class="help-block nos-help msg-minlength-' + el.name + '">' + (el.label || el.placeholder) + ' must be a minimum of ' + el.minlength + ' characters</span>';
-                    },
-                    
-                    min: function (el) {
-                        return '<span style="display: none;" class="help-block nos-help msg-min-' + el.name + '">' + (el.label || el.placeholder) + ' must be a minimum of ' + el.min + '</span>';
-                    },
-                    
-                    max: function (el) {
-                        return '<span style="display: none;" class="help-block nos-help msg-max-' + el.name + '">' + (el.label || el.placeholder) + ' must be no more than ' + el.max + '</span>';
-                    }
-                };
-                
                 // validation that runs on form submit
                 this.submitValidation = function (data) {
                     
@@ -411,7 +412,7 @@
                         fileField = $(':file').filter('[required]:visible'),
                         cbgroup = $(':checkbox').parents('fieldset'),
                         cb = $(':checkbox, :radio').filter('[required]:visible').parents('fieldset');
-                    
+                   
                     // checkbox and radio validation
                     // build individual arrays for each required field and check to see if arrays are empty on form submit
                     if (cb) {
@@ -449,27 +450,39 @@
                 
                     // check all text-based fields for a blank value
                     $(reqInput).each(function (i) {
-                        var field = reqInput[i];
-                        var msg = '.msg-required-' + field.name;
+                        var field = reqInput[i],
+                            msg = '.msg-required-' + field.name,
+                            mask = $(this).attr('data-mask');
                         field.value = self.validator.sanitize(field.value);
-                        if ($(field).val().length < 1) {
-                            $(msg).slideDown();
-                            $(field).addClass('required-field-border');
-                            $(this).bind('keyup keydown change blur', function () {
-                                this.value.length >= 0 && ($(msg).slideUp(), $(field).removeClass('required-field-border'));
-                            });
+                        if (mask) {
+                            if ($(field).caret().begin < 1) {
+                                $(msg).slideDown();
+                                $(this).bind('keyup keydown change blur paste', function () {
+                                    $(this).caret().begin > 0 && $(msg).slideUp();
+                                    $(this).caret().begin < 1 && $(msg).slideDown();
+                                });
+                            }
+                        } else {
+                           if ($(field).val().length < 1) {
+                                $(msg).slideDown();
+                                $(this).bind('keyup keydown change blur paste', function () {
+                                    this.value.length > 0 && $(msg).slideUp();
+                                    this.value.length < 1 && $(msg).slideDown();
+                                });
+                            }
                         }
+                        
                     });
                 
                     // select Required field validation
                     $(reqSR).each(function (i) {
-                        var sfield = reqSR[i];
-                        var msg = '.msg-required-' + sfield.name;
+                        var sfield = reqSR[i],
+                            msg = '.msg-required-' + sfield.name;
                         if ($(sfield).val() === '') {
                             $(msg).slideDown();
-                            $(sfield).addClass('required-field-border');
                             $(this).change(function () {
-                                $(this).val() !== '' && ($(msg).slideUp(), $(sfield).removeClass('required-field-border'));
+                                $(this).val() !== '' && $(msg).slideUp();
+                                $(this).val() === '' && $(msg).slideDown();
                             });
                         }    
                     });
@@ -481,29 +494,49 @@
                         var filelist = (document.getElementById(field.id).files || document.getElementById(field.id).value); // ie8 doesn't support 'files'
                         if (filelist.length === 0) {
                             $(msg).slideDown();
-                            $(field).addClass('required-field-border');
                             $(this).change(function () {
-                                $(this).val() !== '' && ($(msg).slideUp(), $(field).removeClass('required-field-border'));
+                                $(this).val() !== '' && $(msg).slideUp();
+                                $(this).val() === '' && $(msg).slideDown();
                             });
                         } 
                         formdata[field.name] = filelist;   
                     });
                     
                     // send form submit object back to user if all fields are valid
-                    if (!$('input, select, textarea').hasClass('required-field-border') && !$('.nos-help').is(':visible')) {
+                    if (!$('.nos-help').is(':visible')) {
                          userdata.submit(formdata);
+                    } else {
+                        if ($('.nos-required').is(':visible')) {
+                            $('.nos-form-required').slideDown();
+                            $(':input, select, textarea').bind('change keyup blur focus paste', function () {
+                                if ($('.nos-required').is(':visible')) {
+                                    $('.nos-form-required').slideDown();
+                                } else {
+                                    $('.nos-form-required').slideUp();
+                                }
+                            });
+                        }
+                        if ($('.nos-invalid').is(':visible')) {
+                            $('.nos-form-invalid').slideDown();
+                            $(':input, select, textarea').bind('change keyup blur focus paste', function () {
+                                if ($('.nos-invalid').is(':visible')) {
+                                    $('.nos-form-invalid').slideDown();
+                                } else {
+                                    $('.nos-form-invalid').slideUp();
+                                }
+                            });
+                        }
                     }
                 };
                 
-                // this function handles interactive error messages while user is typing
+                // this function handles real time error messages while user is typing
                 this.validate = function (fields) {
                     
                     // resets form
                     function reset () {
                         $(':reset').click(function () {
                             $(this).closest('form').find(':input:not(:submit, :reset, :button, :image), textarea, select').val('');
-                            $('.nos-help').slideUp('fast');
-                            $('input, select, textarea').removeClass('required-field-border');
+                            $('.nos-help').slideUp();
                         });
                     }
                     
@@ -511,7 +544,7 @@
                     function maxLength (v) {
                         var maxLengthId = (v.id || v.name);
                         $('#' + maxLengthId).keydown(function (e) {
-                            if (this.value.length > v.maxlength) {
+                            if ($(this).val().length > v.maxlength) {
                                 e.preventDefault();
                             }
                         });
@@ -521,20 +554,60 @@
                     function minLength (v) {
                         var msg = '.msg-minlength-' + v.name;
                         var id = '#' + (v.id || v.name);
-                        $(id).keyup(function () {
-                            var minval = this.value.length;
-                            minval < v.minlength ? $(msg).slideDown() : $(msg).slideUp();
+                        $(id).bind('keyup change blur focus paste', function () {
+                            var minval = $(this).val().length;
+                            if (minval > 0) {
+                                minval < v.minlength ? $(msg).slideDown() : $(msg).slideUp();
+                            } else {
+                                $(msg).slideUp();
+                            }
+                        });
+                    }
+                    
+                    // validates the min and max attributes on number fields
+                    function minMax (v) {
+                        var minMsg = '.msg-min-' + v.name;
+                        var maxMsg = '.msg-max-' + v.name;
+                        var id = '#' + (v.id || v.name);
+                        $(id).bind('keyup keydown change blur focus paste', function () {
+                            var numVal = $(this).val();
+                            if (numVal > 0) {
+                                numVal < v.min ? $(minMsg).slideDown() : $(minMsg).slideUp();
+                                numVal > v.max ? $(maxMsg).slideDown() : $(maxMsg).slideUp();
+                            } else { 
+                                $(minMsg).slideUp(); 
+                            }
+                        });
+                    }
+                    
+                    // validates regex patterns 
+                    function validatePattern (v) {
+                        var nm = v.name,
+                            msg = '.msg-invalid-' + nm,
+                            id = '#' + (v.id || nm),
+                            regex = new RegExp(v.pattern);
+                        $(id).bind('keyup change blur focus paste', function () {
+                            if ($(this).val().length > 0) {
+                                regex.test($(this).val()) ? $(msg).slideUp() : $(msg).slideDown();
+                            }
+                            else {
+                                $(msg).slideUp();
+                            }
                         });
                     }
                     
                     // calls email/zip/phone validation functions and hides/displays messages to user
                     function validateFields (v) {
-                        var nm = v.name;
-                        var msg = '.msg-invalid-' + nm;
-                        var id = '#' + (v.id || nm);
+                        var nm = v.name,
+                            msg = '.msg-invalid-' + nm,
+                            id = '#' + (v.id || nm);
                         var emval;
-                        $(id).bind('keyup change keydown blur', function () {
+                        $(id).bind('keyup change blur paste', function () {
                             switch (v.type) {
+                                
+                                // once the user starts to type, email/zip/tel will be sent through a validator and a 
+                                // message will be displayed to warn user about invalid input
+                                // message will disappear once input is valid
                                 case 'email':
                                     emval = $(this).val();
                                     if (emval.length > 0) {
@@ -542,20 +615,37 @@
                                     }
                                         emval === '' && $(msg).slideUp();
                                     break;
+                                    
                                 case 'zip':
                                     emval = $(this).val();
-                                    if (emval.length > 0) {
-                                        self.validator.zipcode(emval) ? $(msg).slideUp() : $(msg).slideDown();
-                                    }
+                                    if ($.mask && v.mask) {
+                                        if ($(this).caret().begin > 0) {
+                                            self.validator.zipcode(emval) ? $(msg).slideUp() : $(msg).slideDown();
+                                        }
+                                        $(this).caret().end === 0 && $(msg).slideUp();
+                                    } else {
+                                        if (emval.length > 0) {
+                                            self.validator.zipcode(emval) ? $(msg).slideUp() : $(msg).slideDown();
+                                        }
                                         emval === '' && $(msg).slideUp();
+                                    }
                                     break;
+                                    
                                 case 'tel':
                                     emval = $(this).val();
-                                    if (emval.length > 0) {
-                                        self.validator.phone(emval) ? $(msg).slideUp() : $(msg).slideDown();
-                                    }
+                                    if ($.mask && v.mask) {
+                                        if ($(this).caret().begin > 0) {
+                                            self.validator.phone(emval) ? $(msg).slideUp() : $(msg).slideDown();
+                                        }
+                                        $(this).caret().end === 0 && $(msg).slideUp();
+                                    } else {
+                                        if (emval.length > 0) {
+                                            self.validator.phone(emval) ? $(msg).slideUp() : $(msg).slideDown();
+                                        }
                                         emval === '' && $(msg).slideUp();
+                                    }
                                     break;
+                                    
                             }
                         });
                     }
@@ -564,9 +654,9 @@
                     function callValidation(k, v) {
                         
                         // set mask
-                        // I really thought this would take more code...nope
                         if (v.mask) {
-                            $.mask ? $('#'+(v.id || v.name)).mask(v.mask): console.warn('You must include the masked input plugin to use "mask". Go here: https://github.com/digitalBush/jquery.maskedinput');  
+                            $.mask ? $('#'+(v.id || v.name)).mask(v.mask): console.warn('You must include the masked input plugin to use "mask". Go here: https://github.com/digitalBush/jquery.maskedinput');
+                            $('#' + (v.id || v.name)).attr('data-mask', true); 
                         }
                         
                         // call reset function
@@ -577,11 +667,16 @@
                             validateFields(v);
                         }
                         
+                        v.pattern && validatePattern(v);
+                        
                         // call maxLength function
                         v.maxlength && maxLength(v);
                         
                         // call minLength function 
                         v.minlength && minLength(v);
+                        
+                        // call min / max function
+                        (v.min || v.max) && minMax(v);
                         
                     }
                     
@@ -609,17 +704,65 @@
                     
                 };
                 
+                // error messages to warn of incorrect types in the configuration
+                this.errorMessages = function () {
+                    var settings = this.settings;
+                    typeof settings.fields !== 'object' && console.warn('Your form data is not an object!');
+                    typeof settings.validate !== 'boolean' && console.warn('"validate" must have a boolean value!');
+                    typeof settings.htmlValidation !== 'boolean' && console.warn('"htmlValidation" must have a boolean value!');
+                    typeof settings.submit !== 'function' && console.warn('"submit" must be a function!');
+                    typeof settings.animationSpeed !== 'number' && console.warn('"animationSpeed" must be a number!');
+                    typeof settings.messages !== 'object' && console.warn('"messages" must be an object!');
+                };
+                
+                // change the animation speed for validation messages
+                // these can be set by user
+                this.setBehavior = function (settings) {
+                    
+                    // toggles browser validation on/off based on user input - default is 'off'
+                    !this.settings.htmlValidation && this.form.attr('novalidate', '');
+                    
+                    $.prototype.slideDown = (function(slideDown){
+                        var defaultSpeed = settings.animationSpeed;
+                        return function(speed){
+                            slideDown.call( this, speed || defaultSpeed );
+                        };
+                    })($.prototype.slideDown);
+                    
+                    $.prototype.slideUp = (function(slideUp){
+                        var defaultSpeed = settings.animationSpeed;
+                        return function(speed){
+                            slideUp.call( this, speed || defaultSpeed );
+                        };
+                    })($.prototype.slideUp);
+                    
+                },
+                
                 // builds form
                 this.build = function () {
                     
+                    var self = this,
+                    
+                        // counter used to find the last element in a one-column layout
+                        elmCounter = 0;
+                        
                     // create empty form string to build upon
                     var form = '', 
                     
                         // user supplied json fields
-                        field = (this.settings.fields);
-                    
+                        field = (this.settings.fields),
+                        
+                        // find the last column in a two-column layout
+                        lastColumn = this.settings.fields.length - 1,
+                        
+                        // find the last element in a one-column layout
+                        lastElement = this.settings.fields.length;
+                        
                     // loop through all field objects
                     $.each(field, function () {
+                        
+                        // counter is used to find the last column
+                        var counter = 0;
                        
                        // check for a column property
                        // this signals a multi-column form
@@ -629,6 +772,9 @@
                            form += '<div class="' + this.classname + '">';
                            
                            $.each(this.column, function () {
+                               
+                               // increment counter
+                               ++counter;
                                
                                var each = this;
                                
@@ -646,6 +792,16 @@
                                 
                            });
                            
+                           // if looping through the last column, append form error messages before the closing div
+                           if (counter === lastColumn) {
+                               
+                                // append an error message onto the form for required fields
+                                form += self.userErrorMessage.form.required(self.form[0]);
+                                
+                                // append an error message onto the form for invalid fields
+                                form += self.userErrorMessage.form.invalid(self.form[0]);
+                           }
+                           
                            form += '</div>';
                        }
                        
@@ -658,11 +814,22 @@
                             $.each(self.elements, function (k) {
                                 
                                 // when element type is matched to an array, it is sent to be built in the associated 'getElements' function
-                                if ($.inArray(each.type, this) > -1) { 
+                                if ($.inArray(each.type, this) > -1) {
+                                    ++elmCounter;
                                     form += self.getElements[k](each); 
+                                    
+                                    if (elmCounter === lastElement) {
+                                        // append an error message onto the form for required fields
+                                        form += self.userErrorMessage.form.required(self.form[0]);
+                                        
+                                        // append an error message onto the form for invalid fields
+                                        form += self.userErrorMessage.form.invalid(self.form[0]);
+                                    }
+                                    
                                 }
-                           
+                                
                             });
+                            
                        }
                        
                     });
@@ -691,8 +858,8 @@
                     // displays error messages if the config object has incorrect types
                     this.errorMessages();
                     
-                    // toggle the html browser validation
-                    this.htmlValidation();
+                    // set some form behaviors
+                    this.setBehavior(this.settings);
                     
                     // build the form
                     this.build();
@@ -711,15 +878,6 @@
                         userdata.validate && self.submitValidation($(this));
                     
                     });
-                },
-                
-                // error messages to warn of incorrect types in the configuration
-                errorMessages: function () {
-                    var settings = this.settings;
-                    typeof settings.fields !== 'object' && console.warn('Your form data is not an object!');
-                    typeof settings.validate !== 'boolean' && console.warn('"validate" must have a boolean value!');
-                    typeof settings.htmlValidation !== 'boolean' && console.warn('"htmlValidation" must have a boolean value!');
-                    typeof settings.submit !== 'function' && console.warn('"submit" must be a function!');
                 }
         });
 

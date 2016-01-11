@@ -10,8 +10,13 @@
         "formGroup": true,
         "placeholder": "Your Name",
         "pattern": "[A-Za-z]{3}",
-        "minlength": 1,
-        "maxlength": 60
+        "minlength": 2,
+        "maxlength": 60,
+        "messages": {
+            "required": "This is a required field",
+            "minlength": "This must be at least 2 characters long",
+            "invalid": "This must be a valid country code"
+        }
     },
     {
         "name": "numberexample",
@@ -97,7 +102,7 @@
         "id": "rangeid",
         "type": "range",
         "label": "Range Example",
-        "required": false,
+        "required": true,
         "classname": "",
         "formGroup": true,
         "min": 1,

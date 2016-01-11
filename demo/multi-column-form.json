@@ -13,8 +13,14 @@
                 "classname": "form-control",
                 "formGroup": true,
                 "placeholder": "Your Name",
-                "minlength": 5,
-                "maxlength": 60
+                "pattern": "[A-Za-z]{3}",
+                "minlength": 2,
+                "maxlength": 60,
+                "messages": {
+                    "required": "This is a required field",
+                    "minlength": "This must be at least 2 characters long",
+                    "invalid": "you screwed up"
+                }
             },
             {
                 "name": "numberexample",
@@ -28,7 +34,11 @@
                 "formGroup": true,
                 "min": 5,
                 "max": 10,
-                "step": 1
+                "step": 1,
+                "messages": {
+                    "required": "You missed this one",
+                    "minlength": "This must be at least 2 characters long"
+                }
             },
             {
                 "name": "emailexample",
@@ -81,7 +91,6 @@
                 "id": "test",
                 "type": "text",
                 "title": "test",
-                "autofocus": true,
                 "label": "Text Field",
                 "required": true,
                 "classname": "form-control",
