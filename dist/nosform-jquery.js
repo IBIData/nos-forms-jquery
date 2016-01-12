@@ -23,6 +23,8 @@
                     invalid: 'Please correct errors'
                 }
             };
+            
+            
 
         // The plugin constructor
         function Nos ( element, options ) {
@@ -135,8 +137,9 @@
                             max: input.max && ' max="' + input.max + '"' || ''
                         });
                         var element = (formgroup.start || '') + label + 
-                            '<input' + el.type + el.name + el.id + el.minlength + el.maxlength + el.placeholder + el.classname + 
-                            el.value + el.title + el.min + el.max + el.step + el.size + el.pattern + el.autocomplete + el.multiple + el.readonly + el.disabled + el.autofocus + el.required + '>' + 
+                            '<input data-nos' + el.type + el.name + el.id + el.minlength + el.maxlength + el.placeholder + el.classname + 
+                            el.value + el.title + el.min + el.max + el.step + el.size + el.pattern + el.autocomplete + el.multiple + el.readonly + 
+                            el.disabled + el.autofocus + el.required + '>' + 
                             (el.message.required || '') + (el.message.minlength || '') + (el.message.valid || '') + (el.message.min || '') + (el.message.max || '') + 
                             (formgroup.end || '');
                         return element;
@@ -160,7 +163,7 @@
                             width: input.width && ' width="' + input.width + '"' || ''
                         });
                         var element = (formgroup.start || '') + 
-                            '<input' + el.type + el.name + el.id + el.classname + el.title + el.src + el.alt + el.height + el.width + 
+                            '<input data-nos' + el.type + el.name + el.id + el.classname + el.title + el.src + el.alt + el.height + el.width + 
                             el.formtarget + el.formmethod + el.formaction + el.formenctype + el.disabled + el.value + el.formnovalidate + '>&nbsp;' + 
                             (formgroup.end || formgroup);
                         return element;
@@ -177,7 +180,7 @@
                             wrap: input.wrap && ' wrap="' + input.wrap + '"' || ''
                         });
                         var element = (formgroup.start || '') + label + 
-                            '<textarea' + 
+                            '<textarea data-nos' + 
                             el.name + el.id + el.title + el.minlength + el.maxlength + el.placeholder + el.classname + el.value + el.rows + el.cols + el.wrap + el.readonly + el.disabled + el.autofocus + el.required + 
                             '></textarea>' + 
                             (el.message.required || '') + (el.message.minlength || '') + 
@@ -197,7 +200,7 @@
                             options += '<option value="' + k + '" ' + selectedOption + '>' + v + '</option>';
                         });
                         var element = (formgroup.start || '') + label + 
-                            '<select' + 
+                            '<select data-nos' + 
                             el.name + el.id + el.classname + el.multiple + el.title + el.size + el.readonly + el.disabled + el.autofocus + el.required + '>' + 
                             options + 
                             '</select>' + 
@@ -232,7 +235,7 @@
                                 console.warn('Your checkbox/radio "checked" property must be an object or string');
                             }
                             element += (div.start || '') + 
-                                    '<label' + el.inline + '><input' +
+                                    '<label' + el.inline + '><input data-nos' +
                                     el.type + el.name + el.title + el.id+k+'" ' + el.classname + ' value="' + k + '"' + checked + el.disabled + el.autofocus + el.required + 
                                     '>' + 
                                     v + 
@@ -257,7 +260,7 @@
                         });
                         var element = (formgroup.start || '') + label + 
                             (div.start || '') + 
-                            '<input' + el.type + el.name + el.id + el.title + el.accept + el.multiple + el.disabled + el.autofocus + el.required + 
+                            '<input data-nos' + el.type + el.name + el.id + el.title + el.accept + el.multiple + el.disabled + el.autofocus + el.required + 
                             '>' +  
                             (el.message.required || '') + 
                             (div.end || '') + 
@@ -313,7 +316,7 @@
                             options += '<option value="' + v + '" ' + selectedOption + '>' + k + '</option>';
                         });
                         var element = (formgroup.start || '') + label + 
-                            '<select ' + el.name + el.id + el.classname + el.size + el.multiple + el.readonly + el.disabled + el.autofocus + el.required + 
+                            '<select data-nos ' + el.name + el.id + el.classname + el.size + el.multiple + el.readonly + el.disabled + el.autofocus + el.required + 
                             '>' + 
                             options + 
                             '</select>' + 
@@ -407,11 +410,11 @@
                     });
                 
                     // selectors for required fields
-                    var reqInput = $('input:not(:radio, :checkbox, :button, :submit, :reset, :file, :image), textarea').filter('[required]:visible'),
-                        reqSR = $('select').filter('[required]:visible'),
-                        fileField = $(':file').filter('[required]:visible'),
-                        cbgroup = $(':checkbox').parents('fieldset'),
-                        cb = $(':checkbox, :radio').filter('[required]:visible').parents('fieldset');
+                    var reqInput = $('[data-nos]:not(:radio, :checkbox, :button, :submit, :reset, :file, :image, select)').filter('[required]:visible'),
+                        reqSR = $('select[data-nos]').filter('[required]:visible'),
+                        fileField = $(':file[data-nos]').filter('[required]:visible'),
+                        cbgroup = $(':checkbox[data-nos]').parents('fieldset'),
+                        cb = $(':checkbox, :radio[data-nos]').filter('[required]:visible').parents('fieldset');
                    
                     // checkbox and radio validation
                     // build individual arrays for each required field and check to see if arrays are empty on form submit
@@ -534,8 +537,8 @@
                     
                     // resets form
                     function reset () {
-                        $(':reset').click(function () {
-                            $(this).closest('form').find(':input:not(:submit, :reset, :button, :image), textarea, select').val('');
+                        $(':reset[data-nos]').click(function () {
+                            $(this).closest('form').find(':input:not(:submit, :reset, :button, :image)').val('');
                             $('.nos-help').slideUp();
                         });
                     }

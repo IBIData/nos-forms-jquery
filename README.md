@@ -106,6 +106,11 @@ $("#myform").nosForm({
     fields: {}, // Your json data,
     validate: true, // toggle javascript validation
     htmlValidation: false, // toggle html browser validation
+    animationSpeed: 100, // change speed of js animations (this will alter the default jquery slideUp() and slideDown() speeds)
+    messages: { // these are the messages that will appear on the bottom of the form when an unsuccessful submit has occurred
+        required: 'Please fill out all required fields', // warning about required fields
+        invalid: 'Invalid fields' // warning about invalid fields (pattern, minlength, min, max)
+    },
     submit: function (formdata) {
         // your submit function
         // this will pass back the entered form data as a formatted json object
@@ -164,47 +169,130 @@ Create as many columns as you like.
 
 There are a few special element types available.
 
+**state**
 
+This will render a select element with all 50 states and options for Canadian Provinces and US Territories
+
+**zip**
+
+Will render a text box with zip code pattern validation built in
 
 ###Properties
 
-**type** | Required | String
+**type** | *Required* | *String*
 
 - Specifies the type of element
 
-**name** | Required | String
+**name** | *Required* | *String*
 
 - Gives the element a name, and will be used as the id if none is specified
 
-**id** | String
+**id** | *String*
 
 - Gives the element an id. If not specified, the name will also be the id.
 
-**formGroup** | Boolean
+**formGroup** | *Boolean*
 
 - Wraps the element in a Bootstrap form group
 
-**classname** | String
+**classname** | *String*
 
 - Gives the element a class
 
-**label** | String
+**label** | *String*
 
 - Adds a label above element
 
-**mask** | String
+**mask** | *String*
  
 - Adds a masked input to a text element. [Requires external plugin](https://github.com/digitalBush/jquery.maskedinput)
 
 All other html attributes are supported and behave as expected. See the examples below.
 
+##Validation 
+
+By default, validation will happen when you specify certain properties in your json file. All fields will be checked for values and sanitized. Error messages will be generated, and it will basically take care of itself.
+
+- ***required*** - adds required tag and ensures a value is in place
+
+- ***minlength*** - adds minlength tag and checks with javascript
+
+- ***maxlength*** - adds maxlength tag and double checks it with javascript
+
+- ***pattern*** - will validate input against a regex of your choosing
+
+- ***min*** - adds min tag and checks
+
+- ***max*** - adds max tag and checks
+
+###Validation Messages
+
+By default, there are messages in place that warn the user about missing/invalid fields. They are inside hidden Bootstrap alert divs. If you do not specify a value, they will name each field by whatever value you have on the label. If you don't have a label, they will find a placeholder value.
+
+These messages can be customized for each field, if you need. See the examples below.
+
+There are also some default form messages that will display on the bottom of the form if the user tries to submit unsuccessfully. These can be customized in the plugin initilization, as mentioned in the 'Options' section.
+
 ##Examples
+
+The following examples have all available options listed. Normally they won't look so bloated.
 
 ####text
 
-**
-
+```json
+{
+    "name": "txtExample",
+    "id": "txtId",
+    "type": "text",
+    "autofocus": true,
+    "label": "Simple Text Field Example",
+    "required": true,
+    "classname": "form-control",
+    "formGroup": true,
+    "placeholder": "Just a Text Field",
+    "pattern": "[A-Za-z]{5}",
+    "minlength": 5,
+    "maxlength": 60,
+    "value": "",
+    "title": "Simple Text Field",
+    "autocomplete": "on",
+    "disabled": false,
+    "readonly": false,
+    "size": 60,
+    "message": {
+        "required": "This simple text field is required",  
+        "invalid": "This field must be valid",
+        "minlength": "This field must be at least 5 characters long"
+    }
+}
+```
 ####email
+```json
+{
+    "name": "emailExample",
+    "id": "emailId",
+    "type": "email",
+    "autofocus": false,
+    "label": "Email Example",
+    "required": true,
+    "classname": "form-control secondClass",
+    "formGroup": true,
+    "placeholder": "Email Address",
+    "minlength": 1,
+    "maxlength": 100,
+    "value": "",
+    "title": "Email Address",
+    "autocomplete": "on",
+    "disabled": false,
+    "readonly": false,
+    "size": 60,
+    "message": {
+        "required": "This simple text field is required",  
+        "invalid": "This field must be valid",
+        "minlength": "This field must be at least 5 characters long"
+    }
+}
+```
 ####tel
 ####date
 ####submit

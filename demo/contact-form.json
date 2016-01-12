@@ -76,6 +76,30 @@
         "maxlength": 60
     },
     {
+        "name": "weekExample",
+        "type": "week",
+        "label": "Week Example",
+        "required": true,
+        "classname": "form-control",
+        "formGroup": true
+    },
+    {
+        "name": "monthExample",
+        "type": "month",
+        "label": "Month Example",
+        "required": true,
+        "classname": "form-control",
+        "formGroup": true
+    },
+    {
+        "name": "datetimeLocalExample",
+        "type": "datetime-local",
+        "label": "Datetime Local Example",
+        "required": true,
+        "classname": "form-control",
+        "formGroup": true
+    },
+    {
         "name": "urlexample",
         "id": "urlid",
         "type": "url",
