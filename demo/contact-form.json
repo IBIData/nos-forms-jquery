@@ -4,7 +4,7 @@
         "id": "txtid",
         "type": "text",
         "autofocus": true,
-        "label": "Simple Text Field Example",
+        "label": "Name",
         "required": true,
         "classname": "form-control",
         "formGroup": true,
@@ -59,10 +59,24 @@
         "type": "zip",
         "label": "Zip Code Example",
         "required": true,
+        "disabled": true,
         "classname": "form-control",
         "formGroup": true,
         "placeholder": "Zip Code",
         "mask": "99999?-9999"
+    },
+    {
+        "name": "cloneExample",
+        "type": "clone",
+        "classname": "form-control",
+        "formGroup": true,
+        "label": "Clone Example",
+        "placeholder": "Item",
+        "start": 3,
+        "maxFields": 5,
+        "addon": "<i class='glyphicon glyphicon-ok'></i>",
+        "addButtonValue": "Add",
+        "removeButtonValue": "Remove"
     },
     {
         "name": "dateexample",
@@ -105,11 +119,13 @@
         "type": "url",
         "label": "URL Example",
         "required": true,
+        "readonly": false,
         "classname": "form-control",
         "formGroup": true,
         "minlength": 1,
         "maxlength": 60,
-        "placeholder": "http://www.example.com"
+        "placeholder": "http://www.example.com",
+        "value": ""
     },
     {
         "name": "colorexample",
@@ -129,6 +145,7 @@
         "required": true,
         "classname": "",
         "formGroup": true,
+        "disabled": false,
         "min": 1,
         "max": 100,
         "step": 1,
@@ -139,8 +156,9 @@
         "type": "file",
         "label": "File Upload Example",
         "formGroup": true,
-        "classname": "",
+        "classname": "files",
         "required": true,
+        "disabled": false,
         "accept": "image/*",
         "multiple": true
     },
@@ -164,6 +182,9 @@
         "formGroup": true,
         "required": true,
         "multiple": false,
+        "disabled": false,
+        "title": "Select",
+        "readonly": false,
         "selected": "",
         "options": {
             "": "Select One...",
@@ -179,6 +200,7 @@
         "label": "Check a Box",
         "formGroup": true,
         "required": true,
+        "disabled": false,
         "inline": false,
         "checked": [
             "value2",
@@ -197,6 +219,7 @@
         "formGroup": true,
         "required": true,
         "inline": true,
+        "disabled": false,
         "checked": "",
         "options": {
             "value1": "First Option",

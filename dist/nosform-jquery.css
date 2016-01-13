@@ -48,19 +48,7 @@
     margin-top: 5px !important;
 }
 
-.valid {
-    border: 1px solid green;
-}
-
-.invalid {
-    border: 1px solid red;
-}
-
-/*.nos-help {
-    color: red !important;
-}*/
-
-.nos-form-group {
+.form-group, .nos-form-group {
     margin-bottom: 15px;
 }
 

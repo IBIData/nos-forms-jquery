@@ -3,18 +3,17 @@
         "classname": "col-md-6 col-sm-6 col-xs-12",
         "column": [
             {
-                "name": "txtexample",
+                "name": "name",
                 "id": "txtid",
                 "type": "text",
                 "title": "test",
                 "autofocus": true,
-                "label": "Simple Text Field Example",
+                "label": "Name",
                 "required": true,
                 "classname": "form-control",
                 "formGroup": true,
                 "placeholder": "Your Name",
-                "pattern": "[A-Za-z]{3}",
-                "minlength": 2,
+                "minlength": 1,
                 "maxlength": 60,
                 "messages": {
                     "required": "This is a required field",
@@ -44,6 +43,7 @@
                 "name": "emailexample",
                 "type": "email",
                 "title": "test",
+                "validate": false,
                 "label": "Email Example",
                 "required": true,
                 "classname": "form-control",
@@ -100,6 +100,21 @@
                 "maxlength": 60
             }
         ]
+    },
+    {
+        "classname": "col-md-12",
+        "column": [
+            {
+                "name": "newsletterSubscribe",
+                "type": "checkbox",
+                "formGroup": true,
+                "inline": true,
+                "checked": "",
+                "options": {
+                    "optIn": "Subscribe to Email Newsletter"
+                }
+            }
+        ]  
     },
     {
         "classname": "col-md-12 col-sm-12 col-xs-12",
