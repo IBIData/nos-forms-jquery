@@ -14,7 +14,6 @@ This plugin is intended for people who spend a lot of time building tedious form
 - [jQuery](http://jquery.com/download/) - minimum version 1.9
 
 - [Bootstrap](http://getbootstrap.com/getting-started/) (recommended) - minimum version 3.0
-----------------------------------------
 
 ##Getting Started
 ----------------------------------------
@@ -24,7 +23,6 @@ This plugin is intended for people who spend a lot of time building tedious form
 2. Create empty form element with a unique id/class
 
 3. Call nosForm function, specifying your data and options
-----------------------------------------
 
 ##Quick Example
 ----------------------------------------
