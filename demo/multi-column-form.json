@@ -10,8 +10,6 @@
                 "autofocus": true,
                 "label": "Name",
                 "required": true,
-                "classname": "form-control",
-                "formGroup": true,
                 "placeholder": "Your Name",
                 "minlength": 1,
                 "maxlength": 60,
@@ -29,8 +27,6 @@
                 "label": "Number Example",
                 "required": true,
                 "placeholder": "A Number",
-                "classname": "form-control",
-                "formGroup": true,
                 "min": 5,
                 "max": 10,
                 "step": 1,
@@ -43,13 +39,12 @@
                 "name": "emailexample",
                 "type": "email",
                 "title": "test",
-                "validate": false,
+                "validate": true,
                 "label": "Email Example",
                 "required": true,
-                "classname": "form-control",
-                "formGroup": true,
                 "placeholder": "Your Email",
-                "minlength": 1
+                "minlength": 1,
+                "maxlength": 100
             }
         ]
     },
@@ -102,7 +97,7 @@
         ]
     },
     {
-        "classname": "col-md-12",
+        "classname": "col-md-12 col-sm-12 col-xs-12",
         "column": [
             {
                 "name": "newsletterSubscribe",

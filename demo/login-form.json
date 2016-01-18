@@ -1,0 +1,53 @@
+[
+    {
+        "classname": "col-md-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-12",
+        "column": [
+            {
+                "type": "html",
+                "element": "<div class='form-group'><h1 style='text-align: center;'>Log In</h1></div>"
+            },
+            {
+                "name": "name",
+                "type": "text",
+                "autofocus": true,
+                "required": true,
+                "classname": "form-control",
+                "formGroup": true,
+                "placeholder": "User Name or Email Address",
+                "maxlength": 60,
+                "autocomplete": "on",
+                "messages": {
+                    "required": "You must enter a user name or email address!"
+                }
+            },
+            {
+                "name": "password",
+                "type": "password",
+                "required": true,
+                "autofocus": false,
+                "disabled": false,
+                "readonly": false,
+                "placeholder": "Password",
+                "classname": "form-control",
+                "formGroup": true,
+                "maxlength": 20,
+                "minlength": 6,
+                "messages": {
+                    "required": "You must enter a password!",
+                    "minlength": "Your password must be at least 6 characters!"
+                }
+            },
+            {
+                "name": "submit",
+                "type": "submit",
+                "classname": "btn btn-primary btn-block",
+                "formGroup": true,
+                "value": "Log In"
+            },
+            {
+                "type": "html",
+                "element": "<a href='#'><div style='text-align: center'>Sign up for a new account</div></a>"
+            }
+        ]
+    }
+]

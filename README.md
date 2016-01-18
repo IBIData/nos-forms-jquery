@@ -2,7 +2,7 @@
 
 **Quickly generate and validate html forms with jQuery, Bootstrap and json objects.**
 
-This is a simple json form builder that will build and validate your forms for you. It will also handle serializing your data and spit out a nice json object to your submit function. This is meant to be used with Bootstrap, but you could probably get along without it.
+This is a simple json form builder that will build and validate your forms for you. It will also handle serializing your data and spit out a nice json object to your submit function. This plugin is meant to be used with Bootstrap.
 
 This plugin is intended for people who spend a lot of time building tedious forms. Copying and pasting json objects from this file is encouraged, as well as saving and reusing json files to build your forms.
 
@@ -13,7 +13,7 @@ This plugin is intended for people who spend a lot of time building tedious form
 
 - [jQuery](http://jquery.com/download/) - minimum version 1.9
 
-- [Bootstrap](http://getbootstrap.com/getting-started/) (recommended) - minimum version 3.0
+- [Bootstrap](http://getbootstrap.com/getting-started/) - minimum version 3.0
 
 ##Getting Started
 ----------------------------------------
@@ -110,7 +110,7 @@ $("#myform").nosForm({
     fields: {}, // Your json data,
     validate: true, // toggle javascript validation
     htmlValidation: false, // toggle html browser validation
-    animationSpeed: 100, // change speed of js animations (this will alter the default jquery slideUp() and slideDown() speeds)
+    animationSpeed: 100, // change speed of js animations (error message animations)
     messages: { // these are the messages that will appear on the bottom of the form when an unsuccessful submit has occurred
         required: 'Please fill out all required fields', // warning about required fields
         invalid: 'Invalid fields' // warning about invalid fields (pattern, minlength, min, max)
@@ -167,6 +167,60 @@ If you would like a form to work with multiple columns, you just have to format 
 ]
 ```
 
+###Nesting Columns
+
+Nesting columns can be accomplished by declaring a row where needed.
+
+```json
+[
+    {
+        "row": true, // adds a row class div before this column
+        "classname": "col-md-6 col-md-offset-3", // centers this form on the page in a col-6
+        "column": [
+            {
+                "row": true, // adds another row
+                "classname": "col-md-12", // nests a col-12 class inside the col-6
+                "column": [
+                    {
+                        // form element here
+                    }
+                ]
+            },
+            {
+                "row": true,
+                "column": [
+                    {
+                        "classname": "col-md-6",
+                        "column": [
+                            {
+                                // form element here
+                            }
+                        ]
+                    },
+                    {
+                        "classname": "col-md-6",
+                        "column": [
+                            {
+                                // form element here
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "classname": "col-md-12",
+                "row": true,
+                "column": [
+                    {
+                        // form element here
+                    }
+                ]
+            }
+        ]
+    }
+]
+```
+
 This format allows you to create your form elements in blocks. Adding Bootstrap classes makes it easy for you to display your form in a column layout. Add as many columns as you'd like.
 
 ##Special Types
@@ -178,6 +232,8 @@ There are a few special element types available.
 **zip** - Will render a text box with zip code pattern validation built in
 
 **clone** - Will create a text input with add/remove field buttons. Good for letting users enter an undetermined amount of data.
+
+**html** - Allows you to insert any custom html and have it render in the order specified in your json 
 
 ##Properties
 
@@ -193,11 +249,11 @@ There are a few special element types available.
 
 - Gives the element an id. If not specified, the name will also be the id.
 
-**formGroup** | *Boolean*
+**formGroup** | *Boolean* | defaults to true
 
 - Wraps the element in a Bootstrap form group
 
-**classname** | *String*
+**classname** | *String* | defaults to form-control (for text-based fields)
 
 - Gives the element a class
 
@@ -208,6 +264,10 @@ There are a few special element types available.
 **mask** | *String*
  
 - Adds a masked input to a text element. [Requires external plugin](https://github.com/digitalBush/jquery.maskedinput)
+
+**helpBlock** | *String*
+
+- Adds a Bootstrap help-block of text below element
 
 All other html attributes are supported and behave as expected. See the examples below.
 
@@ -228,11 +288,37 @@ By default, validation will happen when you specify certain properties in your j
 
 - ***max*** - adds max tag and checks
 
+- ***match*** - enter in the id of an element to check against. This will check that these values match (Mostly for password confirmation). You can customize the error message with the 'invalid' message.
+
 ###Validation Messages
+
+----------------------------------------
 
 By default, there are messages in place that warn the user about missing/invalid fields. They are inside hidden Bootstrap alert divs. If you do not specify a value, they will name each field by whatever value you have on the label. If you don't have a label, they will find a placeholder value.
 
 These messages can be customized for each field, if you need. See the examples below.
+
+There are five specific types of message that can appear for each field: 
+
+ - ***required*** - "[field name] is a required field"
+ 
+    - triggered (on submit) when a required field is left blank
+ 
+ - ***minlength*** - "[field name] must have a minimum of * characters"
+ 
+    - triggered (as you type) when a minlength has not been met
+ 
+ - ***invalid*** - "[field name] must be valid"
+ 
+    - triggered (as you type) when certain criteria have not been met. (email/zip/phone not valid, regex pattern not matching, passwords not matching, etc.)
+ 
+ - ***min*** - "[field name] must have a minimum value of *."
+ 
+    - triggered (as you type) when a minimum has not been met (numbers, dates)
+ 
+ - ***max*** - "[field name] must have a maximum value of *."
+ 
+    - triggered (as you type) when a max has been overshot
 
 There are also some default form messages that will display on the bottom of the form if the user tries to submit unsuccessfully. These can be customized in the plugin initilization, as mentioned in the 'Options' section.
 
@@ -263,7 +349,7 @@ The following examples have all available options listed. Normally they won't lo
     "disabled": false,
     "readonly": false,
     "size": 60,
-    "message": {
+    "messages": {
         "required": "This simple text field is required",  
         "invalid": "This field must be valid",
         "minlength": "This field must be at least 5 characters long"
@@ -292,7 +378,7 @@ The following examples have all available options listed. Normally they won't lo
     "disabled": false,
     "readonly": false,
     "size": 100,
-    "message": {
+    "messages": {
         "required": "Email Address is required",  
         "invalid": "Your email must be valid"
     }
@@ -321,7 +407,7 @@ The following examples have all available options listed. Normally they won't lo
     "readonly": false,
     "size": 100,
     "mask": "999-999-9999", // requires masked input plugin https://github.com/digitalBush/jquery.maskedinput
-    "message": {
+    "messages": {
         "required": "Your phone number is required",  
         "invalid": "Your phone number must be valid"
     }
@@ -495,6 +581,7 @@ The following examples have all available options listed. Normally they won't lo
     "name": "passwordExample",
     "id": "passwordId",
     "type": "password",
+    "match": "otherpasswordid", // if this is a 'confirm password' field, enter the id of the password field to match here and it will validate/display messages
     "label": "Password Example",
     "title": "Password Example",
     "required": true,
@@ -506,9 +593,10 @@ The following examples have all available options listed. Normally they won't lo
     "formGroup": true,
     "minlength": 6,
     "maxlength": 20,
-    "message": {
+    "messages": {
         "required": "You must enter a password!",
-        "minlength": "Your password must be at least 6 characters"
+        "minlength": "Your password must be at least 6 characters",
+        "invalid": "Your passwords do not match!" // add the 'invalid' message when you are confirming passwords
     }
 }
 ```
@@ -530,12 +618,20 @@ The following examples have all available options listed. Normally they won't lo
     "min": 5,
     "max": 10,
     "step": 1,
-    "message": {
+    "messages": {
         "min": "Your number must have a minimum value of 5",
         "max": "Your number must be no greater than 10"   
     }
 }
 ```
+####html
+```json
+{
+    "type": "html",
+    "element": "<div class='form-group'><h3>My Custom element</h3></div>"   
+}
+```
+####clone
 ```json
 {
     "name": "cloneExample",
@@ -548,7 +644,9 @@ The following examples have all available options listed. Normally they won't lo
     "maxFields": 5, // the maximum allowed inputs to display on the page
     "addon": "<i class='glyphicon glyphicon-ok'></i>", // if you have a custom addon, insert here (symbols, html, text). Numbered by default
     "addButtonValue": "Add", // value of the button that adds fields
-    "removeButtonValue": "Remove" // value of the button that removes fields
+    "removeButtonValue": "Remove", // value of the button that removes fields
+    "addButtonClass": "btn btn-primary", // classes for add button
+    "removeButtonClass": "btn btn-danger" // classes for remove button
 }
 ```
 ####state
@@ -751,6 +849,7 @@ The following examples have all available options listed. Normally they won't lo
     "classname": "",
     "disabled": false,
     "autofocus": false,
+    "helpBlock": "Only image files are accepted",
     "title": "File Upload Example",
     "required": true,
     "accept": "image/*",

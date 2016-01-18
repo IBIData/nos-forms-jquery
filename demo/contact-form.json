@@ -6,8 +6,6 @@
         "autofocus": true,
         "label": "Name",
         "required": true,
-        "classname": "form-control",
-        "formGroup": true,
         "placeholder": "Your Name",
         "pattern": "[A-Za-z]{3}",
         "minlength": 2,
@@ -19,14 +17,43 @@
         }
     },
     {
+        "type": "html",
+        "element": "<div class='form-group'><div class='well'><h3>I'm a Well</h3></div></div>"
+    },
+    {
+        "row": true,
+        "column": [
+            {
+                "classname": "col-md-6",
+                "column": [
+                    {
+                        "name": "emailtest",
+                        "type": "email",
+                        "validate": false,
+                        "label": "Email"
+                    }
+                ]
+            },
+            {
+                "classname": "col-md-6",
+                "column": [
+                    {
+                        "name": "emailtest2",
+                        "type": "email",
+                        "validate": true,
+                        "label": "Email"
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "name": "numberexample",
         "id": "numberid",
-        "type": "number",
+        "type": "text",
         "label": "Number Example",
         "required": true,
         "placeholder": "A Number",
-        "classname": "form-control",
-        "formGroup": true,
         "min": 5,
         "max": 10,
         "step": 1
@@ -36,8 +63,6 @@
         "type": "email",
         "label": "Email Example",
         "required": true,
-        "classname": "form-control",
-        "formGroup": true,
         "placeholder": "Your Email",
         "minlength": 1
     },
@@ -46,8 +71,6 @@
         "type": "tel",
         "label": "Phone Number Example",
         "required": true,
-        "classname": "form-control",
-        "formGroup": true,
         "placeholder": "Your Phone Number",
         "mask": "999-999-9999",
         "minlength": 1,
@@ -59,32 +82,28 @@
         "type": "zip",
         "label": "Zip Code Example",
         "required": true,
-        "disabled": true,
-        "classname": "form-control",
-        "formGroup": true,
         "placeholder": "Zip Code",
         "mask": "99999?-9999"
     },
     {
         "name": "cloneExample",
         "type": "clone",
-        "classname": "form-control",
         "formGroup": true,
         "label": "Clone Example",
         "placeholder": "Item",
         "start": 3,
         "maxFields": 5,
-        "addon": "<i class='glyphicon glyphicon-ok'></i>",
+        "addon": "http://",
         "addButtonValue": "Add",
-        "removeButtonValue": "Remove"
+        "removeButtonValue": "Remove",
+        "addButtonClass": "btn btn-primary",
+        "removeButtonClass": "btn btn-danger"
     },
     {
         "name": "dateexample",
         "type": "date",
         "label": "Date Example",
         "required": true,
-        "classname": "form-control",
-        "formGroup": true,
         "placeholder": "Date",
         "minlength": 1,
         "maxlength": 60
@@ -93,25 +112,19 @@
         "name": "weekExample",
         "type": "week",
         "label": "Week Example",
-        "required": true,
-        "classname": "form-control",
-        "formGroup": true
+        "required": true
     },
     {
         "name": "monthExample",
         "type": "month",
         "label": "Month Example",
-        "required": true,
-        "classname": "form-control",
-        "formGroup": true
+        "required": true
     },
     {
         "name": "datetimeLocalExample",
         "type": "datetime-local",
         "label": "Datetime Local Example",
-        "required": true,
-        "classname": "form-control",
-        "formGroup": true
+        "required": true
     },
     {
         "name": "urlexample",
@@ -119,22 +132,15 @@
         "type": "url",
         "label": "URL Example",
         "required": true,
-        "readonly": false,
-        "classname": "form-control",
-        "formGroup": true,
         "minlength": 1,
         "maxlength": 60,
-        "placeholder": "http://www.example.com",
-        "value": ""
+        "placeholder": "http://www.example.com"
     },
     {
         "name": "colorexample",
         "id": "colorid",
         "type": "color",
         "label": "Color Picker Example",
-        "required": true,
-        "classname": "",
-        "formGroup": true,
         "value": "#E7E7E8"
     },
     {
@@ -143,9 +149,6 @@
         "type": "range",
         "label": "Range Example",
         "required": true,
-        "classname": "",
-        "formGroup": true,
-        "disabled": false,
         "min": 1,
         "max": 100,
         "step": 1,
@@ -155,7 +158,6 @@
         "name": "fileupload",
         "type": "file",
         "label": "File Upload Example",
-        "formGroup": true,
         "classname": "files",
         "required": true,
         "disabled": false,
@@ -166,8 +168,6 @@
         "name": "stateSelect",
         "type": "state",
         "label": "State",
-        "classname": "form-control",
-        "formGroup": true,
         "required": true,
         "selected": "",
         "defaultSelected": "Select One...",
@@ -178,8 +178,6 @@
         "name": "select",
         "type": "select",
         "label": "Select Option",
-        "classname": "form-control",
-        "formGroup": true,
         "required": true,
         "multiple": false,
         "disabled": false,
@@ -198,10 +196,9 @@
         "name": "mycb",
         "type": "checkbox",
         "label": "Check a Box",
-        "formGroup": true,
         "required": true,
         "disabled": false,
-        "inline": false,
+        "inline": true,
         "checked": [
             "value2",
             "value3"
@@ -216,10 +213,8 @@
         "name": "myRadio",
         "type": "radio",
         "label": "Radio",
-        "formGroup": true,
         "required": true,
         "inline": true,
-        "disabled": false,
         "checked": "",
         "options": {
             "value1": "First Option",
@@ -232,8 +227,6 @@
         "type": "textarea",
         "label": "Message",
         "required": true,
-        "classname": "form-control",
-        "formGroup": true,
         "placeholder": "Your message",
         "minlength": 5,
         "maxlength": 200,
@@ -259,9 +252,7 @@
         "name": "imageexample",
         "id": "imageid",
         "type": "image",
-        "classname": "",
         "formGroup": true,
-        "inline": false,
         "src": "http://placehold.it/50x40",
         "alt": "Placeholder Image"
     }

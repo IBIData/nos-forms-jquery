@@ -1,0 +1,170 @@
+[
+    {
+        "classname": "col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12",
+        "row": true,
+        "column": [
+            {
+                "row": true,
+                "classname": "col-md-12",
+                "column": [
+                    {
+                        "type": "html",
+                        "element": "<div class='form-group'><h1>Sign Up</h1></div>"
+                    }
+                ]
+            },
+            {
+                "row": true,
+                "column": [
+                    {
+                        "classname": "col-md-6",
+                        "column": [
+                            {
+                                "name": "firstname",
+                                "type": "text",
+                                "placeholder": "First Name",
+                                "required": true,
+                                "minlength": 1,
+                                "maxlength": 60,
+                                "messages": {
+                                    "required": "Your first name is required!"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "classname": "col-md-6",
+                        "column": [
+                            {
+                                "name": "lastname",
+                                "type": "text",
+                                "placeholder": "Last Name",
+                                "required": true,
+                                "minlength": 1,
+                                "maxlength": 60,
+                                "messages": {
+                                    "required": "Your last name is required!"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "classname": "col-md-12",
+                "row": true,
+                "column": [
+                    {
+                        "name": "username",
+                        "type": "text",
+                        "placeholder": "User Name",
+                        "required": true,
+                        "minlength": 8,
+                        "maxlength": 60,
+                        "messages": {
+                            "required": "Your user name is required!",
+                            "minlength": "Your user name must contain at least 8 characters!"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "type": "email",
+                        "placeholder": "Email Address",
+                        "required": true,
+                        "minlength": 1,
+                        "maxlength": 60,
+                        "validate": true,
+                        "messages": {
+                            "required": "Your email address is required!",
+                            "invalid": "Your email address must be valid!"
+                        }
+                    }
+                ]
+            },
+            {
+                "row": true,
+                "column": [
+                    {
+                        "classname": "col-md-6",
+                        "column": [
+                            {
+                                "name": "password",
+                                "id": "pwdId",
+                                "type": "password",
+                                "placeholder": "Password",
+                                "required": true,
+                                "minlength": 8,
+                                "maxlength": 30,
+                                "messages": {
+                                    "required": "A valid password is required!"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "classname": "col-md-6",
+                        "column": [
+                            {
+                                "name": "repeatpassword",
+                                "type": "password",
+                                "match": "pwdId",
+                                "placeholder": "Confirm Password",
+                                "required": true,
+                                "maxlength": 30,
+                                "messages": {
+                                    "required": "You must type your password again!",
+                                    "invalid": "Your passwords do not match!"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "classname": "col-md-12",
+                "row": true,
+                "column": [
+                    {
+                        "name": "agreement",
+                        "type": "checkbox",
+                        "inline": true,
+                        "required": true,
+                        "options": {
+                            "agree": "I agree to the <a href='#'>terms and conditions</a>"
+                        },
+                        "messages": {
+                            "required": "You must agree to the terms and conditions before registering!"
+                        }
+                    }
+                ]
+            },
+            {
+                "row": true,
+                "column": [
+                    {
+                        "classname": "col-md-6 col-sm-6 col-xs-12",
+                        "column": [
+                            {
+                                "name": "signup",
+                                "type": "submit",
+                                "classname": "btn btn-primary btn-block",
+                                "value": "Sign Up"
+                            }
+                        ]
+                    },
+                    {
+                        "classname": "col-md-6 col-sm-6 col-xs-12",
+                        "column": [
+                            {
+                                "name": "login",
+                                "type": "button",
+                                "classname": "btn btn-success btn-block",
+                                "value": "Log In"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]
