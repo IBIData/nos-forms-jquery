@@ -503,7 +503,7 @@ The following examples have all available options listed. Normally they won't lo
     "formGroup": true,
     "required": true,
     "disabled": false,
-    "inline": false,
+    "inline": false, // display checkboxes inline. this basically just changes the bootstrap layout for checkbox controls
     "checked": [ "value2", "value3" ], // accepts a value from the options below. can be a string or an array of options
     "options": {
         "value1": "First Option",
@@ -545,10 +545,10 @@ The following examples have all available options listed. Normally they won't lo
     "title": "Select Example",
     "multiple": false,
     "selected": "", // by setting the selected option to a blank string, we are setting it to the blank value in the options object below
-    "options": {
+    "options": { 
         "": "Select One...",
         "value1": "First Value",
-        "value2": "Second Value",
+        "value2": "Second Value",   // accepts an object or an array of objects
         "value3": "Third Value",
         "value4": "Fourth Value"
     }

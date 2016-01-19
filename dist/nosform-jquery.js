@@ -53,8 +53,6 @@
             other: ['range', 'color']
         };
                 
-                
-                
         // takes user form object and converts to string fragments for creating html
         this.getAttrs = function (input) {
 
@@ -140,7 +138,7 @@
                 var element = el.formGroup.start + el.label +
                     '<input data-nos' + el.type + el.name + el.id + el.minlength + el.maxlength + el.placeholder + el.classname +
                     el.value + el.title + el.min + el.max + el.step + el.size + el.pattern + el.autocomplete + el.multiple + el.readonly +
-                    el.disabled + el.autofocus + el.required + '>' + el.helpBlock + 
+                    el.disabled + el.autofocus + el.required + '>' + el.helpBlock +
                     el.message.required + el.message.minlength + el.message.valid + el.message.min + el.message.max +
                     el.formGroup.end;
                 return element;
@@ -180,7 +178,7 @@
                 var element = el.formGroup.start + el.label +
                     '<textarea data-nos' +
                     el.name + el.id + el.title + el.minlength + el.maxlength + el.placeholder + el.classname + el.value + el.rows + el.cols + el.wrap + el.readonly + el.disabled + el.autofocus + el.required +
-                    '></textarea>' + el.helpBlock + 
+                    '></textarea>' + el.helpBlock +
                     el.message.required + el.message.minlength +
                     el.formGroup.end;
                 return element;
@@ -188,10 +186,18 @@
                     
             // returns select elements
             select: function (input) {
+                console.log(input.options);
+                if (input.options.length) {
+                    $.each(input.options, function () {
+                        console.log(this);
+                    });
+                }
+                var options = '';
                 var el = $.extend(this.self.getAttrs(input), {
                     classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"'
                 });
-                $.each(input.options, function (k, v) {
+                var selOptions = input.options;
+                $.each(selOptions, function (k, v) {
                     var selectedOption;
                     el.selected === k ? selectedOption = ' selected' : selectedOption = '';
                     options += '<option value="' + k + '" ' + selectedOption + '>' + v + '</option>';
@@ -200,7 +206,7 @@
                     '<select data-nos' +
                     el.name + el.id + el.classname + el.multiple + el.title + el.size + el.readonly + el.disabled + el.autofocus + el.required + '>' +
                     options +
-                    '</select>' + el.helpBlock + 
+                    '</select>' + el.helpBlock +
                     el.message.required +
                     el.formGroup.end;
                 return element;
@@ -232,7 +238,7 @@
                     el.type + el.name + el.title + el.id + k + '" ' + el.classname + ' value="' + k + '"' + checked + el.disabled + el.autofocus + el.required +
                     '>' +
                     v +
-                    '</label>' + el.helpBlock + 
+                    '</label>' + el.helpBlock +
                     el.div.end;
                 });
 
@@ -251,7 +257,7 @@
                 var element = el.formGroup.start + el.label +
                     el.div.start +
                     '<input data-nos' + el.type + el.name + el.id + el.title + el.accept + el.multiple + el.disabled + el.autofocus + el.required +
-                    '>' + el.helpBlock + 
+                    '>' + el.helpBlock +
                     el.message.required +
                     el.div.end +
                     el.formGroup.end;
@@ -274,32 +280,36 @@
                 var element = el.formGroup.start + el.label +
                     '<input data-nos' + el.type + el.name + el.id + el.classname +
                     el.value + el.title + el.min + el.max + el.step + el.readonly +
-                    el.disabled + el.autofocus + el.required + '>' + el.helpBlock + 
+                    el.disabled + el.autofocus + el.required + '>' + el.helpBlock +
                     el.message.required + el.message.min + el.message.max +
                     el.formGroup.end;
                 return element;
             },
 
+            // build clone fields
             clone: function (input) {
 
                 var maxFields = (input.maxFields || 10) + 1,
                     startFields = (input.start || 1),
                     hideFields,
-                    element = '';
+                    element = '', 
+                    i;
 
+                // assign attributes 
                 var el = $.extend(this.self.getAttrs(input), {
                     placeholder: input.placeholder && input.placeholder || '',
                     classname: input.classname && input.classname || 'form-control',
                     addValue: input.addButtonValue && input.addButtonValue || 'Add Field',
                     removeValue: input.removeButtonValue && input.removeButtonValue || 'Remove Field',
                     addButtonClass: input.addButtonClass && input.addButtonClass || 'btn btn-primary',
-                    removeButtonClass: input.removeButtonClass && input.removeButtonClass || 'btn btn-danger'
+                    removeButtonClass: input.removeButtonClass && input.removeButtonClass || 'btn btn-danger',
+                    name: input.name && ' name="' + input.name || ''
                 });
 
                 element += el.label;
 
-                var i = 1;
-                for (i; i < maxFields; i++) {
+                // loop to build clone input fields
+                for (i = 1; i < maxFields; i++) {
 
                     var addon = (input.addon || i);
 
@@ -314,16 +324,16 @@
                     div.start +
 
                     '<span class="input-group-addon nos-input-group-addon">' + addon + '</span>' +
-                    '<input data-nos type="text" class="' + el.classname + '">' +
+                    '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.name + i + '" >' +
 
                     div.end +
 
                     el.formGroup.end;
 
                 }
-                
+
                 element += el.helpBlock;
-                
+
                 element += '<input type="button" data-nos-add-button class="' + el.addButtonClass + ' nos-form-group" value="' + el.addValue + '">&nbsp;<input type="button" data-nos-remove-button value="' + el.removeValue + '" class="' + el.removeButtonClass + ' nos-form-group">';
 
 
@@ -384,7 +394,7 @@
                     '<select data-nos ' + el.name + el.id + el.classname + el.size + el.multiple + el.readonly + el.disabled + el.autofocus + el.required +
                     '>' +
                     options +
-                    '</select>' + el.helpBlock + 
+                    '</select>' + el.helpBlock +
                     el.message.required +
                     el.formGroup.end;
                 return element;
@@ -438,8 +448,7 @@
         this.validator = {
 
             email: function (email) {
-                var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                return re.test(email);
+                return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
             },
 
             phone: function (tel) {
@@ -479,7 +488,15 @@
                 reqSR = $('select[data-nos]').filter('[required]:visible'),
                 fileField = $(':file[data-nos]').filter('[required]:visible'),
                 cbgroup = $(':checkbox[data-nos]').parents('fieldset'),
-                cb = $(':checkbox, :radio[data-nos]').filter('[required]:visible').parents('fieldset');
+                cb = $(':checkbox, :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
+                requiredFields = $('[required]:visible');
+            
+            requiredFields.each(function () {
+                $(this).val().length < 1 ? $(this).addClass('nos-invalid-required') : $(this).removeClass('nos-invalid-required');
+                $(this).bind('change keyup keydown blur focus paste', function () {
+                    $(this).val().length < 1 ? $(this).addClass('nos-invalid-required') : $(this).removeClass('nos-invalid-required');
+                });
+            });
                    
             // checkbox and radio validation
             // build individual arrays for each required field and check to see if arrays are empty on form submit
@@ -600,32 +617,40 @@
         // this function handles real time error messages while user is typing
         this.validate = function (fields) {
             
+            var allFields = $(':input:not(:submit, :reset, :button, :image), select, textarea');
+            
+            allFields.addClass('nos-untouched');
+            
+            allFields.on('focus', function () {
+                $(this).addClass('nos-touched').removeClass('nos-untouched');
+            });
+            
             // resets form
-            function reset () {
+            function reset() {
                 $(':reset[data-nos]').click(function () {
-                    $(this).closest('form').find(':input:not(:submit, :reset, :button, :image)').val('');
+                    $(this).closest('form').find(':input:not(:submit, :reset, :button, :image)').val('').removeClass('nos-touched').addClass('nos-untouched');
                     $('.nos-help').nosSlideUp();
                 });
             }
                     
             // checks maxlength on fields if browser doesn't catch/support it
-            function maxLength (v) {
+            function maxLength(v) {
                 var maxLengthId = (v.id || v.name);
                 $('#' + maxLengthId).keydown(function (e) {
-                    if ($(this).val().length > v.maxlength) {
+                    if ($(this).val().length === v.maxlength) {
                         e.preventDefault();
                     }
                 });
             }
                     
             // validates that the minlength has been met and displays/hides message to user
-            function minLength (v) {
+            function minLength(v) {
                 var msg = '.msg-minlength-' + v.name;
                 var id = '#' + (v.id || v.name);
                 $(id).bind('keyup change blur focus paste', function () {
                     var minval = $(this).val().length;
                     if (minval > 0) {
-                        minval < v.minlength ? $(msg).nosSlideDown() : $(msg).nosSlideUp();
+                        minval < v.minlength ? ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-minlength')) : ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-minlength'));
                     } else {
                         $(msg).nosSlideUp();
                     }
@@ -633,15 +658,15 @@
             }
                     
             // validates the min and max attributes on number fields
-            function minMax (v) {
+            function minMax(v) {
                 var minMsg = '.msg-min-' + v.name;
                 var maxMsg = '.msg-max-' + v.name;
                 var id = '#' + (v.id || v.name);
                 $(id).bind('keyup keydown change blur focus paste', function () {
                     var numVal = $(this).val();
                     if (numVal > 0) {
-                        numVal < v.min ? $(minMsg).nosSlideDown() : $(minMsg).nosSlideUp();
-                        numVal > v.max ? $(maxMsg).nosSlideDown() : $(maxMsg).nosSlideUp();
+                        numVal < v.min ? ($(minMsg).nosSlideDown(), $(this).addClass('nos-invalid-min')) : ($(minMsg).nosSlideUp(), $(this).removeClass('nos-invalid-min'));
+                        numVal > v.max ? ($(maxMsg).nosSlideDown(), $(this).addClass('nos-invalid-max')) : ($(maxMsg).nosSlideUp(), $(this).removeClass('nos-invalid-max'));
                     } else {
                         $(minMsg).nosSlideUp();
                     }
@@ -649,36 +674,37 @@
             }
                     
             // validates regex patterns 
-            function validatePattern (v) {
+            function validatePattern(v) {
                 var nm = v.name,
                     msg = '.msg-invalid-' + nm,
                     id = '#' + (v.id || nm),
                     regex = new RegExp(v.pattern);
                 $(id).bind('keyup change blur focus paste', function () {
                     if ($(this).val().length > 0) {
-                        regex.test($(this).val()) ? $(msg).nosSlideUp() : $(msg).nosSlideDown();
+                        regex.test($(this).val()) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-pattern')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-pattern'));
                     }
                     else {
                         $(msg).nosSlideUp();
                     }
                 });
             }
-            
-            function passwordMatch (v) {
+
+            function passwordMatch(v) {
                 var id = '#' + v.match;
                 var pwd = '#' + (v.id || v.name);
                 var msg = '.msg-invalid-' + v.name;
                 $(pwd + ',' + id).bind('keydown keyup change blur focus', function () {
                     if ($(pwd).val().length > 0) {
-                        $(id).val() !== $(pwd).val() ? $(msg).nosSlideDown() : $(msg).nosSlideUp();
+                        $(id).val() !== $(pwd).val() ? ($(msg).nosSlideDown(), $(pwd + ',' + id).addClass('nos-invalid-match')) : ($(msg).nosSlideUp(), $(pwd + ',' + id).removeClass('nos-invalid-match'));
                     } else {
                         $(msg).nosSlideUp();
+                        $(pwd + ',' + id).removeClass('nos-invalid-match');
                     }
                 });
             }
                     
             // calls email/zip/phone validation functions and hides/displays messages to user
-            function validateFields (v) {
+            function validateFields(v) {
                 var nm = v.name,
                     msg = '.msg-invalid-' + nm,
                     id = '#' + (v.id || nm);
@@ -692,23 +718,23 @@
                         case 'email':
                             emval = $(this).val();
                             if (emval.length > 0) {
-                                self.validator.email(emval) ? $(msg).nosSlideUp() : $(msg).nosSlideDown();
+                                self.validator.email(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-email')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-email'));
                             }
-                            emval === '' && $(msg).nosSlideUp();
+                            emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-email'));
                             break;
 
                         case 'zip':
                             emval = $(this).val();
                             if ($.mask && v.mask) {
                                 if ($(this).caret().begin > 0) {
-                                    self.validator.zipcode(emval) ? $(msg).nosSlideUp() : $(msg).nosSlideDown();
+                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-zip'));
                                 }
-                                $(this).caret().end === 0 && $(msg).nosSlideUp();
+                                $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip'));
                             } else {
                                 if (emval.length > 0) {
-                                    self.validator.zipcode(emval) ? $(msg).nosSlideUp() : $(msg).nosSlideDown();
+                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-zip'));
                                 }
-                                emval === '' && $(msg).nosSlideUp();
+                                emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip'));
                             }
                             break;
 
@@ -716,14 +742,14 @@
                             emval = $(this).val();
                             if ($.mask && v.mask) {
                                 if ($(this).caret().begin > 0) {
-                                    self.validator.phone(emval) ? $(msg).nosSlideUp() : $(msg).nosSlideDown();
+                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-tel'));
                                 }
-                                $(this).caret().end === 0 && $(msg).nosSlideUp();
+                                $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel'));
                             } else {
                                 if (emval.length > 0) {
-                                    self.validator.phone(emval) ? $(msg).nosSlideUp() : $(msg).nosSlideDown();
+                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-tel'));
                                 }
-                                emval === '' && $(msg).nosSlideUp();
+                                emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel'));
                             }
                             break;
 
@@ -780,29 +806,29 @@
                 v.match && passwordMatch(v);
 
             }
-            
-            function findElements (column) {
-                    
+
+            function findElements(column) {
+
                 $.each(column, function (key, value) {
-                    
+
                     callValidation(key, value);
-                    
+
                     if (this.column) {
                         findElements(this.column);
                     }
-                    
+
                 });
-                
+
             }
                     
             // find out if the form is one column or multi-column
             // multi-column forms send multiple objects
             $.each(fields, function (k, v) {
-                
+
                 if (this.column) {
-                    
+
                     callValidation(k, v);
-                    
+
                     findElements(this.column);
 
                 }
@@ -862,7 +888,7 @@
             // accepts objects that contain a form field
             // runs them through the proper build functions
             buildElements: function (obj) {
-                
+
                 var element = '';
                 
                 // loop through all element arrays and categorize each element type
@@ -883,7 +909,7 @@
             // it will loop through and check each object to see if there is another nested column
             // if there is, it will run it and apply the proper rows
             buildBlock: function (block) {
-               
+
                 var str = block.row && '<div class="row nos-row nos-first-row">' || '',
 
                     self = this;
@@ -893,10 +919,10 @@
                 function buildColumn(col) {
                     
                     // first column class
-                    str += col.classname &&  '<div class="' + col.classname + '">' || '';
+                    str += col.classname && '<div class="' + col.classname + '">' || '';
 
                     $.each(col.column, function () {
-                        
+
                         if (this.column) {
                             
                             // if there is another nested column with a row specified, add a row and check the next level
@@ -907,21 +933,21 @@
                             
                             // end div for row
                             str += this.row && '</div>' || '';
-                            
+
                         }
-                        
+
                         else {
                             
                             // if no other nested column exists, build what we found
                             str += self.buildElements(this);
-                            
+
                         }
 
                     });
                     
                     // end div for first column class
                     str += col.classname && '</div>' || '';
-                    
+
                 }
                 
                 // initial function call
@@ -929,7 +955,7 @@
                 
                 // end divs for the rows
                 str += block.row && '</div>' || '';
-                
+
                 return str;
 
             },
@@ -995,11 +1021,11 @@
             };
             
             // append an error message onto the form for required fields
-            $(this.form).append(message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.required(this.form[0]) + '</div' +  message.row.end);
+            $(this.form).append(message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.required(this.form[0]) + '</div' + message.row.end);
                                         
             // append an error message onto the form for invalid fields
             $(this.form).append(message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end);
-            
+
         },
                 
         // initialize the plugin
