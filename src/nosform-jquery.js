@@ -1,5 +1,5 @@
 /* global jQuery */
-;(function ($, window, document, undefined) {
+; (function ($, window, document, undefined) {
 
     "use strict";
     
@@ -9,6 +9,7 @@
         animationSpeed: 100,
         validate: true,
         htmlValidation: false,
+        honeypot: true,
         messages: {
             required: 'Please fill out all required fields',
             invalid: 'Please correct errors'
@@ -26,7 +27,7 @@
                 
         // final plugin settings
         this.settings = $.extend({}, defaults, options);
-                
+        this.settings.messages = $.extend({}, defaults.messages, options.messages);
         // need access to this later
         var userdata = this.settings;
                 
@@ -98,7 +99,7 @@
             },
 
             honeypot: function () {
-                return '<div id="nos-div-hp-css"><label for="nos-text-css">Please leave this field blank</label><input type="text" id="nos-text-css" name="nos-text-css" value=""></div><div id="nos-div-hp-js"><label for="nos-email-js">Please leave this field unchanged</label><input type="email" id="nos-email-js" name="nos-email-js" value="validemail@email.com"></div>';
+                return '<div id="nos-div-hp-css"><label for="nos-text-css">Please leave this field blank</label><input type="text" id="nos-text-css" name="nos-text-css[]" value=""></div><div id="nos-div-hp-js"><label for="nos-email-js">Please leave this field unchanged</label><input type="email" id="nos-email-js" name="nos-email-js[]" value="validemail@email.com"></div>';
             },
 
             div: function (classname) {
@@ -310,6 +311,8 @@
                     removeButtonClass: input.removeButtonClass && input.removeButtonClass || 'btn btn-danger',
                     name: input.name && ' name="' + input.name || ''
                 });
+                
+                element += el.formGroup.start;
 
                 element += el.label;
 
@@ -329,13 +332,15 @@
                     div.start +
 
                     '<span class="input-group-addon nos-input-group-addon">' + addon + '</span>' +
-                    '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.name + i + '" >' +
+                    '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.name + i + '[]" >' +
 
                     div.end +
 
                     el.formGroup.end;
 
                 }
+                
+                element += el.formGroup.end; 
 
                 element += el.helpBlock;
 
@@ -494,14 +499,26 @@
                 fileField = $(':file[data-nos]').filter('[required]:visible'),
                 cbgroup = $(':checkbox[data-nos]').parents('fieldset'),
                 cb = $(':checkbox[data-nos], :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
-                requiredFields = $('[data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible');
+                requiredFields = $('[data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible'),
+                clone = $('.nos-clone');
 
             requiredFields.each(function () {
-                $(this).val().length < 1 ? $(this).addClass('nos-invalid-required').removeClass('nos-valid-required') : $(this).removeClass('nos-invalid-required').addClass('nos-valid-required');
-                $(this).on('change keyup keydown blur focus paste', function () {
-                    $(this).val().length < 1 ? $(this).addClass('nos-invalid-required').removeClass('nos-valid-required') : $(this).removeClass('nos-invalid-required').addClass('nos-valid-required');
+                $(this).val().length < 1 ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
+                $(this).on('change keyup keydown blur paste', function () {
+                    $(this).val().length < 1 ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
                 });
             });
+            
+            if (clone.length) {
+                var cloneName = $(clone).parents().siblings('.nos-label').attr('for');
+                    formdata[cloneName] = {};
+                $.each(clone, function () {
+                    var cloneFieldName = $(this).attr('name').split('[]');
+                   if ($(this).val() !== "") { 
+                       formdata[cloneName][cloneFieldName[0]] = $(this).val(); 
+                   }
+                });
+            }
                    
             // checkbox and radio validation
             // build individual arrays for each required field and check to see if arrays are empty on form submit
@@ -598,7 +615,9 @@
             }
 
             else if (!$('.nos-help').is(':visible') && $('.nos-untouched[required]').is(':visible')) {
-                console.log('problem');
+                $('[data-nos]').each(function () {
+                    $(this).focus();
+                });
             }
 
             else {
@@ -633,13 +652,19 @@
             allFields.addClass('nos-untouched');
 
             allFields.on('focus change input', function () {
-                $(this).addClass('nos-touched').removeClass('nos-untouched');
+                $(this).alterClass('nos-untouched', 'nos-touched');
+            });
+
+            allFields.on('keydown change paste', function () {
+                $(this).val().length > 0 && $(this).attr('class').indexOf('nos-invalid-') !== 1 ? $(this).addClass('nos-valid-field') : $(this).removeClass('nos-valid-field');
+            }).on('blur change', function () {
+                $(this).removeClass('nos-valid-field');
             });
             
             // resets form
             function reset() {
                 $(':reset[data-nos]').click(function () {
-                    $(this).closest('form').find(':input:not(:submit, :reset, :button, :image)').val('').removeClass('nos-touched').addClass('nos-untouched');
+                    $(this).closest('form').find(':input:not(:submit, :reset, :button, :image)').val('').alterClass('nos-*', '').addClass('nos-untouched');
                     $('.nos-help').nosSlideUp();
                 });
             }
@@ -661,7 +686,7 @@
                 $(id).on('keyup change blur focus paste', function () {
                     var minval = $(this).val().length;
                     if (minval > 0) {
-                        minval < v.minlength ? ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-minlength').removeClass('nos-valid-minlength')) : ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-minlength').addClass('nos-valid-minlength'));
+                        minval < v.minlength ? ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-minlength', 'nos-invalid-minlength')) : ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-minlength', 'nos-valid-minlength'));
                     } else {
                         $(msg).nosSlideUp();
                         $(this).removeClass('nos-invalid-minlength nos-valid-minlength');
@@ -679,13 +704,13 @@
                 $(id).on('keyup change blur focus paste submit', function () {
                     var numVal = $(this).val();
                     if (numVal > 0) {
-                        numVal < v.min ? ($(minMsg).nosSlideDown(), $(this).addClass('nos-invalid-min').removeClass('nos-valid-min')) : ($(minMsg).nosSlideUp(), $(this).removeClass('nos-invalid-min').addClass('nos-valid-min'));
-                        numVal > v.max ? ($(maxMsg).nosSlideDown(), $(this).addClass('nos-invalid-max').removeClass('nos-valid-max')) : ($(maxMsg).nosSlideUp(), $(this).removeClass('nos-invalid-max').addClass('nos-valid-max'));
+                        numVal < v.min ? ($(minMsg).nosSlideDown(), $(this).alterClass('nos-valid-min', 'nos-invalid-min')) : ($(minMsg).nosSlideUp(), $(this).alterClass('nos-invalid-min', 'nos-valid-min'));
+                        numVal > v.max ? ($(maxMsg).nosSlideDown(), $(this).alterClass('nos-valid-max', 'nos-invalid-max')) : ($(maxMsg).nosSlideUp(), $(this).alterClass('nos-invalid-max', 'nos-valid-max'));
                     } else {
                         $(minMsg).nosSlideUp();
                         $(this).removeClass('nos-invalid-min nos-invalid-max');
                     }
-                }).on('submit', function () {
+                }).on('blur change', function () {
                     $(this).removeClass('nos-valid-min nos-valid-max');
                 });
             }
@@ -698,7 +723,7 @@
                     regex = new RegExp(v.pattern);
                 $(id).on('keyup change blur focus paste', function () {
                     if ($(this).val().length > 0) {
-                        regex.test($(this).val()) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-pattern').addClass('nos-valid-pattern')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-pattern').removeClass('nos-valid-pattern'));
+                        regex.test($(this).val()) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-pattern', 'nos-valid-pattern')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-pattern', 'nos-invalid-pattern'));
                     }
                     else {
                         $(msg).nosSlideUp();
@@ -715,7 +740,7 @@
                 var msg = '.msg-invalid-' + v.name;
                 $(pwd + ',' + id).on('keyup change blur paste focus', function () {
                     if ($(pwd).val().length > 0) {
-                        $(id).val() !== $(pwd).val() ? ($(msg).nosSlideDown(), $(pwd + ',' + id).addClass('nos-invalid-match').removeClass('nos-valid-match')) : ($(msg).nosSlideUp(), $(pwd + ',' + id).removeClass('nos-invalid-match').addClass('nos-valid-match'));
+                        $(id).val() !== $(pwd).val() ? ($(msg).nosSlideDown(), $(pwd + ',' + id).alterClass('nos-valid-match', 'nos-invalid-match')) : ($(msg).nosSlideUp(), $(pwd + ',' + id).alterClass('nos-invalid-match', 'nos-valid-match'));
                     } else {
                         $(msg).nosSlideUp();
                         $(pwd + ',' + id).removeClass('nos-invalid-match nos-valid-match');
@@ -740,7 +765,7 @@
                         case 'email':
                             emval = $(this).val();
                             if (emval.length > 0) {
-                                self.validator.email(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-email').addClass('nos-valid-email')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-email').removeClass('nos-valid-email'));
+                                self.validator.email(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-email', 'nos-valid-email')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-email', 'nos-invalid-email'));
                             }
                             emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-email nos-valid-email'));
                             break;
@@ -749,12 +774,12 @@
                             emval = $(this).val();
                             if ($.mask && v.mask) {
                                 if ($(this).caret().begin > 0) {
-                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip').addClass('nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-zip').removeClass('nos-valid-zip'));
+                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-zip', 'nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-zip', 'nos-invalid-zip'));
                                 }
                                 $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip nos-valid-zip'));
                             } else {
                                 if (emval.length > 0) {
-                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip').addClass('nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-zip').removeClass('nos-valid-zip'));
+                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-zip', 'nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-zip', 'nos-invalid-zip'));
                                 }
                                 emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip nos-valid-zip'));
                             }
@@ -764,12 +789,12 @@
                             emval = $(this).val();
                             if ($.mask && v.mask) {
                                 if ($(this).caret().begin > 0) {
-                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel').addClass('nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-tel').removeClass('nos-valid-tel'));
+                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-tel', 'nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-tel', 'nos-invalid-tel'));
                                 }
                                 $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel nos-valid-tel'));
                             } else {
                                 if (emval.length > 0) {
-                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel').addClass('nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-tel').removeClass('nos-valid-tel'));
+                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-tel', 'nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-tel', 'nos-invalid-tel'));
                                 }
                                 emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel nos-valid-tel'));
                             }
@@ -885,6 +910,34 @@
                     
             // toggles browser validation on/off based on user input - default is 'off'
             !this.settings.htmlValidation && this.form.attr('novalidate', '');
+
+            $.prototype.alterClass = function (removals, additions) {
+
+                var self = this;
+
+                if (removals.indexOf('*') === -1) {
+                    // Use native jQuery methods if there is no wildcard matching
+                    self.removeClass(removals);
+                    return !additions ? self : self.addClass(additions);
+                }
+
+                var patt = new RegExp('\\s' +
+                    removals.
+                        replace(/\*/g, '[A-Za-z0-9-_]+').
+                        split(' ').
+                        join('\\s|\\s') +
+                    '\\s', 'g');
+
+                self.each(function (i, it) {
+                    var cn = ' ' + it.className + ' ';
+                    while (patt.test(cn)) {
+                        cn = cn.replace(patt, ' ');
+                    }
+                    it.className = $.trim(cn);
+                });
+
+                return !additions ? self : self.addClass(additions);
+            };
             
             // this will alter the animation speed of the slideDown/slideUp effects
             // used for user error messages
@@ -934,7 +987,7 @@
             // if there is, it will run it and apply the proper rows
             buildBlock: function (block) {
 
-                var str = block.row && '<div class="row nos-row nos-first-row">' || '',
+                var str = block.row && '<div class="row nos-row">' || '',
 
                     self = this;
 
@@ -991,7 +1044,7 @@
                 var self = this,
                     
                     // our form string
-                    formStr = this.self.getElements.honeypot(),
+                    formStr = this.self.settings.honeypot && this.self.getElements.honeypot() || '',
                     
                     // user submitted json fields
                     field = this.self.settings.fields;
@@ -1074,7 +1127,7 @@
             this.build.form();
                     
             // hide honeypot fields
-            $('#nos-div-hp-js').css('display', 'none');
+            this.settings.honeypot && $('#nos-div-hp-js').css('display', 'none');
                     
             // run validation
             this.settings.validate && this.validate(this.settings.fields), this.addMessage();

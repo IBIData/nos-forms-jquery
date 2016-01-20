@@ -111,6 +111,7 @@ $("#myform").nosForm({
     validate: true, // toggle javascript validation
     htmlValidation: false, // toggle html browser validation
     animationSpeed: 100, // change speed of js animations (error message animations)
+    honeypot: true, // adds two honeypot fields to filter out bots
     messages: { // these are the messages that will appear on the bottom of the form when an unsuccessful submit has occurred
         required: 'Please fill out all required fields', // warning about required fields
         invalid: 'Invalid fields' // warning about invalid fields (pattern, minlength, min, max)
@@ -122,7 +123,38 @@ $("#myform").nosForm({
 });
 ```
 
-###Single Columns
+###**fields**
+
+ Accepts an object with your form element structure. This was originally intended to be imported from a json file (for easy reuse of forms), but you can write the object in your js file as well. This allows you to write your own functions that return the correct values to individual fields.
+ 
+ ###**validate**
+ 
+ Accepts a boolean value. Toggles the build-in validation on or off. If for some reason you want to validate the form yourself, turn this off. FYI - this will also disable the built-in form submit and data serialization.
+ 
+ ###**htmlValidate**
+ 
+ Accepts a boolean value. Toggles the html5 validation on or off. Basically, this is just adding and removing a 'novalidate' tag from the form.
+ 
+ ###**animationSpeed**
+ 
+ Accepts a number value (milliseconds). Controls the speed of the validation messages popping in and out of form fields.
+ 
+ ###**honeypot**
+ 
+ Accepts a boolean. By default, there are two honeypot text fields rendered on each form (one is empty and one has a preset value). Both are hidden by CSS and JS. If either are modified, the form will appear to submit, but the server will never receive any data.
+ 
+ ###**messages**
+ 
+ Accepts two properties with string values. 'required' and 'invalid'. These are the two messages that are positioned below each form. On an unsuccessful form submit, the appropriate message will be displayed to the user. If not modified, they will display the default values shown above.
+ 
+ ###**submit**
+ 
+ Accepts a function that receives the form data passed to it. If validation is turned off, this will not work.
+ 
+ ##Structure 
+ ---
+
+##Single Columns
 
 These are pretty standard.
 
@@ -134,7 +166,7 @@ These are pretty standard.
 ]
 ```
 
-###Multiple Columns
+##Multiple Columns
 
 If you would like a form to work with multiple columns, you just have to format your json data a little different.
 
@@ -167,7 +199,7 @@ If you would like a form to work with multiple columns, you just have to format 
 ]
 ```
 
-###Nesting Columns
+##Nesting Columns
 
 Nesting columns can be accomplished by declaring a row where needed.
 
@@ -225,54 +257,66 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 
 ##Special Types
 
+---
+
 There are a few special element types available.
 
-**state** - This will render a select element with all 50 states and options for Canadian Provinces and US Territories
+**state**
 
-**zip** - Will render a text box with zip code pattern validation built in
+ This will render a select element with all 50 states and options for Canadian Provinces and US Territories
 
-**clone** - Will create a text input with add/remove field buttons. Good for letting users enter an undetermined amount of data.
+**zip** 
 
-**html** - Allows you to insert any custom html and have it render in the order specified in your json 
+Will render a text box with zip code pattern validation built in
 
-##Properties
+**clone** 
+
+Will create a text input with add/remove field buttons. Good for letting users enter an undetermined amount of data.
+
+**html** 
+
+Allows you to insert any custom html and have it render in the order specified in your json 
+
+##Important Properties
+
+---
 
 **type** | *Required* | *String*
 
-- Specifies the type of element
+Specifies the type of element
 
 **name** | *Required* | *String*
 
-- Gives the element a name, and will be used as the id if none is specified
+Gives the element a name, and will be used as the id if none is specified
 
 **id** | *String*
 
-- Gives the element an id. If not specified, the name will also be the id.
+Gives the element an id. If not specified, the name will also be the id.
 
 **formGroup** | *Boolean* | defaults to true
 
-- Wraps the element in a Bootstrap form group
+Wraps the element in a Bootstrap form group
 
 **classname** | *String* | defaults to form-control (for text-based fields)
 
-- Gives the element a class
+Gives the element a class
 
 **label** | *String*
 
-- Adds a label above element
+Adds a label above element
 
 **mask** | *String*
  
-- Adds a masked input to a text element. [Requires external plugin](https://github.com/digitalBush/jquery.maskedinput)
+Adds a masked input to a text element. [Requires external plugin](https://github.com/digitalBush/jquery.maskedinput)
 
 **helpBlock** | *String*
 
-- Adds a Bootstrap help-block of text below element
+Adds a Bootstrap help-block of text below element
 
 All other html attributes are supported and behave as expected. See the examples below.
 
 ##Validation 
-----------------------------------------
+---
 
 By default, validation will happen when you specify certain properties in your json file. All fields will be checked for values and sanitized. Error messages will be generated, and it will basically take care of itself.
 
