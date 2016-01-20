@@ -7,7 +7,7 @@
  *  Under MIT License
  */
 /* global jQuery */
-; (function ($, window, document, undefined) {
+;(function ($, window, document, undefined) {
 
     "use strict";
     
@@ -105,6 +105,10 @@
                 };
             },
 
+            honeypot: function () {
+                return '<div id="nos-div-hp-css"><label for="nos-text-css">Please leave this field blank</label><input type="text" id="nos-text-css" name="nos-text-css" value=""></div><div id="nos-div-hp-js"><label for="nos-email-js">Please leave this field unchanged</label><input type="email" id="nos-email-js" name="nos-email-js" value="validemail@email.com"></div>';
+            },
+
             div: function (classname) {
                 return {
                     start: '<div class="' + classname + '">',
@@ -186,17 +190,18 @@
                     
             // returns select elements
             select: function (input) {
-                console.log(input.options);
+                var selOptions = {};
                 if (input.options.length) {
                     $.each(input.options, function () {
-                        console.log(this);
+                        $.extend(selOptions, this);
                     });
+                } else {
+                    selOptions = input.options;
                 }
                 var options = '';
                 var el = $.extend(this.self.getAttrs(input), {
                     classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"'
                 });
-                var selOptions = input.options;
                 $.each(selOptions, function (k, v) {
                     var selectedOption;
                     el.selected === k ? selectedOption = ' selected' : selectedOption = '';
@@ -214,6 +219,14 @@
                     
             // returns checkbox and radio elements
             check: function (input) {
+                var inputOptions = {};
+                if (input.options.length) {
+                    $.each(input.options, function () {
+                        $.extend(inputOptions, this);
+                    });
+                } else {
+                    inputOptions = input.options;
+                }
                 var checked = '';
                 var el = $.extend(this.self.getAttrs(input), {
                     inline: input.inline && ' class="' + input.type + '-inline"' || '',
@@ -225,7 +238,7 @@
 
                 var element = el.formGroup.start + el.label + el.fieldset.start;
 
-                $.each(input.options, function (k, v) {
+                $.each(inputOptions, function (k, v) {
                     if (typeof input.checked === 'object' || input.checked === undefined) {
                         $.inArray(k, input.checked) > -1 ? checked = ' checked' : checked = '';
                     } else if (typeof input.checked === 'string') {
@@ -292,7 +305,7 @@
                 var maxFields = (input.maxFields || 10) + 1,
                     startFields = (input.start || 1),
                     hideFields,
-                    element = '', 
+                    element = '',
                     i;
 
                 // assign attributes 
@@ -488,13 +501,13 @@
                 reqSR = $('select[data-nos]').filter('[required]:visible'),
                 fileField = $(':file[data-nos]').filter('[required]:visible'),
                 cbgroup = $(':checkbox[data-nos]').parents('fieldset'),
-                cb = $(':checkbox, :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
-                requiredFields = $('[required]:visible');
-            
+                cb = $(':checkbox[data-nos], :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
+                requiredFields = $('[data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible');
+
             requiredFields.each(function () {
-                $(this).val().length < 1 ? $(this).addClass('nos-invalid-required') : $(this).removeClass('nos-invalid-required');
-                $(this).bind('change keyup keydown blur focus paste', function () {
-                    $(this).val().length < 1 ? $(this).addClass('nos-invalid-required') : $(this).removeClass('nos-invalid-required');
+                $(this).val().length < 1 ? $(this).addClass('nos-invalid-required').removeClass('nos-valid-required') : $(this).removeClass('nos-invalid-required').addClass('nos-valid-required');
+                $(this).on('change keyup keydown blur focus paste', function () {
+                    $(this).val().length < 1 ? $(this).addClass('nos-invalid-required').removeClass('nos-valid-required') : $(this).removeClass('nos-invalid-required').addClass('nos-valid-required');
                 });
             });
                    
@@ -542,7 +555,7 @@
                 if (mask) {
                     if ($(field).caret().begin < 1) {
                         $(msg).nosSlideDown();
-                        $(this).bind('keyup keydown change blur paste', function () {
+                        $(this).on('keyup keydown change blur paste', function () {
                             $(this).caret().begin > 0 && $(msg).nosSlideUp();
                             $(this).caret().begin < 1 && $(msg).nosSlideDown();
                         });
@@ -550,7 +563,7 @@
                 } else {
                     if ($(field).val().length < 1) {
                         $(msg).nosSlideDown();
-                        $(this).bind('keyup keydown change blur paste', function () {
+                        $(this).on('keyup keydown change blur paste', function () {
                             this.value.length > 0 && $(msg).nosSlideUp();
                             this.value.length < 1 && $(msg).nosSlideDown();
                         });
@@ -586,14 +599,20 @@
                 }
                 formdata[field.name] = filelist;
             });
-                    
+                        
             // send form submit object back to user if all fields are valid
-            if (!$('.nos-help').is(':visible')) {
+            if (!$('.nos-help').is(':visible') && !$('.nos-untouched[required]').is(':visible') && $('#nos-text-css').val() === '' && $('#nos-email-js').val() === 'validemail@email.com') {
                 userdata.submit(formdata);
-            } else {
+            }
+
+            else if (!$('.nos-help').is(':visible') && $('.nos-untouched[required]').is(':visible')) {
+                console.log('problem');
+            }
+
+            else {
                 if ($('.nos-required').is(':visible')) {
                     $('.nos-form-required').nosSlideDown();
-                    $(':input, select, textarea').bind('change keyup blur focus paste', function () {
+                    $(':input, select, textarea').filter('[data-nos]').on('change input keyup blur focus paste', function () {
                         if ($('.nos-required').is(':visible')) {
                             $('.nos-form-required').nosSlideDown();
                         } else {
@@ -603,7 +622,7 @@
                 }
                 if ($('.nos-invalid').is(':visible')) {
                     $('.nos-form-invalid').nosSlideDown();
-                    $(':input, select, textarea').bind('change keyup blur focus paste', function () {
+                    $(':input, select, textarea').on('change input keyup blur focus paste', function () {
                         if ($('.nos-invalid').is(':visible')) {
                             $('.nos-form-invalid').nosSlideDown();
                         } else {
@@ -616,12 +635,12 @@
                 
         // this function handles real time error messages while user is typing
         this.validate = function (fields) {
-            
-            var allFields = $(':input:not(:submit, :reset, :button, :image), select, textarea');
-            
+
+            var allFields = $('[data-nos]:not(:submit, :reset, :button, :image, :checkbox, :radio, input[type=color], input[type=range])');
+
             allFields.addClass('nos-untouched');
-            
-            allFields.on('focus', function () {
+
+            allFields.on('focus change input', function () {
                 $(this).addClass('nos-touched').removeClass('nos-untouched');
             });
             
@@ -637,7 +656,7 @@
             function maxLength(v) {
                 var maxLengthId = (v.id || v.name);
                 $('#' + maxLengthId).keydown(function (e) {
-                    if ($(this).val().length === v.maxlength) {
+                    if ($(this).val().length > v.maxlength) {
                         e.preventDefault();
                     }
                 });
@@ -647,13 +666,16 @@
             function minLength(v) {
                 var msg = '.msg-minlength-' + v.name;
                 var id = '#' + (v.id || v.name);
-                $(id).bind('keyup change blur focus paste', function () {
+                $(id).on('keyup change blur focus paste', function () {
                     var minval = $(this).val().length;
                     if (minval > 0) {
-                        minval < v.minlength ? ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-minlength')) : ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-minlength'));
+                        minval < v.minlength ? ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-minlength').removeClass('nos-valid-minlength')) : ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-minlength').addClass('nos-valid-minlength'));
                     } else {
                         $(msg).nosSlideUp();
+                        $(this).removeClass('nos-invalid-minlength nos-valid-minlength');
                     }
+                }).on('blur change', function () {
+                    $(this).removeClass('nos-valid-minlength');
                 });
             }
                     
@@ -662,14 +684,17 @@
                 var minMsg = '.msg-min-' + v.name;
                 var maxMsg = '.msg-max-' + v.name;
                 var id = '#' + (v.id || v.name);
-                $(id).bind('keyup keydown change blur focus paste', function () {
+                $(id).on('keyup change blur focus paste submit', function () {
                     var numVal = $(this).val();
                     if (numVal > 0) {
-                        numVal < v.min ? ($(minMsg).nosSlideDown(), $(this).addClass('nos-invalid-min')) : ($(minMsg).nosSlideUp(), $(this).removeClass('nos-invalid-min'));
-                        numVal > v.max ? ($(maxMsg).nosSlideDown(), $(this).addClass('nos-invalid-max')) : ($(maxMsg).nosSlideUp(), $(this).removeClass('nos-invalid-max'));
+                        numVal < v.min ? ($(minMsg).nosSlideDown(), $(this).addClass('nos-invalid-min').removeClass('nos-valid-min')) : ($(minMsg).nosSlideUp(), $(this).removeClass('nos-invalid-min').addClass('nos-valid-min'));
+                        numVal > v.max ? ($(maxMsg).nosSlideDown(), $(this).addClass('nos-invalid-max').removeClass('nos-valid-max')) : ($(maxMsg).nosSlideUp(), $(this).removeClass('nos-invalid-max').addClass('nos-valid-max'));
                     } else {
                         $(minMsg).nosSlideUp();
+                        $(this).removeClass('nos-invalid-min nos-invalid-max');
                     }
+                }).on('submit', function () {
+                    $(this).removeClass('nos-valid-min nos-valid-max');
                 });
             }
                     
@@ -679,13 +704,16 @@
                     msg = '.msg-invalid-' + nm,
                     id = '#' + (v.id || nm),
                     regex = new RegExp(v.pattern);
-                $(id).bind('keyup change blur focus paste', function () {
+                $(id).on('keyup change blur focus paste', function () {
                     if ($(this).val().length > 0) {
-                        regex.test($(this).val()) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-pattern')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-pattern'));
+                        regex.test($(this).val()) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-pattern').addClass('nos-valid-pattern')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-pattern').removeClass('nos-valid-pattern'));
                     }
                     else {
                         $(msg).nosSlideUp();
+                        $(this).removeClass('nos-invalid-pattern nos-valid-pattern');
                     }
+                }).on('blur change', function () {
+                    $(this).removeClass('nos-valid-pattern');
                 });
             }
 
@@ -693,13 +721,15 @@
                 var id = '#' + v.match;
                 var pwd = '#' + (v.id || v.name);
                 var msg = '.msg-invalid-' + v.name;
-                $(pwd + ',' + id).bind('keydown keyup change blur focus', function () {
+                $(pwd + ',' + id).on('keyup change blur paste focus', function () {
                     if ($(pwd).val().length > 0) {
-                        $(id).val() !== $(pwd).val() ? ($(msg).nosSlideDown(), $(pwd + ',' + id).addClass('nos-invalid-match')) : ($(msg).nosSlideUp(), $(pwd + ',' + id).removeClass('nos-invalid-match'));
+                        $(id).val() !== $(pwd).val() ? ($(msg).nosSlideDown(), $(pwd + ',' + id).addClass('nos-invalid-match').removeClass('nos-valid-match')) : ($(msg).nosSlideUp(), $(pwd + ',' + id).removeClass('nos-invalid-match').addClass('nos-valid-match'));
                     } else {
                         $(msg).nosSlideUp();
-                        $(pwd + ',' + id).removeClass('nos-invalid-match');
+                        $(pwd + ',' + id).removeClass('nos-invalid-match nos-valid-match');
                     }
+                }).on('blur change', function () {
+                    $(this).removeClass('nos-valid-match');
                 });
             }
                     
@@ -709,7 +739,7 @@
                     msg = '.msg-invalid-' + nm,
                     id = '#' + (v.id || nm);
                 var emval;
-                $(id).bind('keyup change blur paste', function () {
+                $(id).on('keyup input change blur paste focus', function () {
                     switch (v.type) {
                                 
                         // once the user starts to type, email/zip/tel will be sent through a validator and a 
@@ -718,23 +748,23 @@
                         case 'email':
                             emval = $(this).val();
                             if (emval.length > 0) {
-                                self.validator.email(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-email')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-email'));
+                                self.validator.email(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-email').addClass('nos-valid-email')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-email').removeClass('nos-valid-email'));
                             }
-                            emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-email'));
+                            emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-email nos-valid-email'));
                             break;
 
                         case 'zip':
                             emval = $(this).val();
                             if ($.mask && v.mask) {
                                 if ($(this).caret().begin > 0) {
-                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-zip'));
+                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip').addClass('nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-zip').removeClass('nos-valid-zip'));
                                 }
-                                $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip'));
+                                $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip nos-valid-zip'));
                             } else {
                                 if (emval.length > 0) {
-                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-zip'));
+                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip').addClass('nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-zip').removeClass('nos-valid-zip'));
                                 }
-                                emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip'));
+                                emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip nos-valid-zip'));
                             }
                             break;
 
@@ -742,18 +772,20 @@
                             emval = $(this).val();
                             if ($.mask && v.mask) {
                                 if ($(this).caret().begin > 0) {
-                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-tel'));
+                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel').addClass('nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-tel').removeClass('nos-valid-tel'));
                                 }
-                                $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel'));
+                                $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel nos-valid-tel'));
                             } else {
                                 if (emval.length > 0) {
-                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-tel'));
+                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel').addClass('nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).addClass('nos-invalid-tel').removeClass('nos-valid-tel'));
                                 }
-                                emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel'));
+                                emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel nos-valid-tel'));
                             }
                             break;
 
                     }
+                }).on('blur change', function () {
+                    $(this).removeClass('nos-valid-email nos-valid-zip nos-valid-tel');
                 });
             }
                     
@@ -967,7 +999,7 @@
                 var self = this,
                     
                     // our form string
-                    formStr = '',
+                    formStr = this.self.getElements.honeypot(),
                     
                     // user submitted json fields
                     field = this.self.settings.fields;
@@ -1048,6 +1080,9 @@
                     
             // build the form
             this.build.form();
+                    
+            // hide honeypot fields
+            $('#nos-div-hp-js').css('display', 'none');
                     
             // run validation
             this.settings.validate && this.validate(this.settings.fields), this.addMessage();
