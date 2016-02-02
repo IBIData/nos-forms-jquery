@@ -61,8 +61,6 @@ $.get('contact-form.json', function (jsonData) {
         "type": "text", 
         "label": "Name", 
         "required": true, 
-        "classname": "form-control", 
-        "formGroup": true, 
         "placeholder": "Your Name",
         "minlength": 1, 
         "maxlength": 60 
@@ -72,8 +70,6 @@ $.get('contact-form.json', function (jsonData) {
         "type": "email",
         "label": "Email Address",
         "required": true,
-        "classname": "form-control",
-        "formGroup": true,
         "placeholder": "Your Email",
         "minlength": 1,
         "maxlength": 100
@@ -83,8 +79,6 @@ $.get('contact-form.json', function (jsonData) {
         "type": "textarea",
         "label": "Message",
         "required": true,
-        "classname": "form-control",
-        "formGroup": true,
         "placeholder": "Your message",
         "minlength": 5,
         "maxlength": 500,
@@ -129,7 +123,7 @@ $("#myform").nosForm({
  
  ###**validate**
  
- Accepts a boolean value. Toggles the build-in validation on or off. If for some reason you want to validate the form yourself, turn this off. FYI - this will also disable the built-in form submit and data serialization.
+ Accepts a boolean value. Toggles the build-in validation on or off. If for some reason you don't need validation, turn this off.
  
  ###**htmlValidate**
  
@@ -149,7 +143,7 @@ $("#myform").nosForm({
  
  ###**submit**
  
- Accepts a function that receives the form data passed to it. If validation is turned off, this will not work.
+ Accepts a function that receives the form data passed to it.
  
  ##Structure 
  ---
@@ -240,8 +234,8 @@ Nesting columns can be accomplished by declaring a row where needed.
                 ]
             },
             {
-                "classname": "col-md-12",
                 "row": true,
+                "classname": "col-md-12",
                 "column": [
                     {
                         // form element here
@@ -276,6 +270,10 @@ Will create a text input with add/remove field buttons. Good for letting users e
 **html** 
 
 Allows you to insert any custom html and have it render in the order specified in your json 
+
+**label**
+
+Renders a label on the fly
 
 ##Important Properties
 
@@ -312,6 +310,10 @@ Adds a masked input to a text element. [Requires external plugin](https://github
 **helpBlock** | *String*
 
 Adds a Bootstrap help-block of text below element
+
+**inputGroup** | *Object*
+
+Adds a Bootstrap input group to the element
 
 All other html attributes are supported and behave as expected. See the examples below.
 
@@ -914,6 +916,16 @@ The following examples have all available options listed. Normally they won't lo
     "alt": "Placeholder Image",
     "height": 50,
     "width": 50
+}
+```
+
+####label
+```json
+{
+    "name": "testLabel",
+    "type": "label",
+    "value": "Test Label",
+    "classname": "someclass"
 }
 ```
 

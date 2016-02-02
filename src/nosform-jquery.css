@@ -20,7 +20,7 @@
     display: inline-block !important;
 }
 
-.nos-valid-field, .nos-valid-field:focus, .nos-valid-email, .nos-valid-email:focus, .nos-valid-zip, .nos-valid-zip:focus, .nos-valid-tel, .nos-valid-tel:focus, .nos-valid-match, .nos-valid-match:focus, .nos-valid-pattern, .nos-valid-pattern:focus, .nos-valid-min, .nos-valid-min:focus, .nos-valid-max, .nos-valid-max:focus, .nos-valid-minlength, .nos-valid-minlength:focus, .nos-valid-required, .nos-valid-required:focus {
+.nos-valid-email, .nos-valid-email:focus, .nos-valid-zip, .nos-valid-zip:focus, .nos-valid-tel, .nos-valid-tel:focus, .nos-valid-match, .nos-valid-match:focus, .nos-valid-pattern, .nos-valid-pattern:focus, .nos-valid-min, .nos-valid-min:focus, .nos-valid-max, .nos-valid-max:focus, .nos-valid-minlength, .nos-valid-minlength:focus, .nos-valid-required, .nos-valid-required:focus {
     border: 1px solid green;
 }
 

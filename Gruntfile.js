@@ -94,7 +94,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("build", ["concat", "uglify", "cssmin"]);
     grunt.registerTask("build-js", ["jshint", "build"]);
-    grunt.registerTask("default", ["build-js", "connect", "watch"]);
+    grunt.registerTask("default", ["build", "connect", "watch"]);
     grunt.registerTask("travis", ["build-js"]);
 
 };

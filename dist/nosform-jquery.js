@@ -26,7 +26,7 @@
         
     // The plugin constructor
     function Nos(element, options) {
-                
+        
         // need access to this later
         var self = this;
                 
@@ -35,9 +35,9 @@
                 
         // final plugin settings
         this.settings = $.extend({}, defaults, options);
+        
+        // settings.messages is a nested object, we need to extend this as well
         this.settings.messages = $.extend({}, defaults.messages, options.messages);
-        // need access to this later
-        var userdata = this.settings;
                 
         // Store arrays of element types
         // These are used to determine which function will be called from the 'getElements' object below
@@ -51,7 +51,8 @@
             state: ['state'],
             clone: ['clone'],
             html: ['html'],
-            other: ['range', 'color']
+            other: ['range', 'color'],
+            lbl: ['label']
         };
                 
         // takes user form object and converts to string fragments for creating html
@@ -76,7 +77,7 @@
                 readonly: input.readonly && ' readonly' || '',
                 title: input.title && ' title="' + input.title + '"' || '',
                 size: input.size && ' size="' + input.size + '"' || '',
-                message: self.getUserErrorMessages(input) // returns object that stores user error messages
+                message: self.settings.validate && self.getUserErrorMessages(input) || { required: '', minlength: '', min: '', max: '', valid: '' } // returns object that stores user error messages
             });
 
         },
@@ -106,17 +107,30 @@
                 };
             },
 
+            // returns honeypot fields
             honeypot: function () {
                 return '<div id="nos-div-hp-css"><label for="nos-text-css">Please leave this field blank</label><input type="text" id="nos-text-css" name="nos-text-css[]" value=""></div><div id="nos-div-hp-js"><label for="nos-email-js">Please leave this field unchanged</label><input type="email" id="nos-email-js" name="nos-email-js[]" value="validemail@email.com"></div>';
             },
-
+            
+            // returns a div with a class
             div: function (classname) {
                 return {
                     start: '<div class="' + classname + '">',
                     end: '</div>'
                 };
             },
+            
+            // returns bootstrap input group
+            inputGroup: function (input) {
+                return {
+                    start: input && '<div class="input-group">',
+                    left: input.left && '<span class="input-group-addon ' + (input.left.classname || '') + '">' + (input.left.text || '') + '</span>' || '',
+                    right: input.right && '<span class="input-group-addon ' + (input.right.classname || '') + '">' + (input.right.text || '') + '</span>' || '',
+                    end: input && '</div>'
+                };
+            },
 
+            // fieldsets are used with checkboxes/radios
             fieldset: function (id) {
                 return {
                     start: '<fieldset id="' + id + '" class="nos-fieldset">',
@@ -124,10 +138,13 @@
                 };
             },
 
+            // returns a label
             label: function (input) {
-                var required;
-                input.required ? required = ' required-field' : required = '';
-                return '<label for="' + (input.id || input.name) + '" class="nos-label' + required + '">' + input.label + '</label>';
+                return '<label for="' + (input.id || input.name) + '" class="nos-label' + (input.required && ' required-field' || '') + '">' + input.label + '</label>';
+            },
+
+            lbl: function (input) {
+                return '<label class="nos-label label-' + (input.name || input.id) + ' ' + (input.classname || '') + '">' + input.value + '</label>';
             },
                     
             // returns text-based elements
@@ -138,12 +155,13 @@
                     step: input.step && ' step="' + input.step + '"' || '',
                     min: input.min && ' min="' + input.min + '"' || '',
                     max: input.max && ' max="' + input.max + '"' || '',
-                    classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"'
+                    classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"',
+                    inputGroup: input.inputGroup && this.inputGroup(input.inputGroup) || { start: '', left: '', right: '', end: '' }
                 });
-                var element = el.formGroup.start + el.label +
+                var element = el.formGroup.start + el.label + el.inputGroup.start + el.inputGroup.left +
                     '<input data-nos' + el.type + el.name + el.id + el.minlength + el.maxlength + el.placeholder + el.classname +
                     el.value + el.title + el.min + el.max + el.step + el.size + el.pattern + el.autocomplete + el.multiple + el.readonly +
-                    el.disabled + el.autofocus + el.required + '>' + el.helpBlock +
+                    el.disabled + el.autofocus + el.required + '>' + el.inputGroup.right + el.inputGroup.end + el.helpBlock +
                     el.message.required + el.message.minlength + el.message.valid + el.message.min + el.message.max +
                     el.formGroup.end;
                 return element;
@@ -204,9 +222,7 @@
                     classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"'
                 });
                 $.each(selOptions, function (k, v) {
-                    var selectedOption;
-                    el.selected === k ? selectedOption = ' selected' : selectedOption = '';
-                    options += '<option value="' + k + '" ' + selectedOption + '>' + v + '</option>';
+                    options += '<option value="' + k + '" ' + (el.selected === k && ' selected' || '') + '>' + v + '</option>';
                 });
                 var element = el.formGroup.start + el.label +
                     '<select data-nos' +
@@ -238,7 +254,6 @@
                 });
 
                 var element = el.formGroup.start + el.label + el.fieldset.start;
-
                 $.each(inputOptions, function (k, v) {
                     if (typeof input.checked === 'object' || input.checked === undefined) {
                         $.inArray(k, input.checked) > -1 ? checked = ' checked' : checked = '';
@@ -285,6 +300,7 @@
 
             },
 
+            // returns input type range & color
             other: function (input) {
                 var el = $.extend(this.self.getAttrs(input), {
                     step: input.step && ' step="' + input.step + '"' || '',
@@ -317,9 +333,12 @@
                     removeValue: input.removeButtonValue && input.removeButtonValue || 'Remove Field',
                     addButtonClass: input.addButtonClass && input.addButtonClass || 'btn btn-primary',
                     removeButtonClass: input.removeButtonClass && input.removeButtonClass || 'btn btn-danger',
-                    name: input.name && ' name="' + input.name || ''
+                    name: input.name && ' name="' + input.name || '',
+                    message: {
+                        required: '<div style="display: none;" class="alert alert-danger nos-help nos-required msg-required-' + input.name + '">' + (input.label || 'This') + ' is a required field</div>'
+                    }
                 });
-                
+
                 element += el.formGroup.start;
 
                 element += el.label;
@@ -340,21 +359,22 @@
                     div.start +
 
                     '<span class="input-group-addon nos-input-group-addon">' + addon + '</span>' +
-                    '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.name + i + '[]" >' +
+                    '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.name + i + '[]" ' + el.required + '>' +
 
                     div.end +
 
                     el.formGroup.end;
 
                 }
-                
-                element += el.formGroup.end; 
+
+                element += el.formGroup.end;
 
                 element += el.helpBlock;
 
                 element += '<input type="button" data-nos-add-button class="' + el.addButtonClass + ' nos-form-group" value="' + el.addValue + '">&nbsp;<input type="button" data-nos-remove-button value="' + el.removeValue + '" class="' + el.removeButtonClass + ' nos-form-group">';
 
-
+                element += el.message.required;
+                
                 return element;
 
             },
@@ -400,14 +420,15 @@
                 // after object is complete, we create the html
                 var stateObj = sortObject($.extend(states, (input.usTerritory && territories), (input.canada && provinces))),
                     options = '<option value="">' + (input.defaultSelected || "Select One...") + '</option>';
+
                 var el = $.extend(this.self.getAttrs(input), {
                     classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"'
                 });
+
                 $.each(stateObj, function (k, v) {
-                    var selectedOption;
-                    el.selected === v ? selectedOption = ' selected' : selectedOption = '';
-                    options += '<option value="' + v + '" ' + selectedOption + '>' + k + '</option>';
+                    options += '<option value="' + v + '" ' + (el.selected === v && ' selected' || '') + '>' + k + '</option>';
                 });
+
                 var element = el.formGroup.start + el.label +
                     '<select data-nos ' + el.name + el.id + el.classname + el.size + el.multiple + el.readonly + el.disabled + el.autofocus + el.required +
                     '>' +
@@ -488,186 +509,18 @@
 
         };
                 
-        // validation that runs on form submit
-        this.submitValidation = function (data) {
-
-            var form = $(data).serializeArray(),
-                formdata = {};
-                        
-            // assign serialized form object properties to new form submit object, unless it is a checkbox field
-            $.each(form, function (key, value) {
-                if (value.name.indexOf('[]') === -1) {
-                    formdata[value.name] = value.value;
-                }
-            });
-                
-            // selectors for required fields
-            var reqInput = $('[data-nos]:not(:radio, :checkbox, :button, :submit, :reset, :file, :image, select)').filter('[required]:visible'),
-                reqSR = $('select[data-nos]').filter('[required]:visible'),
-                fileField = $(':file[data-nos]').filter('[required]:visible'),
-                cbgroup = $(':checkbox[data-nos]').parents('fieldset'),
-                cb = $(':checkbox[data-nos], :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
-                requiredFields = $('[data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible'),
-                clone = $('.nos-clone');
-
-            requiredFields.each(function () {
-                $(this).val().length < 1 ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
-                $(this).on('change keyup keydown blur paste', function () {
-                    $(this).val().length < 1 ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
-                });
-            });
-            
-            if (clone.length) {
-                var cloneName = $(clone).parents().siblings('.nos-label').attr('for');
-                    formdata[cloneName] = {};
-                $.each(clone, function () {
-                    var cloneFieldName = $(this).attr('name').split('[]');
-                   if ($(this).val() !== "") { 
-                       formdata[cloneName][cloneFieldName[0]] = $(this).val(); 
-                   }
-                });
-            }
-                   
-            // checkbox and radio validation
-            // build individual arrays for each required field and check to see if arrays are empty on form submit
-            if (cb) {
-                var cba = {},
-                    cmsg = {};
-                cb.each(function (i) {
-                    var checkboxes = $(this).find(':checkbox, :radio');
-                    cmsg[i] = '.msg-required-' + $(this).attr('id');
-                    cba[i] = [];
-                    $(checkboxes).each(function () {
-                        $(this).is(':checked') && cba[i].push(this.value);
-                    });
-                    cba[i].length < 1 && $(cmsg[i]).nosSlideDown();
-                    $(checkboxes).change(function () {
-                        $.inArray(this, cba[i]) > -1 ? cba[i].splice(this, 1) : cba[i].push(this);
-                        cba[i].length > 0 && $(cmsg[i]).nosSlideUp();
-                    });
-                });
-            }
-
-            // create checkbox object for form submit response
-            if (cbgroup) {
-                var obj = {};
-                cbgroup.each(function (i) {
-                    var str = $(this).attr('id'),
-                        fcb = $(this).find(':checkbox');
-                    obj[i] = {};
-                    fcb.each(function () {
-                        var uid = $(this).attr('value');
-                        obj[i][uid] = this.checked;
-                    });
-                    formdata[str] = obj[i];
-                });
-            }
-                
-            // check all text-based fields for a blank value
-            $(reqInput).each(function (i) {
-                var field = reqInput[i],
-                    msg = '.msg-required-' + field.name,
-                    mask = $(this).attr('data-mask');
-                field.value = self.validator.sanitize(field.value);
-                if (mask) {
-                    if ($(field).caret().begin < 1) {
-                        $(msg).nosSlideDown();
-                        $(this).on('keyup keydown change blur paste', function () {
-                            $(this).caret().begin > 0 && $(msg).nosSlideUp();
-                            $(this).caret().begin < 1 && $(msg).nosSlideDown();
-                        });
-                    }
-                } else {
-                    if ($(field).val().length < 1) {
-                        $(msg).nosSlideDown();
-                        $(this).on('keyup keydown change blur paste', function () {
-                            this.value.length > 0 && $(msg).nosSlideUp();
-                            this.value.length < 1 && $(msg).nosSlideDown();
-                        });
-                    }
-                }
-
-            });
-                
-            // select Required field validation
-            $(reqSR).each(function (i) {
-                var sfield = reqSR[i],
-                    msg = '.msg-required-' + sfield.name;
-                if ($(sfield).val() === '') {
-                    $(msg).nosSlideDown();
-                    $(this).change(function () {
-                        $(this).val() !== '' && $(msg).nosSlideUp();
-                        $(this).val() === '' && $(msg).nosSlideDown();
-                    });
-                }
-            });
-                    
-            // file Required field validation
-            $(fileField).each(function (i) {
-                var field = fileField[i];
-                var msg = '.msg-required-' + field.name;
-                var filelist = (document.getElementById(field.id).files || document.getElementById(field.id).value); // ie8 doesn't support 'files'
-                if (filelist.length === 0) {
-                    $(msg).nosSlideDown();
-                    $(this).change(function () {
-                        $(this).val() !== '' && $(msg).nosSlideUp();
-                        $(this).val() === '' && $(msg).nosSlideDown();
-                    });
-                }
-                formdata[field.name] = filelist;
-            });
-                        
-            // send form submit object back to user if all fields are valid
-            if (!$('.nos-help').is(':visible') && !$('.nos-untouched[required]').is(':visible') && $('#nos-text-css').val() === '' && $('#nos-email-js').val() === 'validemail@email.com') {
-                userdata.submit(formdata);
-            }
-
-            else if (!$('.nos-help').is(':visible') && $('.nos-untouched[required]').is(':visible')) {
-                $('[data-nos]').each(function () {
-                    $(this).focus();
-                });
-            }
-
-            else {
-                if ($('.nos-required').is(':visible')) {
-                    $('.nos-form-required').nosSlideDown();
-                    $(':input, select, textarea').filter('[data-nos]').on('change input keyup blur focus paste', function () {
-                        if ($('.nos-required').is(':visible')) {
-                            $('.nos-form-required').nosSlideDown();
-                        } else {
-                            $('.nos-form-required').nosSlideUp();
-                        }
-                    });
-                }
-                if ($('.nos-invalid').is(':visible')) {
-                    $('.nos-form-invalid').nosSlideDown();
-                    $(':input, select, textarea').on('change input keyup blur focus paste', function () {
-                        if ($('.nos-invalid').is(':visible')) {
-                            $('.nos-form-invalid').nosSlideDown();
-                        } else {
-                            $('.nos-form-invalid').nosSlideUp();
-                        }
-                    });
-                }
-            }
-        };
-                
         // this function handles real time error messages while user is typing
         this.validate = function (fields) {
-
-            var allFields = $('[data-nos]:not(:submit, :reset, :button, :image, :checkbox, :radio, input[type=color], input[type=range])');
-
-            allFields.addClass('nos-untouched');
-
-            allFields.on('focus change input', function () {
-                $(this).alterClass('nos-untouched', 'nos-touched');
-            });
-
-            allFields.on('keydown change paste', function () {
-                $(this).val().length > 0 && $(this).attr('class').indexOf('nos-invalid-') !== 1 ? $(this).addClass('nos-valid-field') : $(this).removeClass('nos-valid-field');
-            }).on('blur change', function () {
-                $(this).removeClass('nos-valid-field');
-            });
+            
+            // manage touched/untouched classes
+            function manageTouchedFields() {
+                var allFields = $('[data-nos]:not(:submit, :reset, :button, :image, :checkbox, :radio, input[type=color], input[type=range])');
+                allFields
+                    .addClass('nos-untouched')
+                    .on('focus change input', function () {
+                        $(this).alterClass('nos-untouched', 'nos-touched');
+                    });
+            }
             
             // resets form
             function reset() {
@@ -757,13 +610,14 @@
                     $(this).removeClass('nos-valid-match');
                 });
             }
+            
                     
             // calls email/zip/phone validation functions and hides/displays messages to user
             function validateFields(v) {
                 var nm = v.name,
                     msg = '.msg-invalid-' + nm,
-                    id = '#' + (v.id || nm);
-                var emval;
+                    id = '#' + (v.id || nm),
+                    emval;
                 $(id).on('keyup input change blur paste focus', function () {
                     switch (v.type) {
                                 
@@ -813,31 +667,39 @@
                     $(this).removeClass('nos-valid-email nos-valid-zip nos-valid-tel');
                 });
             }
+
+            function addMask(v) {
+                $.mask ? $('#' + (v.id || v.name)).mask(v.mask) : console.warn('You must include the masked input plugin to use "mask". Go here: https://github.com/digitalBush/jquery.maskedinput');
+                $('#' + (v.id || v.name)).attr('data-mask', true);
+            }
+
+            function cloneButtons() {
+                // clone field add button functionality
+                $('[data-nos-add-button]').click(function () {
+                    $('.nos-input-group.hidden').length > 0 && $('.nos-input-group.hidden').eq(0).removeClass('hidden');
+                    $('.nos-input-group.hidden').length === 0 && $(this).addClass('disabled');
+                    $('.nos-input-group:not(.hidden)').length > 1 && $('[data-nos-remove-button]').removeClass('disabled');
+                });
                     
-            // clone field add button functionality
-            $('[data-nos-add-button]').click(function () {
-                $('.nos-input-group.hidden').length > 0 && $('.nos-input-group.hidden').eq(0).removeClass('hidden');
-                $('.nos-input-group.hidden').length === 0 && $(this).addClass('disabled');
-                $('.nos-input-group:not(.hidden)').length > 1 && $('[data-nos-remove-button]').removeClass('disabled');
-            });
-                    
-            // clone field remove button functionality
-            $('[data-nos-remove-button]').click(function () {
-                $('.nos-input-group:not(.hidden)').length > 1 && $('.nos-input-group:not(.hidden)').eq(-1).addClass('hidden');
-                $('.nos-input-group:not(.hidden)').length === 1 && $(this).addClass('disabled');
-                $('.nos-input-group.hidden').length > 0 && $('[data-nos-add-button]').removeClass('disabled');
-            });
+                // clone field remove button functionality
+                $('[data-nos-remove-button]').click(function () {
+                    $('.nos-input-group:not(.hidden)').length > 1 && $('.nos-input-group:not(.hidden)').eq(-1).addClass('hidden');
+                    $('.nos-input-group:not(.hidden)').length === 1 && $(this).addClass('disabled');
+                    $('.nos-input-group.hidden').length > 0 && $('[data-nos-add-button]').removeClass('disabled');
+                });
+            }
                     
             // calls the validation functions
             function callValidation(k, v) {
                 
+                // add touched/untouched classes
+                manageTouchedFields();
+
+                // clone add/remove button functionality
+                v.type === 'clone' && cloneButtons();
+                
                 // set mask
-                if (v.mask) {
-
-                    $.mask ? $('#' + (v.id || v.name)).mask(v.mask) : console.warn('You must include the masked input plugin to use "mask". Go here: https://github.com/digitalBush/jquery.maskedinput');
-                    $('#' + (v.id || v.name)).attr('data-mask', true);
-
-                }
+                v.mask && addMask(v);
                         
                 // call reset function
                 v.type === 'reset' && reset();
@@ -899,6 +761,201 @@
             });
 
         };
+        
+        // validation that runs on form submit
+        this.submitValidation = function (data) {
+            
+            // initializing form submit object
+            var form = $(data).serializeArray(),
+                formdata = {},
+                
+                // selectors for required fields
+                reqInput = $('[data-nos]:not(:radio, :checkbox, :button, :submit, :reset, :file, :image, select, .nos-clone)').filter('[required]:visible'),
+                reqSR = $('select[data-nos]').filter('[required]:visible'),
+                fileField = $(':file[data-nos]').filter('[required]:visible'),
+                cbgroup = $(':checkbox[data-nos]').parents('fieldset'),
+                cb = $(':checkbox[data-nos], :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
+                requiredFields = $('[data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible'),
+                clone = $('.nos-clone');
+
+            // assign serialized form object properties to new form submit object, unless it is a checkbox field
+            function init() {
+                $.each(form, function (key, value) {
+                    if (value.name.indexOf('[]') === -1) {
+                        formdata[value.name] = value.value;
+                    }
+                });
+                submitForm();
+            }
+
+            function checkRequiredFields() {
+                requiredFields.each(function () {
+                    $(this).val().length < 1 ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
+                    $(this).on('change keyup keydown blur paste', function () {
+                        $(this).val().length < 1 ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
+                    });
+                });
+            }
+            
+            // build submit object for clone types
+            function buildClone() {
+                var cloneName = $(clone).parents().siblings('.nos-label').attr('for');
+                formdata[cloneName] = {};
+                $.each(clone, function () {
+                    var cloneFieldName = $(this).attr('name').split('[]');
+                    if ($(this).val() !== "") {
+                        formdata[cloneName][cloneFieldName[0]] = $(this).val();
+                    }
+                });
+            }
+            
+            // create checkbox object for form submit response
+            function cbRadioSubmitObject() {
+                var obj = {};
+                cbgroup.each(function (i) {
+                    var str = $(this).attr('id'),
+                        fcb = $(this).find(':checkbox');
+                    obj[i] = {};
+                    fcb.each(function () {
+                        var uid = $(this).attr('value');
+                        obj[i][uid] = this.checked;
+                    });
+                    formdata[str] = obj[i];
+                });
+            }
+            
+            // checkbox and radio validation
+            // build individual arrays for each required field and check to see if arrays are empty on form submit
+            function validateCbRadio() {
+                var cba = {},
+                    cmsg = {};
+                cb.each(function (i) {
+                    var checkboxes = $(this).find(':checkbox, :radio');
+                    cmsg[i] = '.msg-required-' + $(this).attr('id');
+                    cba[i] = [];
+                    $(checkboxes).each(function () {
+                        $(this).is(':checked') && cba[i].push(this.value);
+                        $(this).change(function () {
+                            $.inArray($(this).val(), cba[i]) > -1 ? cba[i].splice($.inArray($(this).val(), cba[i]), 1) : cba[i].push($(this).val());
+                            cba[i].length > 0 ? $(cmsg[i]).nosSlideUp() : $(cmsg[i]).nosSlideDown();
+                        });
+                    });
+                    cba[i].length < 1 && $(cmsg[i]).nosSlideDown();
+                });
+            }
+
+            // check all text-based fields for a blank value
+            function validateRequiredFields() {
+                $(reqInput).each(function (i) {
+                    var field = reqInput[i],
+                        msg = '.msg-required-' + field.name,
+                        mask = $(this).attr('data-mask');
+                    field.value = self.validator.sanitize(field.value);
+                    if (mask) {
+                        if ($(field).caret().begin < 1) {
+                            $(msg).nosSlideDown();
+                            $(this).on('keyup keydown change blur paste', function () {
+                                $(this).caret().begin > 0 && $(msg).nosSlideUp();
+                                $(this).caret().begin < 1 && $(msg).nosSlideDown();
+                            });
+                        }
+                    } else {
+                        if ($(field).val().length < 1) {
+                            $(msg).nosSlideDown();
+                            $(this).on('keyup keydown change blur paste', function () {
+                                this.value.length > 0 && $(msg).nosSlideUp();
+                                this.value.length < 1 && $(msg).nosSlideDown();
+                            });
+                        }
+                    }
+
+                });
+            }
+
+            // select Required field validation
+            function validateSelectFields() {
+                $(reqSR).each(function (i) {
+                    var sfield = reqSR[i],
+                        msg = '.msg-required-' + sfield.name;
+                    if ($(sfield).val() === '') {
+                        $(msg).nosSlideDown();
+                        $(this).change(function () {
+                            $(this).val() !== '' && $(msg).nosSlideUp();
+                            $(this).val() === '' && $(msg).nosSlideDown();
+                        });
+                    }
+                });
+            }
+            
+            // file Required field validation
+            function validateFileFields() {
+                $(fileField).each(function (i) {
+                    var field = fileField[i];
+                    var msg = '.msg-required-' + field.name;
+                    var filelist = (document.getElementById(field.id).files || document.getElementById(field.id).value); // ie8 doesn't support 'files'
+                    if (filelist.length === 0) {
+                        $(msg).nosSlideDown();
+                        $(this).change(function () {
+                            $(this).val() !== '' && $(msg).nosSlideUp();
+                            $(this).val() === '' && $(msg).nosSlideDown();
+                        });
+                    }
+                    formdata[field.name] = filelist;
+                });
+            }
+
+            // send form submit object back to user if all fields are valid
+            function submitForm() {
+                
+                if (!$('.nos-help').is(':visible') && !$('.nos-untouched[required]').is(':visible')) {
+
+                    if (self.settings.honeypot !== false) {
+                        ($('#nos-text-css').val() === '' && $('#nos-email-js').val() === 'validemail@email.com') && self.settings.submit(formdata);
+                    }
+                    else {
+                        self.settings.submit(formdata);
+                    }
+                }
+
+                else if (!$('.nos-help').is(':visible') && $('.nos-untouched[required]').is(':visible')) {
+                    $('[data-nos]').each(function () {
+                        $(this).focus();
+                    });
+                }
+
+                else {
+                    $('.nos-required').is(':visible') && $('.nos-form-required').nosSlideDown();
+                    $('.nos-invalid').is(':visible') && $('.nos-form-invalid').nosSlideDown();
+                    $('[data-nos]').on('change input keyup blur focus paste', function () {
+                        $('.nos-invalid').is(':visible') ? $('.nos-form-invalid').nosSlideDown() : $('.nos-form-invalid').nosSlideUp();
+                        $('.nos-required').is(':visible') ? $('.nos-form-required').nosSlideDown() : $('.nos-form-required').nosSlideUp();
+                    });
+                    
+                    
+                    
+                }
+            }
+            
+            // call submit & validation functions
+            init();
+
+            clone.length && buildClone();
+
+            cbgroup && cbRadioSubmitObject();
+
+            if (this.settings.validate) {
+
+                checkRequiredFields(),
+                validateRequiredFields(),
+                validateCbRadio(),
+                validateSelectFields();
+                validateFileFields();
+
+            }
+
+
+
+        };
                 
         // error messages to warn of incorrect types in the configuration
         this.errorMessages = function () {
@@ -919,6 +976,8 @@
             // toggles browser validation on/off based on user input - default is 'off'
             !this.settings.htmlValidation && this.form.attr('novalidate', '');
 
+            // helper function
+            // changes names of classes and selects with wildcards
             $.prototype.alterClass = function (removals, additions) {
 
                 var self = this;
@@ -947,7 +1006,7 @@
                 return !additions ? self : self.addClass(additions);
             };
             
-            // this will alter the animation speed of the slideDown/slideUp effects
+            // controls animation speed of the slideDown/slideUp effects
             // used for user error messages
             $.prototype.nosSlideDown = (function (slideDown) {
                 var defaultSpeed = settings.animationSpeed;
@@ -998,6 +1057,9 @@
                 var str = block.row && '<div class="row nos-row">' || '',
 
                     self = this;
+                    
+                // initial function call
+                buildColumn(block);
 
                 // function to check each new branch of elements for another nested column
                 // this function will repeat until it reaches the end of the tree
@@ -1034,9 +1096,6 @@
                     str += col.classname && '</div>' || '';
 
                 }
-                
-                // initial function call
-                buildColumn(block);
                 
                 // end divs for the rows
                 str += block.row && '</div>' || '';
@@ -1087,7 +1146,7 @@
                 
         // renders form
         this.render = function (input) {
-            $(element).append(input);
+            $(element).html(input);
         },
         
         // adds form validation messages to the end of the form tag
@@ -1122,8 +1181,7 @@
     $.extend(Nos.prototype, {
         init: function () {
 
-            var userdata = this.settings,
-                self = this;
+            var self = this;
                     
             // displays error messages if the config object has incorrect types
             this.errorMessages();
@@ -1148,7 +1206,7 @@
                 e.preventDefault();
                         
                 // run submit form validation, unless user specifies not to
-                userdata.validate && self.submitValidation($(this));
+                self.submitValidation($(this));
 
             });
         }
