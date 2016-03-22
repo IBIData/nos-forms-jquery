@@ -8,6 +8,15 @@
         "required": true,
         "placeholder": "Your Name",
         "pattern": "[A-Za-z]{3}",
+        "data": {
+            "test": 5,
+            "test2": 6
+        },
+        "inputGroup": {
+            "left": {
+                "text": ""
+            }  
+        },
         "minlength": 2,
         "maxlength": 60,
         "messages": {
@@ -17,162 +26,12 @@
         }
     },
     {
-        "type": "html",
-        "element": "<div class='form-group'><div class='well'><h3>I'm a Well</h3></div></div>"
-    },
-    {
-        "row": true,
-        "column": [
-            {
-                "classname": "col-md-6",
-                "column": [
-                    {
-                        "name": "emailtest",
-                        "type": "email",
-                        "validate": false,
-                        "label": "Email"
-                    }
-                ]
-            },
-            {
-                "classname": "col-md-6",
-                "column": [
-                    {
-                        "name": "emailtest2",
-                        "type": "email",
-                        "validate": true,
-                        "label": "Email"
-                    }
-                ]
-            }
-        ]
-    },
-    {
-        "name": "numberexample",
-        "id": "numberid",
-        "type": "text",
-        "label": "Number Example",
-        "required": true,
-        "placeholder": "A Number",
-        "min": 5,
-        "max": 10,
-        "step": 1
-    },
-    {
         "name": "emailexample",
         "type": "email",
         "label": "Email Example",
         "required": true,
         "placeholder": "Your Email",
         "minlength": 1
-    },
-    {
-        "name": "telexample",
-        "type": "tel",
-        "label": "Phone Number Example",
-        "required": true,
-        "placeholder": "Your Phone Number",
-        "mask": "999-999-9999",
-        "minlength": 1,
-        "maxlength": 12
-    },
-    {
-        "name": "zipexample",
-        "id": "zipid",
-        "type": "zip",
-        "label": "Zip Code Example",
-        "required": true,
-        "placeholder": "Zip Code",
-        "mask": "99999?-9999"
-    },
-    {
-        "name": "cloneExample",
-        "type": "clone",
-        "formGroup": true,
-        "label": "Clone Example",
-        "placeholder": "Item",
-        "start": 3,
-        "maxFields": 5,
-        "addon": "http://",
-        "addButtonValue": "Add",
-        "removeButtonValue": "Remove",
-        "addButtonClass": "btn btn-primary",
-        "removeButtonClass": "btn btn-danger"
-    },
-    {
-        "name": "dateexample",
-        "type": "date",
-        "label": "Date Example",
-        "required": true,
-        "placeholder": "Date",
-        "minlength": 1,
-        "maxlength": 60
-    },
-    {
-        "name": "weekExample",
-        "type": "week",
-        "label": "Week Example",
-        "required": true
-    },
-    {
-        "name": "monthExample",
-        "type": "month",
-        "label": "Month Example",
-        "required": true
-    },
-    {
-        "name": "datetimeLocalExample",
-        "type": "datetime-local",
-        "label": "Datetime Local Example",
-        "required": true
-    },
-    {
-        "name": "urlexample",
-        "id": "urlid",
-        "type": "url",
-        "label": "URL Example",
-        "required": true,
-        "minlength": 1,
-        "maxlength": 60,
-        "placeholder": "http://www.example.com"
-    },
-    {
-        "name": "colorexample",
-        "id": "colorid",
-        "type": "color",
-        "label": "Color Picker Example",
-        "value": "#E7E7E8"
-    },
-    {
-        "name": "rangeexample",
-        "id": "rangeid",
-        "type": "range",
-        "label": "Range Example",
-        "required": true,
-        "min": 1,
-        "max": 100,
-        "step": 1,
-        "value": 25
-    },
-    {
-        "name": "fileupload",
-        "type": "file",
-        "label": "File Upload Example",
-        "classname": "files",
-        "required": true,
-        "disabled": false,
-        "accept": "image/*",
-        "multiple": true
-    },
-    {
-        "name": "stateSelect",
-        "type": "state",
-        "label": "State",
-        "required": true,
-        "selected": "",
-        "defaultSelected": "Select One...",
-        "usTerritory": true,
-        "canada": true
     },
     {
         "name": "select",
@@ -192,21 +51,22 @@
             "value4": "Fourth Value"
         }
     },
+    
     {
         "name": "mycb",
         "type": "checkbox",
         "label": "Check a Box",
         "required": true,
-        "disabled": false,
         "inline": true,
+        "submit": "object",
         "checked": [
-            "value2",
-            "value3"
+            "first",
+            "second"
         ],
         "options": {
-            "value1": "First Option",
-            "value2": "Second Option",
-            "value3": "Third Option"
+            "first": "Option 1",
+            "second": "Option 2",
+            "third": "Option 3"
         }
     },
     {
@@ -216,11 +76,19 @@
         "required": true,
         "inline": true,
         "checked": "",
-        "options": {
-            "value1": "First Option",
-            "value2": "Second Option",
-            "value3": "Third Option"
-        }
+        "options": [
+            {
+                "first": "Option1"
+            },
+            {
+                "second": "Option2"
+            }
+        ]
+    },
+    {
+        "name": "state",
+        "type": "state",
+        "selected": "mn"
     },
     {
         "name": "txtmessage",
@@ -247,13 +115,5 @@
         "formGroup": true,
         "inline": true,
         "value": "Reset"
-    },
-    {
-        "name": "imageexample",
-        "id": "imageid",
-        "type": "image",
-        "formGroup": true,
-        "src": "http://placehold.it/50x40",
-        "alt": "Placeholder Image"
     }
 ]

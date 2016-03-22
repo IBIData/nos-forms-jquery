@@ -3,14 +3,18 @@
         "classname": "col-md-6 col-sm-6 col-xs-12",
         "column": [
             {
-                "name": "name",
-                "id": "txtid",
+                "name": "name2",
+                "id": "txtid2",
                 "type": "text",
                 "title": "test",
                 "autofocus": true,
                 "label": "Name",
                 "required": true,
                 "placeholder": "Your Name",
+                "data": {
+                    "field": 0,
+                    "testing": 123
+                },
                 "minlength": 1,
                 "maxlength": 60,
                 "messages": {
@@ -20,8 +24,8 @@
                 }
             },
             {
-                "name": "numberexample",
-                "id": "numberid",
+                "name": "numberexample2",
+                "id": "numberid2",
                 "type": "number",
                 "title": "test",
                 "label": "Number Example",
@@ -36,7 +40,7 @@
                 }
             },
             {
-                "name": "emailexample",
+                "name": "emailexample2",
                 "type": "email",
                 "title": "test",
                 "validate": true,
@@ -52,8 +56,8 @@
         "classname": "col-md-6 col-sm-6 col-xs-12",
         "column": [
             {
-                "name": "zipexample",
-                "id": "zipid",
+                "name": "zipexample2",
+                "id": "zipid2",
                 "type": "zip",
                 "title": "test",
                 "label": "Zip Code Example",
@@ -64,7 +68,7 @@
                 "mask": "99999?-9999"
             },
             {
-                "name": "select",
+                "name": "select2",
                 "type": "select",
                 "title": "test",
                 "label": "Select Option",
@@ -82,8 +86,8 @@
                 }
             },
             {
-                "name": "test",
-                "id": "test",
+                "name": "test2",
+                "id": "test2",
                 "type": "text",
                 "title": "test",
                 "label": "Text Field",
@@ -100,14 +104,28 @@
         "classname": "col-md-12 col-sm-12 col-xs-12",
         "column": [
             {
-                "name": "newsletterSubscribe",
+                "name": "newsletterSubscribe2",
                 "type": "checkbox",
                 "formGroup": true,
                 "inline": true,
+                "submitType": "object",
                 "checked": "",
                 "options": {
                     "optIn": "Subscribe to Email Newsletter"
                 }
+            },
+            {
+                "name": "imageExample",
+                "id": "imageId",
+                "type": "image",
+                "classname": "",
+                "formGroup": true,
+                "inline": false,
+                "autofocus": false,
+                "src": "http://placehold.it/50x40",
+                "alt": "Placeholder Image",
+                "height": 50,
+                "width": 50
             }
         ]  
     },
@@ -115,7 +133,7 @@
         "classname": "col-md-12 col-sm-12 col-xs-12",
         "column": [
             {
-                "name": "submit",
+                "name": "submit2",
                 "type": "submit",
                 "title": "test",
                 "classname": "btn btn-success",
@@ -124,7 +142,7 @@
                 "value": "Submit"
             },
             {
-                "name": "myreset",
+                "name": "myreset2",
                 "type": "reset",
                 "title": "test",
                 "classname": "btn btn-danger",

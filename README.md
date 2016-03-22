@@ -20,7 +20,7 @@ This plugin is intended for people who spend a lot of time building tedious form
 
 1. Include js and css file from 'dist' directory
 
-2. Create empty form element with a unique id/class
+2. Create empty form element with a unique id
 
 3. Call nosForm function, specifying your data and options
 
@@ -101,7 +101,7 @@ All options with default values
 
 ```javascript
 $("#myform").nosForm({
-    fields: {}, // Your json data,
+    fields: null, // Your json data {},
     validate: true, // toggle javascript validation
     htmlValidation: false, // toggle html browser validation
     animationSpeed: 100, // change speed of js animations (error message animations)
@@ -200,7 +200,7 @@ Nesting columns can be accomplished by declaring a row where needed.
 ```json
 [
     {
-        "row": true, // adds a row class div before this column
+        "row": true, // wraps a row class div around this column
         "classname": "col-md-6 col-md-offset-3", // centers this form on the page in a col-6
         "column": [
             {
@@ -247,73 +247,104 @@ Nesting columns can be accomplished by declaring a row where needed.
 ]
 ```
 
-This format allows you to create your form elements in blocks. Adding Bootstrap classes makes it easy for you to display your form in a column layout. Add as many columns as you'd like.
+This format allows you to create your form elements in blocks. Adding Bootstrap classes makes it easy for you to display your form in a column layout. Add as many columns and nest them as deep as you like.
 
-##Special Types
-
----
-
-There are a few special element types available.
-
-**state**
-
- This will render a select element with all 50 states and options for Canadian Provinces and US Territories
-
-**zip** 
-
-Will render a text box with zip code pattern validation built in
-
-**clone** 
-
-Will create a text input with add/remove field buttons. Good for letting users enter an undetermined amount of data.
-
-**html** 
-
-Allows you to insert any custom html and have it render in the order specified in your json 
-
-**label**
-
-Renders a label on the fly
-
-##Important Properties
+##Types
 
 ---
 
-**type** | *Required* | *String*
+| Name                                  | Description                                                                                                       |
+|---------------------------------------|-------------------------------------------------------------------------------------------------------------------|
+| [button](./examples/button.md)        | Standard HTML button element - rendered with button tag, not input.
+| [checkbox]('./examples/checkbox.md)   | Standard HTML checkbox input.
+| [clone]('./examples/clone.md)         | A set of text fields with a button to add/remove fields.
+| [color]('./examples/color.md)         | Standard HTML color input.
+| [date]('./examples/date.md)           | Standard HTML date input.
+| [datetime-local]('./examples/datetime-local.md)| Standard HTML datetime-local input.
+| [email]('./examples/email.md)         | Standard HTML email input. Email validation is built in, but optional.
+| [file]('./examples/file.md)           | Standard HTML file input.
+| [hidden]('./examples/hidden.md)       | Standard HTML hidden input.
+| [html]('./examples/html.md)           | Enter your own html string.
+| [image]('./examples/image.md)         | Standard HTML image input.
+| [label]('./examples/label.md)         | Standard HTML label element.
+| [month]('./examples/month.md)         | Standard HTML month input.
+| [number]('./examples/number.md)       | Standard HTML number input.
+| [password]('./examples/password.md)   | Standard HTML password input.
+| [radio]('./examples/radio.md)         | Standard HTML radio input.
+| [range]('./examples/range.md)         | Standard HTML range input.
+| [reset]('./examples/reset.md)         | Standard HTML reset button element - rendered with button tag, not input. Will automatically reset your form without configuration.
+| [search]('./examples/search.md)       | Standard HTML search input.
+| [select]('./examples/select.md)       | Standard HTML select element.
+| [state]('./examples/state.md)         | Sets all 50 US states in a select element. Also able to add US Territories, Mexican states, and Canadian Provinces.
+| [submit]('./examples/submit.md)       | Standard HTML submit button element - rendered with button tag, not input.
+| [tel]('./examples/tel.md)             | Standard HTML tel input. Phone validation is built in, but optional.
+| [text]('./examples/text.md)           | Standard HTML text input.
+| [textarea]('./examples/textarea.md)   | Standard HTML textarea element.
+| [time]('./examples/time.md)           | Standard HTML time input.
+| [url]('./examples/url.md)             | Standard HTML url input.
+| [week]('./examples/week.md)           | Standard HTML week input.
+| [zip]('./examples/zip.md)             | HTML text input with zip code validation built in, but optional.
 
-Specifies the type of element
 
-**name** | *Required* | *String*
+##Properties
 
-Gives the element a name, and will be used as the id if none is specified
+---
 
-**id** | *String*
+| Name              | Type          | Description                                                                                                           |
+|-------------------|---------------|-----------------------------------------------------------------------------------------------------------------------|
+| accept            | string        | *Used with type 'file'* - specifies accepted file types. See [file](./examples/file.md). 
+| addon             | string        | *Used with type 'clone'* - specifies an input-group addon. See [Clone](./examples/clone.md).
+| alt               | string        | *Used with type 'image'* - specifies alt tag text. See [image](./examples/image.md).
+| autocomplete      | string        | Toggles autocomplete for single element. Accepts "on" or "off".
+| autofocus         | boolean       | Sets HTML5 autofocus attribute for element (only 1 per page).
+| checked           | string/array  | *Used with types 'checkbox, radio'* - specifies pre-checked boxes. See [checkbox](./examples/checkbox.md) and [radio](./examples/checkbox.md).
+| classname         | string        | Specifies class names for element. 'form-control' is active by default for text elements.
+| cols              | number        | *Used with type 'textarea'* - specifies number of columns. See [textarea](./examples/textarea.md).
+| [data](./examples/properties/data.md)| object        | Assigns data- attributes to element. See [data](./examples/properties/data.md).
+| defaultSelected   | string        | *Used with type 'state'* - Sets the default selected value. See [state](./examples/state.md).
+| disabled          | boolean       | Sets HTML5 disabled attribute on element.
+| element           | string        | *Used with type 'html'* - Specifies html string to render. See [html](./examples/html.md).
+| formaction        | string        | *Used with type 'submit, image'* - Sets HTML formaction attribute. See [submit](./examples.submit.md).
+| formenctype       | string        | *Used with type 'submit'* - Sets HTML formenctype attribute. See [submit](./examples.submit.md).
+| formGroup         | boolean       | Wraps element in a Bootstrap form-group div. Default is true.
+| formmethod        | string        | *Used with type 'submit'* - Sets HTML formmethod attribute. See [submit](./examples.submit.md).
+| formnovalidate    | string        | *Used with type 'submit'* - Sets HTML formnovalidate attribute. See [submit](./examples.submit.md).
+| formtarget        | string        | *Used with type 'submit'* - Sets HTML formtarget attribute. See [submit](./examples.submit.md).
+| height            | number        | *Used with type 'image'* - specifies element height. See [image](./examples/image.md).
+| helpBlock         | string        | Inserts a Bootstrap help block below element.
+| id                | string        | Assigns element an id. If no id is present, the name field will also be the id.
+| inline            | boolean       | *Used with type 'button, submit, reset, image, checkbox, radio'* - Assigns 'inline-block' css property to element.
+| [inputGroup](./examples/properties/inputGroup.md)| object        | Adds a Bootstrap input group to the element. See [inputGroup](./examples/properties/inputGroup.md).
+| label             | string        | Adds a label before the element.
+| mask              | string        | Adds a masked input to a text element. [Requires external plugin](https://github.com/digitalBush/jquery.maskedinput).
+| match             | string        | *Used with type 'password'* - used to match passwords when you have a 'repeat password' field. See [password](./examples/password.md).
+| max               | number        | *Used with types 'number, date, range, datetime-local, month, time, week'* - sets maximum accepted value. See [number](./examples/number.md).
+| maxFields         | number        | *Used with type 'clone'* - sets the maximum allowed fields to be dynamically generated. See [clone](./examples/clone.md).
+| maxlength         | number        | Sets a maxlength property on the field. This will also be validated in javascript.
+| [messages](./examples/properties/messages.md)| object        | Overrides the default validation messages. See [messages](./examples/properties/messages.md).
+| min               | number        | *Used with types 'number, date, range, datetime-local, month, time, week'* - sets minimum accepted value. See [number](./examples/number.md).
+| minlength         | number        | Sets a minlength property on the field. This will also be validated in javascript.
+| multiple          | boolean       | *Used with types 'select, state, file'* - Enable multiple selections. See [select](./examples/select.md), [state](./examples/state.md), and [file](./examples/file.md).
+| name              | string        | Gives the element a name. Will also assign the name to the id if no id is specified.
+| options           | object/array  | *Used with types 'select, checkbox, radio'* - Sets the options with key-value pairs.
+| pattern           | string/regex  | Sets HTML5 pattern attribute (Regex strings are difficult to pass in json format).
+| placeholder       | string        | Sets a placeholder in text-based elements.
+| readonly          | boolean       | Sets HTML5 readonly attribute.
+| required          | boolean       | Sets HTML5 required attribute. These fields are also validated in javascript.
+| rows              | number        | *Used with type 'textarea'* - Sets the number of rows. See [textarea](./examples/textarea.md).
+| selected          | string        | *Used with types 'select, state'* - Preselects a select value. See [select](./examples/select.md) and [state](./examples/state.md).
+| size              | number        | *Used with types 'text, search, tel, url, email, password'* - Sets the input size.
+| src               | string        | *Used with type 'image'* - Sets the image source. See [image](./examples/image.md).
+| start             | number        | *Used with type 'clone'* - Sets the number of text fields to start with. See [clone](./examples/clone.md).
+| step              | number        | *Used with types 'number, range, date, datetime-local, month, time'* - Sets the step attribute.
+| submitType        | string        | *Used with type 'checkbox' - Sets the type of value you would like the form to submit for you. See [checkbox](./examples/checkbox.md).
+| title             | string        | Sets the HTML title attribute.
+| type              | string        | Sets the element type.
+| validate          | boolean       | *Used with types 'email, zip, tel'* - Specifies if you would like to validate the form field.
+| value             | string        | Sets a value to the field.
+| width             | number        | *Used with type 'image'* - specifies element width. See [image](./examples/image.md).
+| wrap              | string        | *Used with type 'textarea'* - Sets HTML wrap attribute.
 
-Gives the element an id. If not specified, the name will also be the id.
-
-**formGroup** | *Boolean* | defaults to true
-
-Wraps the element in a Bootstrap form group
-
-**classname** | *String* | defaults to form-control (for text-based fields)
-
-Gives the element a class
-
-**label** | *String*
-
-Adds a label above element
-
-**mask** | *String*
- 
-Adds a masked input to a text element. [Requires external plugin](https://github.com/digitalBush/jquery.maskedinput)
-
-**helpBlock** | *String*
-
-Adds a Bootstrap help-block of text below element
-
-**inputGroup** | *Object*
-
-Adds a Bootstrap input group to the element
 
 All other html attributes are supported and behave as expected. See the examples below.
 
@@ -368,571 +399,23 @@ There are five specific types of message that can appear for each field:
 
 There are also some default form messages that will display on the bottom of the form if the user tries to submit unsuccessfully. These can be customized in the plugin initilization, as mentioned in the 'Options' section.
 
-##Examples
-----------------------------------------
-
-The following examples have all available options listed. Normally they won't look so bloated.
-
-####text
-
-```json
-{
-    "name": "txtExample",
-    "id": "txtId",
-    "type": "text",
-    "autofocus": true,
-    "label": "Simple Text Field Example",
-    "required": true,
-    "classname": "form-control",
-    "formGroup": true,
-    "placeholder": "Just a Text Field",
-    "pattern": "[A-Za-z]{5}",
-    "minlength": 5,
-    "maxlength": 60,
-    "value": "",
-    "title": "Simple Text Field",
-    "autocomplete": "on",
-    "disabled": false,
-    "readonly": false,
-    "size": 60,
-    "messages": {
-        "required": "This simple text field is required",  
-        "invalid": "This field must be valid",
-        "minlength": "This field must be at least 5 characters long"
-    }
-}
-```
-####email
-```json
-{
-    "name": "emailExample",
-    "id": "emailId",
-    "type": "email",
-    "autofocus": false,
-    "label": "Email Example",
-    "validate": true, // will validate email by default. set this to false to turn off automatic email validation
-    "pattern": "", // alternative to 'validate'. use your own regex. don't use this with 'validate' - you'll have to escape some characters and omit the beginning/end forward slashes
-    "required": true,
-    "classname": "form-control secondClass",
-    "formGroup": true,
-    "placeholder": "Email Address",
-    "minlength": 1,
-    "maxlength": 100,
-    "value": "",
-    "title": "Email Address",
-    "autocomplete": "on",
-    "disabled": false,
-    "readonly": false,
-    "size": 100,
-    "messages": {
-        "required": "Email Address is required",  
-        "invalid": "Your email must be valid"
-    }
-}
-```
-####tel
-```json
-{
-    "name": "telExample",
-    "id": "telId",
-    "type": "tel",
-    "autofocus": false,
-    "label": "Email Example",
-    "validate": true, // will validate phone numbers by default (999-999-9999). disable this to turn it off
-    "pattern": "", // use your own regex. be sure to turn off 'validate' above when you use this - you'll have to escape some characters and omit the beginning/end forward slashes
-    "required": true,
-    "classname": "form-control secondClass",
-    "formGroup": true,
-    "placeholder": "Email Address",
-    "minlength": 1,
-    "maxlength": 100,
-    "value": "",
-    "title": "Email Address",
-    "autocomplete": "on",
-    "disabled": false,
-    "readonly": false,
-    "size": 100,
-    "mask": "999-999-9999", // requires masked input plugin https://github.com/digitalBush/jquery.maskedinput
-    "messages": {
-        "required": "Your phone number is required",  
-        "invalid": "Your phone number must be valid"
-    }
-}
-```
-####zip
-```json
-{
-    "name": "zipExample",
-    "id": "zipId",
-    "type": "zip",
-    "label": "Zip Code Example",
-    "title": "Zip Code Example",
-    "required": true,
-    "classname": "form-control",
-    "validate": true, // will validate zip codes by default (99999-9999 && 99999). disable this to turn it off
-    "pattern": "", // use your own regex instead - you'll have to escape some characters and omit the beginning/end forward slashes
-    "disabled": false,
-    "autofocus": false,
-    "readonly": false,
-    "formGroup": true,
-    "placeholder": "Zip Code",
-    "mask": "99999?-9999" // requires masked input plugin https://github.com/digitalBush/jquery.maskedinput 
-}
-```
-####date
-```json
-{
-    "name": "dateExample",
-    "id": "dateId",
-    "type": "date",
-    "label": "Date Example",
-    "title": "Date Example",
-    "required": true,
-    "classname": "form-control",
-    "autofocus": false,
-    "autocomplete": true,
-    "disabled": false,
-    "readonly": false,
-    "formGroup": true,
-    "min": "1900-01-01",
-    "max": "2015-12-31",
-    "value": ""
-}
-```
-####submit
-```json
-{
-    "name": "submit",
-    "type": "submit",
-    "classname": "btn btn-success",
-    "formGroup": true,
-    "inline": true, // use when you have multiple buttons you want to display inline with each other
-    "value": "Submit",
-    "title": "",
-    "formaction": "",
-    "formenctype": "",
-    "formmethod": "",
-    "formnovalidate": false,
-    "formtarget": ""
-}
-```
-####reset
-```json
-{
-    "name": "reset",
-    "type": "reset",
-    "classname": "btn btn-danger",
-    "formGroup": true,
-    "inline": true,
-    "title": "",
-    "value": "Reset"
-}
-```
-####button
-```json
-{
-    "name": "button",
-    "type": "button",
-    "classname": "btn btn-info",
-    "formGroup": true,
-    "inline": true,
-    "title": "",
-    "value": "A Button"
-}
-```
-####checkbox
-```json
-{
-    "name": "cbExample",
-    "type": "checkbox",
-    "label": "Checkbox Example",
-    "formGroup": true,
-    "required": true,
-    "disabled": false,
-    "inline": false, // display checkboxes inline. this basically just changes the bootstrap layout for checkbox controls
-    "checked": [ "value2", "value3" ], // accepts a value from the options below. can be a string or an array of options
-    "options": {
-        "value1": "First Option",
-        "value2": "Second Option",
-        "value3": "Third Option"
-    }
-}
-```
-####radio
-```json
-{
-    "name": "radioExample",
-    "type": "radio",
-    "label": "Radio Example",
-    "formGroup": true,
-    "required": true,
-    "disabled": false,
-    "inline": true, // display radio options inline. this basically just changes the bootstrap layout for radio controls
-    "checked": "value1", // accepts a value from the options below
-    "options": {
-        "value1": "First Option",
-        "value2": "Second Option",
-        "value3": "Third Option"
-    }
-}
-```
-####select
-```json
-{
-    "name": "selectExample",
-    "type": "select",
-    "label": "Select Example",
-    "classname": "form-control",
-    "formGroup": true,
-    "required": true,
-    "autofocus": false,
-    "disabled": false,
-    "readonly": false,
-    "title": "Select Example",
-    "multiple": false,
-    "selected": "", // by setting the selected option to a blank string, we are setting it to the blank value in the options object below
-    "options": { 
-        "": "Select One...",
-        "value1": "First Value",
-        "value2": "Second Value",   // accepts an object or an array of objects
-        "value3": "Third Value",
-        "value4": "Fourth Value"
-    }
-}
-```
-####textarea
-```json
-{
-    "name": "taExample",
-    "type": "textarea",
-    "label": "Textarea Example",
-    "required": true,
-    "classname": "form-control",
-    "formGroup": true,
-    "placeholder": "Textarea content here",
-    "autofocus": false,
-    "minlength": 1,
-    "maxlength": 200,
-    "title": "Textarea Example",
-    "rows": 8,
-    "cols": 100,
-    "wrap": "hard",
-    "value": ""
-}
-```
-
-####password
-```json
-{
-    "name": "passwordExample",
-    "id": "passwordId",
-    "type": "password",
-    "match": "otherpasswordid", // if this is a 'confirm password' field, enter the id of the password field to match here and it will validate/display messages
-    "label": "Password Example",
-    "title": "Password Example",
-    "required": true,
-    "autofocus": false,
-    "disabled": false,
-    "readonly": false,
-    "placeholder": "Password",
-    "classname": "form-control",
-    "formGroup": true,
-    "minlength": 6,
-    "maxlength": 20,
-    "messages": {
-        "required": "You must enter a password!",
-        "minlength": "Your password must be at least 6 characters",
-        "invalid": "Your passwords do not match!" // add the 'invalid' message when you are confirming passwords
-    }
-}
-```
-####number
-```json
-{
-    "name": "numberExample",
-    "id": "numberId",
-    "type": "number",
-    "label": "Number Example",
-    "title": "Number Example",
-    "required": true,
-    "placeholder": "A Number",
-    "autofocus": false,
-    "disabled": false,
-    "readonly": false,
-    "classname": "form-control",
-    "formGroup": true,
-    "min": 5,
-    "max": 10,
-    "step": 1,
-    "messages": {
-        "min": "Your number must have a minimum value of 5",
-        "max": "Your number must be no greater than 10"   
-    }
-}
-```
-####html
-```json
-{
-    "type": "html",
-    "element": "<div class='form-group'><h3>My Custom element</h3></div>"   
-}
-```
-####clone
-```json
-{
-    "name": "cloneExample",
-    "type": "clone",
-    "classname": "form-control",
-    "formGroup": true,
-    "label": "Clone Example",
-    "placeholder": "Item", // will display on each field with a number appended to the end
-    "start": 3, // how many inputs you want to display on page load
-    "maxFields": 5, // the maximum allowed inputs to display on the page
-    "addon": "<i class='glyphicon glyphicon-ok'></i>", // if you have a custom addon, insert here (symbols, html, text). Numbered by default
-    "addButtonValue": "Add", // value of the button that adds fields
-    "removeButtonValue": "Remove", // value of the button that removes fields
-    "addButtonClass": "btn btn-primary", // classes for add button
-    "removeButtonClass": "btn btn-danger" // classes for remove button
-}
-```
-####state
-```json
-{
-    "name": "stateExample",
-    "type": "state",
-    "label": "State Example",
-    "title": "State Example",
-    "classname": "form-control",
-    "formGroup": true,
-    "required": true,
-    "autofocus": false,
-    "disabled": false,
-    "readonly": false,
-    "multiple": false,
-    "selected": "", // use two letter state abbreviations to select a state, a blank value to select the default
-    "defaultSelected": "Select One...", // gives the default (blank) value some text. this is the default
-    "usTerritory": true, 
-    "canada": true
-}
-```
-####color
-```json
-{
-    "name": "colorexample",
-    "id": "colorId",
-    "type": "color",
-    "label": "Color Picker Example",
-    "required": true,
-    "title": "Color Picker Example",
-    "disabled": false,
-    "autofocus": false,
-    "classname": "",
-    "formGroup": true,
-    "value": "#E7E7E8"
-}
-```
-####url
-```json
-{
-    "name": "urlExample",
-    "id": "urlId",
-    "type": "url",
-    "label": "URL Example",
-    "title": "URL Example",
-    "disabled": false,
-    "autofocus": false,
-    "readonly": false,
-    "required": true,
-    "classname": "form-control",
-    "formGroup": true,
-    "minlength": 1,
-    "maxlength": 60,
-    "placeholder": "http://www.example.com",
-    "value": ""
-}
-```
-####week
-```json
-{
-    "name": "weekExample",
-    "id": "weekId",
-    "type": "week",
-    "label": "Week Example",
-    "title": "Week Example",
-    "autofocus": false,
-    "disabled": false,
-    "min": "",
-    "max": "",
-    "readonly": false,
-    "required": true,
-    "classname": "form-control",
-    "formGroup": true,
-    "value": ""
-}
-```
-####time
-```json
-{
-    "name": "timeExample",
-    "id": "timeId",
-    "type": "time",
-    "label": "Time Example",
-    "title": "Time Example",
-    "required": true,
-    "classname": "form-control",
-    "autofocus": false,
-    "disabled": false,
-    "readonly": false,
-    "formGroup": true,
-    "min": "",
-    "max": "",
-    "value": ""
-}
-```
-####search
-```json
-{
-    "name": "searchExample",
-    "id": "searchId",
-    "type": "search",
-    "label": "Search Example",
-    "title": "Search Example",
-    "required": true,
-    "classname": "form-control",
-    "autofocus": false,
-    "disabled": false,
-    "readonly": false,
-    "formGroup": true,
-    "minlength": "",
-    "maxlength": "",
-    "value": ""
-}
-```
-####range
-```json
-{
-    "name": "rangeExample",
-    "id": "rangeId",
-    "type": "range",
-    "label": "Range Example",
-    "required": true,
-    "classname": "",
-    "formGroup": true,
-    "autofocus": false,
-    "disabled": false,
-    "title": "Range Example",
-    "min": 1,
-    "max": 100,
-    "step": 1,
-    "value": 25
-}
-```
-####month
-```json
-{
-    "name": "monthExample",
-    "id": "monthId",
-    "type": "month",
-    "label": "Month Example",
-    "title": "Month Example",
-    "disabled": false,
-    "readonly": false,
-    "autofocus": false,
-    "required": true,
-    "classname": "form-control",
-    "formGroup": true,
-    "min": "",
-    "max": "",
-    "value": ""
-}
-```
-####hidden
-```json
-{
-    "name": "hiddenExample",
-    "id": "hiddenId",
-    "type": "hidden",
-    "label": "Hidden Example",
-    "title": "Hidden Example",
-    "required": true,
-    "classname": "form-control",
-    "autofocus": false,
-    "disabled": false,
-    "readonly": false,
-    "formGroup": true,
-    "minlength": "",
-    "maxlength": "",
-    "value": ""
-}
-```
-####datetime-local
-```json
-{
-    "name": "datetimeLocalExample",
-    "id": "datetimeLocalId",
-    "type": "datetime-local",
-    "title": "Datetime Local Example",
-    "label": "Datetime Local Example",
-    "disabled": false,
-    "readonly": false,
-    "required": true,
-    "autofocus": false,
-    "classname": "form-control",
-    "formGroup": true,
-    "min": "",
-    "max": "",
-    "value": ""
-}
-```
-####file
-```json
-{
-    "name": "fileExample",
-    "id": "fileId",
-    "type": "file",
-    "label": "File Upload Example",
-    "formGroup": true,
-    "classname": "",
-    "disabled": false,
-    "autofocus": false,
-    "helpBlock": "Only image files are accepted",
-    "title": "File Upload Example",
-    "required": true,
-    "accept": "image/*",
-    "multiple": true
-}
-```
-####image
-```json
-{
-    "name": "imageExample",
-    "id": "imageId",
-    "type": "image",
-    "classname": "",
-    "formGroup": true,
-    "inline": false,
-    "autofocus": false,
-    "src": "http://placehold.it/50x40",
-    "alt": "Placeholder Image",
-    "height": 50,
-    "width": 50
-}
-```
-
-####label
-```json
-{
-    "name": "testLabel",
-    "type": "label",
-    "value": "Test Label",
-    "classname": "someclass"
-}
-```
 
 
-###TODO
 
-- add all html global attributes (accesskey, contenteditable, contextmenu, data, etc)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

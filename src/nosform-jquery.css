@@ -1,4 +1,4 @@
-#nos-div-hp-css, #nos-div-hp-js {
+.nos-div-hp-css, .nos-div-hp-js {
     display: none !important;
 }
 .required-field:after {
