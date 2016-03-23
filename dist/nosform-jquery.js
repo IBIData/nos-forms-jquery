@@ -1,5 +1,5 @@
 /*
- *  Nos Forms jQuery - v1.0.0
+ *  Nos-Forms-jQuery - v1.1.0
  *  Build html forms with JSON objects easily with jQuery and Bootstrap
  *  
  *
@@ -21,6 +21,10 @@
         messages: {
             required: 'Please fill out all required fields',
             invalid: 'Please correct errors'
+        },
+        messageLocation: {
+            top: false,
+            bottom: true
         }
     };
         
@@ -858,7 +862,8 @@
                 reqSR = $($form + ' select[data-nos]').filter('[required]:visible'),
                 fileField = $($form + ' :file[data-nos]').filter('[required]:visible'),
                 cbgroup = $($form + ' :checkbox[data-nos]').parents('fieldset'),
-                cb = $($form + ' :checkbox[data-nos], ' + $form + ' :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
+                cb = $($form + ' :checkbox[data-nos]').filter('[required]:visible').parents('fieldset'),
+                radio = $($form + ' :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
                 requiredFields = $($form + ' [data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible'),
                 clone = $($form + ' .nos-clone');
 
@@ -875,7 +880,7 @@
             function checkRequiredFields() {
                 requiredFields.each(function () {
                     $(this).val().length < 1 ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
-                    $(this).on('change keyup keydown blur paste', function () {
+                    $(this).on('change keyup keydown blur paste input', function () {
                         $(this).val().length < 1 ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
                     });
                 });
@@ -929,14 +934,14 @@
                 });
             }
             
-            // checkbox and radio validation
+            // checkbox validation
             // build individual arrays for each required field and check to see if arrays are empty on form submit
-            function validateCbRadio() {
+            function validateCheckbox() {
                 var cba = {},
                     cmsg = {};
                 cb.each(function (i) {
-                    var checkboxes = $(this).find(':checkbox, :radio');
-                    cmsg[i] = $form + ' .msg-required-' + $(this).attr('id');
+                    var checkboxes = $(this).find(':checkbox');
+                    cmsg[i] = '.msg-required-' + $(this).attr('id');
                     cba[i] = [];
                     $(checkboxes).each(function () {
                         $(this).is(':checked') && cba[i].push(this.value);
@@ -946,6 +951,22 @@
                         });
                     });
                     cba[i].length < 1 && $(cmsg[i]).nosSlideDown();
+                });
+            }
+            
+            // radio validation
+            function validateRadio() {
+                var arr = [];
+                radio.each(function () {
+                    var controls = $(this).find(':radio'),
+                        msg = '.msg-required-' + $(this).attr('id');
+                    $(controls).each(function () {
+                        $(this).is(':checked') && arr.push(this.value);
+                        $(this).on('change', function () {
+                            $(this).is(':checked') && arr.push(this.value), $(msg).nosSlideUp();
+                        });
+                    });
+                    arr.length < 1 && $(msg).nosSlideDown();
                 });
             }
 
@@ -959,7 +980,7 @@
                     if (mask) {
                         if ($(field).caret().begin < 1) {
                             $(msg).nosSlideDown();
-                            $(this).on('keyup keydown change blur paste', function () {
+                            $(this).on('keyup keydown change blur paste input', function () {
                                 $(this).caret().begin > 0 && $(msg).nosSlideUp();
                                 $(this).caret().begin < 1 && $(msg).nosSlideDown();
                             });
@@ -967,7 +988,7 @@
                     } else {
                         if ($(field).val().length < 1) {
                             $(msg).nosSlideDown();
-                            $(this).on('keyup keydown change blur paste', function () {
+                            $(this).on('keyup keydown change blur paste input', function () {
                                 this.value.length > 0 && $(msg).nosSlideUp();
                                 this.value.length < 1 && $(msg).nosSlideDown();
                             });
@@ -1049,7 +1070,8 @@
 
                 checkRequiredFields(),
                 validateRequiredFields(),
-                validateCbRadio(),
+                validateCheckbox(),
+                validateRadio(),
                 validateSelectFields();
                 validateFileFields();
 
@@ -1256,6 +1278,10 @@
         // adds form validation messages to the end of the form tag
         this.addMessage = function () {
             
+            function hasCols() {
+                return $($form).find('[class^="col-"]').length > 0;
+            }
+            
             // determines if you are using row classes in your form and mimics this
             var message = {
                 row: {
@@ -1265,14 +1291,17 @@
                 
                 // if entire form is wrapped in a col-* class, apply the same class to the form messages
                 // this ensures that the form messages have the same placement and width as the form itself
-                structure: this.settings.fields.length === 1 && this.settings.fields[0].classname || '' 
+                structure: this.settings.fields.length === 1 ? this.settings.fields[0].classname : hasCols() && 'col-md-12 col-sm-12 col-xs-12' || ''
             };
             
-            // append an error message onto the form for required fields
-            $(this.form[0]).append(message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.required(this.form[0]) + '</div>' + message.row.end);
+            var reqMsg = message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.required(this.form[0]) + '</div>' +            message.row.end,
+                invMsg = message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end;
+            
+            // append an error message onto the form for required and invalid fields
+            this.settings.messageLocation.bottom && $(this.form[0]).append(reqMsg), $(this.form[0]).append(invMsg);
                                         
-            // append an error message onto the form for invalid fields
-            $(this.form[0]).append(message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end);
+            // prepend an error message onto the form for required and invalid fields
+            this.settings.messageLocation.top && $(this.form[0]).prepend(reqMsg), $(this.form[0]).prepend(invMsg);
 
         },
                 

@@ -110,6 +110,10 @@ $("#myform").nosForm({
         required: 'Please fill out all required fields', // warning about required fields
         invalid: 'Invalid fields' // warning about invalid fields (pattern, minlength, min, max)
     },
+    messageLocation: { // places required/invalid error messages on the form
+        top: false, // specifies the messages to be displayed on the top
+        bottom: true  // specifies the messages to be displayed on the bottom
+    },
     submit: function (formdata) {
         // your submit function
         // this will pass back the entered form data as a formatted json object
@@ -139,7 +143,10 @@ $("#myform").nosForm({
  
  ###**messages**
  
- Accepts two properties with string values. 'required' and 'invalid'. These are the two messages that are positioned below each form. On an unsuccessful form submit, the appropriate message will be displayed to the user. If not modified, they will display the default values shown above.
+ Accepts two properties with string values: 'required' and 'invalid'. These are the two messages that are positioned below each form. On an unsuccessful form submit, the appropriate message will be displayed to the user. If not modified, they will display the default values shown above.
+ 
+ ###**messageLocation**
+ Accepts two properties with boolean values: 'top' and 'bottom'. These settings determine the location of the user error messages to be displayed on an invalid form submit attempt.
  
  ###**submit**
  
@@ -345,8 +352,6 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 | width             | number        | *Used with type 'image'* - specifies element width. See [image](./examples/image.md).
 | wrap              | string        | *Used with type 'textarea'* - Sets HTML wrap attribute.
 
-
-All other html attributes are supported and behave as expected. See the examples below.
 
 ##Validation 
 ---

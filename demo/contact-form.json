@@ -14,7 +14,7 @@
         },
         "inputGroup": {
             "left": {
-                "text": ""
+                "text": "$"
             }  
         },
         "minlength": 2,
