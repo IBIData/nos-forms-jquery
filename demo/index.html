@@ -33,7 +33,7 @@
                 
                 $.get('contact-form.json', function (data) {
                     
-                    $("#myform").nosForm({
+                    var form = $("#myform").nosForm({
                         fields: data,
                         animationSpeed: 50,
                         validate: true,
@@ -52,6 +52,7 @@
                     });
                     
                 });
+                
                 
             });
     </script>

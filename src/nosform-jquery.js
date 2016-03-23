@@ -1024,21 +1024,14 @@
 
             // send form submit object back to user if all fields are valid
             function submitForm() {
-
-                if (!$($form + ' .nos-help').is(':visible') && !$($form + ' .nos-untouched[required]').is(':visible')) {
-
-                    if (self.settings.honeypot !== false) {
-                        ($($form + ' .nos-text-css').val() === '' && $($form + ' .nos-email-js').val() === 'validemail@email.com') && self.settings.submit(formdata);
-                    }
-                    else {
-                        self.settings.submit(formdata);
-                    }
-                }
+                
+                if (okToSend()) { send(); }
 
                 else if (!$($form + ' .nos-help').is(':visible') && $($form + ' .nos-untouched[required]').is(':visible')) {
                     $($form + ' [data-nos]').each(function () {
                         $(this).focus();
                     });
+                    if (okToSend()) { send(); }
                 }
 
                 else {
@@ -1048,9 +1041,21 @@
                         $($form + ' .nos-invalid').is(':visible') ? $($form + ' .nos-form-invalid').nosSlideDown() : $($form + ' .nos-form-invalid').nosSlideUp();
                         $($form + ' .nos-required').is(':visible') ? $($form + ' .nos-form-required').nosSlideDown() : $($form + ' .nos-form-required').nosSlideUp();
                     });
-
-
-
+                }
+            }
+            
+            // check if the form is ready to send
+            function okToSend() {
+                return !$($form + ' .nos-help').is(':visible') && !$($form + ' .nos-untouched[required]').is(':visible');
+            }
+            
+            // send the form
+            function send() {
+                if (self.settings.honeypot !== false) {
+                    ($($form + ' .nos-text-css').val() === '' && $($form + ' .nos-email-js').val() === 'validemail@email.com') ? self.settings.submit(formdata) : self.settings.submit({honeypot: true});
+                }
+                else {
+                    self.settings.submit(formdata);
                 }
             }
 
@@ -1346,5 +1351,13 @@
             }
         });
     };
+    
+    // $.fn.nosForm.reset = function () {
+    //     return function () {
+    //         console.log('test');
+    //         $(this).closest('form').find(':input:not(:submit, :reset, :button, :image)').val('').alterClass('nos-*', '').addClass('nos-untouched');
+    //         $('#' + form.id + ' .nos-help').nosSlideUp();
+    //     };
+    // };
 
 })(jQuery, window, document);

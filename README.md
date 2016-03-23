@@ -139,7 +139,7 @@ $("#myform").nosForm({
  
  ###**honeypot**
  
- Accepts a boolean. By default, there are two honeypot text fields rendered on each form (one is empty and one has a preset value). Both are hidden by CSS and JS. If either are modified, the form will appear to submit, but the server will never receive any data.
+ Accepts a boolean. By default, there are two honeypot text fields rendered on each form (one is empty and one has a preset value). Both are hidden by CSS and JS. If either are modified, the form data will be ignored and the plugin will submit an object instead: **{ honeypot: true }**. You are free to handle this however needed in your submit function.
  
  ###**messages**
  
@@ -162,8 +162,11 @@ These are pretty standard.
 ```json
 [
     {
-        // form elements here   
-    }   
+        // form element here   
+    },
+    {
+        // form element here
+    }
 ]
 ```
 
@@ -177,7 +180,7 @@ If you would like a form to work with multiple columns, you just have to format 
        "classname": "col-md-4",
        "column": [
            {
-               // form elements here
+               // form element here
            }
        ] 
     },
@@ -185,7 +188,7 @@ If you would like a form to work with multiple columns, you just have to format 
        "classname": "col-md-4",
        "column": [
            {
-               // form elements here
+               // form element here
            }
        ] 
     },
@@ -193,7 +196,7 @@ If you would like a form to work with multiple columns, you just have to format 
        "classname": "col-md-4",
        "column": [
            {
-               // form elements here
+               // form element here
            }
        ] 
     }   
