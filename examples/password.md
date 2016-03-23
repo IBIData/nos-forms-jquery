@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "passwordExample",
     "id": "passwordId",
@@ -38,7 +38,7 @@ Used mainly for signup forms, this will allow you to easily verify passwords.
 
 Using the match property, you can pass in the id of the first password field to make sure they are identical.
 
-```json
+```javascript
 {
     "name": "password1",
     "type": "password",

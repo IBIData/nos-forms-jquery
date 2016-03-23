@@ -3,7 +3,7 @@
 
 Render a label element.
 
-```json
+```javascript
 {
     "name": "testLabel",
     "type": "label",

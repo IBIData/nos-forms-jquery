@@ -5,7 +5,7 @@ Render your text element as a Bootstrap input group.
 
 ####Input Group with text addons
 
-```json
+```javascript
 
 "inputGroup": {
     "left": {
@@ -22,7 +22,7 @@ Render your text element as a Bootstrap input group.
 
 ####Input Group with glyphicon addons
 
-```json
+```javascript
 
 "inputGroup": {
     "left": {

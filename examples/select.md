@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "selectExample",
     "id": "myselect",
@@ -34,7 +34,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "selectExample",
     "type": "select",
@@ -57,7 +57,7 @@ There are a few ways to enter your select options.
 
 - As in the example above, you can enter them as an object
 
-```json
+```javascript
 "options": {
     "value1": "First Value",
     "value2": "Second Value"
@@ -66,7 +66,7 @@ There are a few ways to enter your select options.
 
 - Enter them as an array of objects
 
-```json
+```javascript
 "options": [
     {
         "value1": "First Value"   
@@ -79,7 +79,7 @@ There are a few ways to enter your select options.
 
 - Enter them as an array. In this scenario, each array item will be used as the selection and value.
 
-```json
+```javascript
 "options": [
     "First Value",
     "Second Value"   

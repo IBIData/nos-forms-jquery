@@ -2,7 +2,7 @@
 ##url
 
 ####Example with all options
-```json
+```javascript
 {
     "name": "urlExample",
     "id": "urlId",
@@ -27,7 +27,7 @@
 ```
 
 ####More practical example
-```json
+```javascript
 {
     "name": "urlExample",
     "type": "url",

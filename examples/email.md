@@ -5,7 +5,7 @@ Has built-in email validation enabled by default. If you don't require this, you
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "emailExample",
     "id": "emailId",
@@ -39,7 +39,7 @@ Has built-in email validation enabled by default. If you don't require this, you
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "emailExample",
     "type": "email",

@@ -2,7 +2,7 @@
 ##color
 
 ####Example with all options
-```json
+```javascript
 {
     "name": "colorexample",
     "id": "colorId",
@@ -23,7 +23,7 @@
 ```
 
 ####More practical example
-```json
+```javascript
 {
     "name": "colorexample",
     "type": "color",

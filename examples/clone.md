@@ -5,7 +5,7 @@ A clone field is basically a set of text boxes with add/remove buttons. This all
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "cloneExample",
     "type": "clone",

@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "taExample",
     "type": "textarea",
@@ -29,7 +29,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "taExample",
     "type": "textarea",

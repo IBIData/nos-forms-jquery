@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "timeExample",
     "id": "timeId",
@@ -28,7 +28,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "timeExample",
     "type": "time",

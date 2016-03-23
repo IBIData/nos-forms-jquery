@@ -5,7 +5,7 @@ Override the default validation messages for individual elements.
 
 ####Default values
 
-```json
+```javascript
 "messages": {
     "required": "[field name] is a required field",
     "invalid": "[field name] must be valid",

@@ -10,7 +10,7 @@
           "email": "jwilliamson@ibidata.com"
       }
   ],
-  "description": "Build html forms with JSON easily with jQuery and Bootstrap",
+  "description": "Build and validate DRY html forms in minutes with JSON, jQuery and Bootstrap",
   "devDependencies": {
     "grunt": "~0.4.5",
     "grunt-cli": "~0.1.13",

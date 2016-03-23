@@ -125,41 +125,41 @@ $("#myform").nosForm({
 
  Accepts an object with your form element structure. This was originally intended to be imported from a json file (for easy reuse of forms), but you can write the object in your js file as well. This allows you to write your own functions that return the correct values to individual fields.
  
- ###**validate**
+###**validate**
  
  Accepts a boolean value. Toggles the build-in validation on or off. If for some reason you don't need validation, turn this off.
  
- ###**htmlValidate**
+###**htmlValidate**
  
  Accepts a boolean value. Toggles the html5 validation on or off. Basically, this is just adding and removing a 'novalidate' tag from the form.
  
- ###**animationSpeed**
+###**animationSpeed**
  
  Accepts a number value (milliseconds). Controls the speed of the validation messages popping in and out of form fields.
  
- ###**honeypot**
+###**honeypot**
  
  Accepts a boolean. By default, there are two honeypot text fields rendered on each form (one is empty and one has a preset value). Both are hidden by CSS and JS. If either are modified, the form data will be ignored and the plugin will submit an object instead: **{ honeypot: true }**. You are free to handle this however needed in your submit function.
  
- ###**messages**
+###**messages**
  
  Accepts two properties with string values: 'required' and 'invalid'. These are the two messages that are positioned below each form. On an unsuccessful form submit, the appropriate message will be displayed to the user. If not modified, they will display the default values shown above.
  
- ###**messageLocation**
+###**messageLocation**
  Accepts two properties with boolean values: 'top' and 'bottom'. These settings determine the location of the user error messages to be displayed on an invalid form submit attempt.
  
- ###**submit**
+###**submit**
  
  Accepts a function that receives the form data passed to it.
  
- ##Structure 
+##Structure 
  ---
 
 ##Single Columns
 
 These are pretty standard.
 
-```json
+```javascript
 [
     {
         // form element here   
@@ -174,7 +174,7 @@ These are pretty standard.
 
 If you would like a form to work with multiple columns, you just have to format your json data a little different.
 
-```json
+```javascript
 [
     {
        "classname": "col-md-4",
@@ -207,7 +207,7 @@ If you would like a form to work with multiple columns, you just have to format 
 
 Nesting columns can be accomplished by declaring a row where needed.
 
-```json
+```javascript
 [
     {
         "row": true, // wraps a row class div around this column

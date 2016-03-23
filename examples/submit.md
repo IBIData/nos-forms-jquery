@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "submit",
     "type": "submit",
@@ -26,7 +26,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "submit",
     "type": "submit",

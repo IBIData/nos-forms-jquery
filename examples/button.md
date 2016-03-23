@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "button",
     "type": "button",
@@ -20,7 +20,7 @@
 ```
 
 ####More practical example
-```json
+```javascript
 {
     "name": "button",
     "type": "button",

@@ -5,7 +5,7 @@ Has built-in US zip code validation by default. If you don't require it, you can
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "zipExample",
     "id": "zipId",
@@ -31,7 +31,7 @@ Has built-in US zip code validation by default. If you don't require it, you can
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "zipExample",
     "type": "zip",

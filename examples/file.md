@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "fileExample",
     "id": "fileId",
@@ -27,7 +27,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "fileExample",
     "type": "file",

@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "radioExample",
     "type": "radio",
@@ -27,7 +27,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "radioExample",
     "type": "radio",
@@ -49,7 +49,7 @@ There are a few ways to enter your radio options.
 
 - As in the example above, you can enter them as an object
 
-```json
+```javascript
 "options": {
     "value1": "First Option",
     "value2": "Second Option"
@@ -58,7 +58,7 @@ There are a few ways to enter your radio options.
 
 - Enter them as an array of objects
 
-```json
+```javascript
 "options": [
     {
         "value1": "First Option"   
@@ -71,7 +71,7 @@ There are a few ways to enter your radio options.
 
 - Enter them as an array. In this scenario, each array item will be used as the radio selection and value.
 
-```json
+```javascript
 "options": [
     "First Option",
     "Second Option"   

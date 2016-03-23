@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "cbExample",
     "id": "cbExample",
@@ -29,7 +29,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "cbExample",
     "type": "checkbox",
@@ -52,7 +52,7 @@ There are a few ways to enter your checkbox options.
 
 - As in the example above, you can enter them as an object
 
-```json
+```javascript
 "options": {
     "value1": "First Option",
     "value2": "Second Option"
@@ -61,7 +61,7 @@ There are a few ways to enter your checkbox options.
 
 - Enter them as an array of objects
 
-```json
+```javascript
 "options": [
     {
         "value1": "First Option"   
@@ -74,7 +74,7 @@ There are a few ways to enter your checkbox options.
 
 - Enter them as an array. In this scenario, each array item will be used as the checkbox selection and value.
 
-```json
+```javascript
 "options": [
     "First Option",
     "Second Option"   
@@ -87,7 +87,7 @@ This is a special property for checkboxes that will determine how your data will
 
 - object - sends back all options with a true/false value
 
-```json
+```javascript
 {
     "value1": true,
     "value2": true,
@@ -97,7 +97,7 @@ This is a special property for checkboxes that will determine how your data will
 
  - array - sends back all checked options as an array
  
-```json
+```javascript
 [
     "value1", "value2"   
 ]

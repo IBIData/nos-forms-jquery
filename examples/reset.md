@@ -5,7 +5,7 @@ By default, the reset button will reset your form.
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "reset",
     "type": "reset",
@@ -23,7 +23,7 @@ By default, the reset button will reset your form.
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "reset",
     "type": "reset",

@@ -4,7 +4,7 @@
 Has built-in US telephone number validation enabled by default. If you don't require this, you can disable it with the 'validate' property.
 
 ####tel
-```json
+```javascript
 {
     "name": "telExample",
     "id": "telId",
@@ -38,7 +38,7 @@ Has built-in US telephone number validation enabled by default. If you don't req
 ```
 
 ####tel
-```json
+```javascript
 {
     "name": "telExample",
     "type": "tel",

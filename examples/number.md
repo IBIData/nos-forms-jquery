@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "numberExample",
     "id": "numberId",
@@ -33,7 +33,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "numberExample",
     "type": "number",

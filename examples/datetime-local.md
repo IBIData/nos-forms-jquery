@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "datetimeLocalExample",
     "id": "datetimeLocalId",
@@ -28,7 +28,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "datetimeLocalExample",
     "type": "datetime-local",

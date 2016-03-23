@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "rangeExample",
     "id": "rangeId",
@@ -28,7 +28,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "rangeExample",
     "type": "range",

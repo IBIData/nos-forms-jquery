@@ -3,7 +3,7 @@
 
 ####Example with all options
 
-```json
+```javascript
 {
     "name": "monthExample",
     "id": "monthId",
@@ -28,7 +28,7 @@
 
 ####More practical example
 
-```json
+```javascript
 {
     "name": "monthExample",
     "type": "month",

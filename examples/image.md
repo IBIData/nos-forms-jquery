@@ -1,7 +1,7 @@
 #Type
 ##image
 
-```json
+```javascript
 {
     "name": "imageExample",
     "id": "imageId",
