@@ -9,7 +9,7 @@
         animationSpeed: 100,
         validate: true,
         htmlValidation: false,
-        honeypot: true,
+        honeypot: false,
         messages: {
             required: 'Please fill out all required fields',
             invalid: 'Please correct errors'
@@ -51,7 +51,8 @@
             clone: ['clone'],
             html: ['html'],
             other: ['range', 'color', 'image'],
-            lbl: ['label']
+            lbl: ['label'],
+            buttonGroup: ['buttonGroup']
         };
                 
         // takes user form object and converts to string fragments for creating html
@@ -180,7 +181,10 @@
             // returns buttons
             buttons: function (input) {
                 var nosgroup = input.formGroup && 'nos-form-group nos-group ' || '',
-                    inline = input.inline && 'nos-inline' || '';
+                    inline = input.inline && 'nos-inline ' || '',
+                    align = input.align && 'pull-' + input.align || '',
+                    prespace = input.align === 'right' ? '&nbsp;' : '',
+                    postspace = input.align === 'left' || input.align === undefined ? '&nbsp;' : '';
                 var el = $.extend(this.self.getAttrs(input), {
                     formaction: input.formaction && ' formaction="' + input.formaction + '"' || '',
                     formenctype: input.formenctype && ' formenctype="' + input.formenctype + '"' || '',
@@ -188,11 +192,32 @@
                     formnovalidate: input.formnovalidate && ' formnovalidate' || '',
                     formtarget: input.formtarget && ' formtarget="' + input.formtarget + '"' || '',
                     value: input.value && input.value || '',
-                    formGroup: (input.formGroup || input.inline) && this.div(nosgroup + inline) || { start: '', end: '' }
+                    formGroup: (input.formGroup || input.inline) && this.div(nosgroup + inline + align) || { start: '', end: '' }
                 });
                 var element = el.formGroup.start + 
-                    '<button data-nos' + el.type + el.name + el.id + el.data + el.classname + el.title + el.formtarget + el.formmethod + el.formaction + 
-                    el.formenctype + el.formnovalidate + el.disabled + '>' + el.value + '</button>&nbsp;' + el.formGroup.end;
+                    prespace + '<button data-nos' + el.type + el.name + el.id + el.data + el.classname + el.title + el.formtarget + el.formmethod + el.formaction + 
+                    el.formenctype + el.formnovalidate + el.disabled + '>' + el.value + '</button>' + postspace + el.formGroup.end;
+                return element;
+            },
+            
+            // returns a button group
+            buttonGroup: function (input) {
+                var nosgroup = input.formGroup && 'nos-form-group nos-group ' || '',
+                    align = input.align && 'pull-' + input.align || '',
+                    vert = input.vertical && '-vertical ' || ' ';
+                    console.log(vert);
+                var i, buttons = '', button = input.buttons;
+                var el = $.extend(this.self.getAttrs(input), {
+                    classname: input.classname && ' class="btn-group' + vert + input.classname + '"' || ' class="btn-group' + vert + '"',
+                    formGroup: (input.formGroup || input.align) && this.div(nosgroup + align) || { start: '', end: '' }
+                });
+                for (i = 0; i < button.length; i++) {
+                    buttons += '<button data-nos type="' + button[i].type + '" class="' + button[i].classname + '">' + button[i].value + '</button>';
+                }
+                var element = el.formGroup.start + el.label + '<br>' + 
+                    '<div ' + el.classname + ' role="group">' + 
+                    buttons + 
+                    el.formGroup.end;
                 return element;
             },
                     
@@ -852,7 +877,7 @@
                 // selectors for required fields
                 reqInput = $($form + ' [data-nos]:not(:radio, :checkbox, :button, :submit, :reset, :file, :image, select, .nos-clone)').filter('[required]:visible'),
                 reqSR = $($form + ' select[data-nos]').filter('[required]:visible'),
-                fileField = $($form + ' :file[data-nos]').filter('[required]:visible'),
+                fileField = $($form + ' :file[data-nos]'),
                 cbgroup = $($form + ' :checkbox[data-nos]').parents('fieldset'),
                 cb = $($form + ' :checkbox[data-nos]').filter('[required]:visible').parents('fieldset'),
                 radio = $($form + ' :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
@@ -1010,8 +1035,8 @@
                 $(fileField).each(function (i) {
                     var field = fileField[i];
                     var msg = $form + ' .msg-required-' + field.name;
-                    var filelist = (document.getElementById(field.id).files || document.getElementById(field.id).value); // ie8 doesn't support 'files'
-                    if (filelist.length === 0) {
+                    var filelist = (document.getElementById(field.id || field.name).files || document.getElementById(field.id || field.name).value); // ie8 doesn't support 'files'
+                    if (filelist.length === 0 && $(field).attr('required', true)) {
                         $(msg).nosSlideDown();
                         $(this).change(function () {
                             $(this).val() !== '' && $(msg).nosSlideUp();
@@ -1291,8 +1316,8 @@
                 structure: this.settings.fields.length === 1 ? this.settings.fields[0].classname : hasCols() && 'col-md-12 col-sm-12 col-xs-12' || ''
             };
             
-            var reqMsg = message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.required(this.form[0]) + '</div>' +            message.row.end,
-                invMsg = message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end;
+            var reqMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.required(this.form[0]) + '</div>' + message.row.end,
+                invMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end;
             
             // append an error message onto the form for required and invalid fields
             this.settings.messageLocation.bottom && $(this.form[0]).append(reqMsg), $(this.form[0]).append(invMsg);

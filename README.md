@@ -105,7 +105,7 @@ $("#myform").nosForm({
     validate: true, // toggle javascript validation
     htmlValidation: false, // toggle html browser validation
     animationSpeed: 100, // change speed of js animations (error message animations)
-    honeypot: true, // adds two honeypot fields to filter out bots
+    honeypot: false, // adds two honeypot fields to filter out bots
     messages: { // these are the messages that will appear on the bottom of the form when an unsuccessful submit has occurred
         required: 'Please fill out all required fields', // warning about required fields
         invalid: 'Invalid fields' // warning about invalid fields (pattern, minlength, min, max)
@@ -139,7 +139,7 @@ $("#myform").nosForm({
  
 ###**honeypot**
  
- Accepts a boolean. By default, there are two honeypot text fields rendered on each form (one is empty and one has a preset value). Both are hidden by CSS and JS. If either are modified, the form data will be ignored and the plugin will submit an object instead: **{ honeypot: true }**. You are free to handle this however needed in your submit function.
+ Accepts a boolean. Optionally, there are two honeypot text fields rendered on each form (one is empty and one has a preset value). Both are hidden by CSS and JS. If either are modified, the form data will be ignored and the plugin will submit an object instead: **{ honeypot: true }**. You are free to handle this however needed in your submit function.
  
 ###**messages**
  
@@ -266,6 +266,7 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 | Name                                  | Description                                                                                                       |
 |---------------------------------------|-------------------------------------------------------------------------------------------------------------------|
 | [button](./examples/button.md)        | Standard HTML button element - rendered with button tag, not input.
+| [buttonGroup](./examples/buttonGroup.md)| Bootstrap Button Group
 | [checkbox]('./examples/checkbox.md)   | Standard HTML checkbox input.
 | [clone]('./examples/clone.md)         | A set of text fields with a button to add/remove fields.
 | [color]('./examples/color.md)         | Standard HTML color input.
@@ -314,12 +315,12 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 | defaultSelected   | string        | *Used with type 'state'* - Sets the default selected value. See [state](./examples/state.md).
 | disabled          | boolean       | Sets HTML5 disabled attribute on element.
 | element           | string        | *Used with type 'html'* - Specifies html string to render. See [html](./examples/html.md).
-| formaction        | string        | *Used with type 'submit, image'* - Sets HTML formaction attribute. See [submit](./examples.submit.md).
-| formenctype       | string        | *Used with type 'submit'* - Sets HTML formenctype attribute. See [submit](./examples.submit.md).
+| formaction        | string        | *Used with type 'submit, image'* - Sets HTML formaction attribute. See [submit](./examples/submit.md).
+| formenctype       | string        | *Used with type 'submit'* - Sets HTML formenctype attribute. See [submit](./examples/submit.md).
 | formGroup         | boolean       | Wraps element in a Bootstrap form-group div. Default is true.
-| formmethod        | string        | *Used with type 'submit'* - Sets HTML formmethod attribute. See [submit](./examples.submit.md).
-| formnovalidate    | string        | *Used with type 'submit'* - Sets HTML formnovalidate attribute. See [submit](./examples.submit.md).
-| formtarget        | string        | *Used with type 'submit'* - Sets HTML formtarget attribute. See [submit](./examples.submit.md).
+| formmethod        | string        | *Used with type 'submit'* - Sets HTML formmethod attribute. See [submit](./examples/submit.md).
+| formnovalidate    | string        | *Used with type 'submit'* - Sets HTML formnovalidate attribute. See [submit](./examples/submit.md).
+| formtarget        | string        | *Used with type 'submit'* - Sets HTML formtarget attribute. See [submit](./examples/submit.md).
 | height            | number        | *Used with type 'image'* - specifies element height. See [image](./examples/image.md).
 | helpBlock         | string        | Inserts a Bootstrap help block below element.
 | id                | string        | Assigns element an id. If no id is present, the name field will also be the id.

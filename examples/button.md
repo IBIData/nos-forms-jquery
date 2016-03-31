@@ -8,12 +8,13 @@
     "name": "button",
     "type": "button",
     "classname": "btn btn-info",
-    "formGroup": true,
+    "formGroup": true, // formGroup must be specified for buttons
     "data": {
         "field": 0,
         "testing": 123,
     },
-    "inline": true,
+    "align": "left", // will add a pull-left/pull-right class to the surrounding div - ONLY WORKS WITH FORMGROUP SET TO TRUE
+    "inline": true, // when there are multiple buttons, this will display them in 'inline-block' divs
     "title": "",
     "value": "A Button"
 }
@@ -26,7 +27,7 @@
     "type": "button",
     "classname": "btn btn-info",
     "formGroup": true,
-    "inline": true,
+    "align": "left",
     "value": "A Button"
 }
 ```
