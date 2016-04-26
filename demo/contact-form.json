@@ -13,9 +13,15 @@
             "test2": 6
         },
         "inputGroup": {
+            "size": "large",
             "left": {
-                "text": "$"
-            }  
+                "text": "$",
+                "classname": "testclass"
+            },
+            "right": {
+                "button": "Test",
+                "classname": "btn btn-primary"
+            }
         },
         "minlength": 2,
         "maxlength": 60,
@@ -51,7 +57,7 @@
             "value4": "Fourth Value"
         }
     },
-    
+
     {
         "name": "mycb",
         "type": "checkbox",

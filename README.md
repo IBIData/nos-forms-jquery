@@ -1,10 +1,10 @@
 #Nos-Forms-jQuery
 
-**Quickly generate and validate html forms with jQuery, Bootstrap and json objects.**
+**Quickly generate and validate html forms with jQuery, Bootstrap and json.**
 
 This is a simple json form builder that will build and validate your forms for you. It will also handle serializing your data and spit out a nice json object to your submit function. This plugin is meant to be used with Bootstrap.
 
-This plugin is intended for people who spend a lot of time building tedious forms. Copying and pasting json objects from this file is encouraged, as well as saving and reusing json files to build your forms.
+This plugin is intended for people who spend a lot of time building tedious forms. Copying and pasting from this file is encouraged, as well as saving and reusing json files to build your forms.
 
 - IE 8 supported
 
@@ -41,14 +41,14 @@ A simple contact form built with [Bootstrap](http://getbootstrap.com). This form
 
 ```javascript
 $.get('contact-form.json', function (jsonData) {
-                    
+
     $("#myform").nosForm({
         fields: jsonData,
         submit: function (formdata) {
             console.log(formdata);
         }
     });
-    
+
 })
 ```
 ####contact-form.json
@@ -56,15 +56,15 @@ $.get('contact-form.json', function (jsonData) {
 ```json
 [
     {
-        "name": "name", 
-        "id": "nameId", 
-        "type": "text", 
-        "label": "Name", 
-        "required": true, 
+        "name": "name",
+        "id": "nameId",
+        "type": "text",
+        "label": "Name",
+        "required": true,
         "placeholder": "Your Name",
-        "minlength": 1, 
-        "maxlength": 60 
-    }, 
+        "minlength": 1,
+        "maxlength": 60
+    },
     {
         "name": "email",
         "type": "email",
@@ -73,7 +73,7 @@ $.get('contact-form.json', function (jsonData) {
         "placeholder": "Your Email",
         "minlength": 1,
         "maxlength": 100
-    },   
+    },
     {
         "name": "message",
         "type": "textarea",
@@ -124,35 +124,35 @@ $("#myform").nosForm({
 ###**fields**
 
  Accepts an object with your form element structure. This was originally intended to be imported from a json file (for easy reuse of forms), but you can write the object in your js file as well. This allows you to write your own functions that return the correct values to individual fields.
- 
+
 ###**validate**
- 
+
  Accepts a boolean value. Toggles the build-in validation on or off. If for some reason you don't need validation, turn this off.
- 
+
 ###**htmlValidate**
- 
+
  Accepts a boolean value. Toggles the html5 validation on or off. Basically, this is just adding and removing a 'novalidate' tag from the form.
- 
+
 ###**animationSpeed**
- 
+
  Accepts a number value (milliseconds). Controls the speed of the validation messages popping in and out of form fields.
- 
+
 ###**honeypot**
- 
+
  Accepts a boolean. Optionally, there are two honeypot text fields rendered on each form (one is empty and one has a preset value). Both are hidden by CSS and JS. If either are modified, the form data will be ignored and the plugin will submit an object instead: **{ honeypot: true }**. You are free to handle this however needed in your submit function.
- 
+
 ###**messages**
- 
+
  Accepts two properties with string values: 'required' and 'invalid'. These are the two messages that are positioned below each form. On an unsuccessful form submit, the appropriate message will be displayed to the user. If not modified, they will display the default values shown above.
- 
+
 ###**messageLocation**
  Accepts two properties with boolean values: 'top' and 'bottom'. These settings determine the location of the user error messages to be displayed on an invalid form submit attempt.
- 
+
 ###**submit**
- 
+
  Accepts a function that receives the form data passed to it.
- 
-##Structure 
+
+##Structure
  ---
 
 ##Single Columns
@@ -162,7 +162,7 @@ These are pretty standard.
 ```javascript
 [
     {
-        // form element here   
+        // form element here
     },
     {
         // form element here
@@ -182,7 +182,7 @@ If you would like a form to work with multiple columns, you just have to format 
            {
                // form element here
            }
-       ] 
+       ]
     },
     {
        "classname": "col-md-4",
@@ -190,7 +190,7 @@ If you would like a form to work with multiple columns, you just have to format 
            {
                // form element here
            }
-       ] 
+       ]
     },
     {
        "classname": "col-md-4",
@@ -198,8 +198,8 @@ If you would like a form to work with multiple columns, you just have to format 
            {
                // form element here
            }
-       ] 
-    }   
+       ]
+    }
 ]
 ```
 
@@ -303,7 +303,7 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 
 | Name              | Type          | Description                                                                                                           |
 |-------------------|---------------|-----------------------------------------------------------------------------------------------------------------------|
-| accept            | string        | *Used with type 'file'* - specifies accepted file types. See [file](./examples/file.md). 
+| accept            | string        | *Used with type 'file'* - specifies accepted file types. See [file](./examples/file.md).
 | addon             | string        | *Used with type 'clone'* - specifies an input-group addon. See [Clone](./examples/clone.md).
 | alt               | string        | *Used with type 'image'* - specifies alt tag text. See [image](./examples/image.md).
 | autocomplete      | string        | Toggles autocomplete for single element. Accepts "on" or "off".
@@ -357,7 +357,7 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 | wrap              | string        | *Used with type 'textarea'* - Sets HTML wrap attribute.
 
 
-##Validation 
+##Validation
 ---
 
 By default, validation will happen when you specify certain properties in your json file. All fields will be checked for values and sanitized. Error messages will be generated, and it will basically take care of itself.
@@ -384,26 +384,26 @@ By default, there are messages in place that warn the user about missing/invalid
 
 These messages can be customized for each field, if you need. See the examples below.
 
-There are five specific types of message that can appear for each field: 
+There are five specific types of message that can appear for each field:
 
  - ***required*** - "[field name] is a required field"
- 
+
     - triggered (on submit) when a required field is left blank
- 
+
  - ***minlength*** - "[field name] must have a minimum of * characters"
- 
+
     - triggered (as you type) when a minlength has not been met
- 
+
  - ***invalid*** - "[field name] must be valid"
- 
+
     - triggered (as you type) when certain criteria have not been met. (email/zip/phone not valid, regex pattern not matching, passwords not matching, etc.)
- 
+
  - ***min*** - "[field name] must have a minimum value of *."
- 
+
     - triggered (as you type) when a minimum has not been met (numbers, dates)
- 
+
  - ***max*** - "[field name] must have a maximum value of *."
- 
+
     - triggered (as you type) when a max has been overshot
 
 There are also some default form messages that will display on the bottom of the form if the user tries to submit unsuccessfully. These can be customized in the plugin initilization, as mentioned in the 'Options' section.

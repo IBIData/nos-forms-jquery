@@ -49,9 +49,13 @@
                         submit: function (formdata) {
                             console.log(formdata);
                         }
-                    });
+                    }).data('plugin_nosForm');
                     
+                    var test = $('#myform').nosForm().data('plugin_nosForm');
                 });
+                
+                
+                
                 
                 
             });

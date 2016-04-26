@@ -10,7 +10,7 @@
 ; (function ($, window, document, undefined) {
 
     "use strict";
-    
+
     // Create the defaults
     var defaults = {
         fields: null,
@@ -27,25 +27,25 @@
             bottom: true
         }
     };
-        
+
     // The plugin constructor
     function Nos(element, options) {
-        
+
         // need access to this later
         var self = this;
-        
+
         // form id
         var $form = '#' + element.id;
-                
+
         // form element
         this.form = $(element);
-                
+
         // final plugin settings
         this.settings = $.extend({}, defaults, options);
-        
+
         // settings.messages is a nested object, we need to extend this as well
         this.settings.messages = $.extend({}, defaults.messages, options.messages);
-                
+
         // Store arrays of element types
         // These are used to determine which function will be called from the 'getElements' object below
         this.elements = {
@@ -62,7 +62,7 @@
             lbl: ['label'],
             buttonGroup: ['buttonGroup']
         };
-                
+
         // takes user form object and converts to string fragments for creating html
         this.getAttrs = function (input) {
 
@@ -90,7 +90,7 @@
             });
 
         },
-                
+
         // assigns an object to the 'message' property above
         // this will contain the user error messages that will display on the form
         this.getUserErrorMessages = function (element) {
@@ -102,12 +102,12 @@
                 max: element.max && self.userErrorMessage.max(element) || ''
             });
         };
-                
+
         // Group of functions used to return a form element
         this.getElements = {
 
             self: this,
-                    
+
             // returns bootstrap form-group div
             formGroup: function () {
                 return {
@@ -120,7 +120,7 @@
             honeypot: function () {
                 return '<div class="nos-div-hp-css"><label for="nos-text-css[]">Please leave this field blank</label><input type="text" class="nos-text-css" name="nos-text-css[]" value=""></div><div class="nos-div-hp-js"><label for="nos-email-js[]">Please leave this field unchanged</label><input type="email" class="nos-email-js" name="nos-email-js[]" value="validemail@email.com"></div>';
             },
-            
+
             // returns a div with a class
             div: function (classname) {
                 return {
@@ -128,22 +128,44 @@
                     end: '</div>'
                 };
             },
-            
+
             data: function (input) {
                 var dataAttr = '';
-            
+
                 $.each(input, function (k, v) {
                     dataAttr += ' data-' + k + '="' + v + '"';
                 });
                 return dataAttr;
             },
-            
+
             // returns bootstrap input group
             inputGroup: function (input) {
+                var leftkeys = input.left && Object.keys(input.left) || '',
+                    rightkeys = input.right && Object.keys(input.right) || '';
+                var leftchoice = input.left ? leftkeys[$.inArray('text', leftkeys)] || leftkeys[$.inArray('button', leftkeys)] : '';
+                var rightchoice = input.right ? rightkeys[$.inArray('text', rightkeys)] || rightkeys[$.inArray('button', rightkeys)] : '';
+                var options = {
+                    left: input.left && {
+                        text: '<span class="input-group-addon ' + (input.left.classname || '') + '">' + (input.left.text || '') + '</span>',
+                        button: '<span class="input-group-btn"><button class="' + (input.left.classname || '') + '" type="button">' + (input.left.button || '') + '</button></span>'
+                    } || '',
+                    right: input.right && {
+                        text: '<span class="input-group-addon ' + (input.right.classname || '') + '">' + (input.right.text || '') + '</span>',
+                        button: '<span class="input-group-btn"><button class="' + (input.right.classname || '') + '" type="button">' + (input.right.button || '') + '</button></span>'
+                    } || ''
+                };
+                var sizes = {
+                    large: 'input-group-lg',
+                    lg: 'input-group-lg',
+                    small: 'input-group-sm',
+                    sm: 'input-group-sm'
+                };
                 return {
-                    start: input && '<div class="input-group">',
-                    left: input.left && '<span class="input-group-addon ' + (input.left.classname || '') + '">' + (input.left.text || '') + '</span>' || '',
-                    right: input.right && '<span class="input-group-addon ' + (input.right.classname || '') + '">' + (input.right.text || '') + '</span>' || '',
+                    start: input && '<div class="input-group ' + (input.size && sizes[input.size] || '') + '">',
+                    left: input.left && options.left[leftchoice] || '',
+                    right: input.right && options.right[rightchoice] || '',
+                    //left: input.left && '<span class="input-group-addon ' + (input.left.classname || '') + '">' + (input.left.text || '') + '</span>' || '',
+                    //right: input.right && '<span class="input-group-addon ' + (input.right.classname || '') + '">' + (input.right.text || '') + '</span>' || '',
                     end: input && '</div>'
                 };
             },
@@ -165,7 +187,7 @@
             lbl: function (input) {
                 return '<label class="nos-label label-' + (input.name || input.id) + ' ' + (input.classname || '') + '">' + input.value + '</label>';
             },
-                    
+
             // returns text-based elements
             text: function (input) {
                 var el = $.extend(this.self.getAttrs(input), {
@@ -185,7 +207,7 @@
                     el.formGroup.end;
                 return element;
             },
-                   
+
             // returns buttons
             buttons: function (input) {
                 var nosgroup = input.formGroup && 'nos-form-group nos-group ' || '',
@@ -202,12 +224,12 @@
                     value: input.value && input.value || '',
                     formGroup: (input.formGroup || input.inline) && this.div(nosgroup + inline + align) || { start: '', end: '' }
                 });
-                var element = el.formGroup.start + 
-                    prespace + '<button data-nos' + el.type + el.name + el.id + el.data + el.classname + el.title + el.formtarget + el.formmethod + el.formaction + 
+                var element = el.formGroup.start +
+                    prespace + '<button data-nos' + el.type + el.name + el.id + el.data + el.classname + el.title + el.formtarget + el.formmethod + el.formaction +
                     el.formenctype + el.formnovalidate + el.disabled + '>' + el.value + '</button>' + postspace + el.formGroup.end;
                 return element;
             },
-            
+
             // returns a button group
             buttonGroup: function (input) {
                 var nosgroup = input.formGroup && 'nos-form-group nos-group ' || '',
@@ -222,13 +244,13 @@
                 for (i = 0; i < button.length; i++) {
                     buttons += '<button data-nos type="' + button[i].type + '" class="' + button[i].classname + '">' + button[i].value + '</button>';
                 }
-                var element = el.formGroup.start + el.label + '<br>' + 
-                    '<div ' + el.classname + ' role="group">' + 
-                    buttons + 
+                var element = el.formGroup.start + el.label + '<br>' +
+                    '<div ' + el.classname + ' role="group">' +
+                    buttons +
                     el.formGroup.end;
                 return element;
             },
-                    
+
             // returns textarea elements
             textarea: function (input) {
                 var el = $.extend(this.self.getAttrs(input), {
@@ -245,7 +267,7 @@
                     el.formGroup.end;
                 return element;
             },
-                    
+
             // returns select elements
             select: function (input) {
                 var selOptions = {},
@@ -279,7 +301,7 @@
                     el.formGroup.end;
                 return element;
             },
-                    
+
             // returns checkbox and radio elements
             check: function (input) {
                 var inputOptions = {},
@@ -328,7 +350,7 @@
                 el.formGroup.end;
                 return element;
             },
-                    
+
             // returns file elements
             file: function (input) {
                 var el = $.extend(this.self.getAttrs(input), {
@@ -365,7 +387,7 @@
                 });
                 var element = el.formGroup.start + el.label +
                     '<input data-nos' + el.type + el.name + el.id + el.data + el.classname +
-                    el.value + el.title + el.height + el.width + el.src + el.alt + 
+                    el.value + el.title + el.height + el.width + el.src + el.alt +
                     el.min + el.max + el.step + el.readonly +
                     el.disabled + el.autofocus + el.required + '>' + el.helpBlock +
                     el.message.required + el.message.min + el.message.max +
@@ -382,7 +404,7 @@
                     element = '',
                     i;
 
-                // assign attributes 
+                // assign attributes
                 var el = $.extend(this.self.getAttrs(input), {
                     placeholder: input.placeholder && input.placeholder || '',
                     classname: input.classname && input.classname || 'form-control',
@@ -435,7 +457,7 @@
                 return element;
 
             },
-                    
+
             // returns select box with 50 states/territories/Canadian Provinces
             // the user specifies what to include, and this function will combine the appropriate objects to create the select element
             state: function (input) {
@@ -445,11 +467,11 @@
                 var states = { "Alabama": "AL", "Alaska": "AK", "Arizona": "AZ", "Arkansas": "AR", "California": "CA", "Colorado": "CO", "Connecticut": "CT", "Delaware": "DE", "District Of Columbia": "DC", "Florida": "FL", "Georgia": "GA", "Hawaii": "HI", "Idaho": "ID", "Illinois": "IL", "Indiana": "IN", "Iowa": "IA", "Kansas": "KS", "Kentucky": "KY", "Louisiana": "LA", "Maine": "ME", "Maryland": "MD", "Massachusetts": "MA", "Michigan": "MI", "Minnesota": "MN", "Mississippi": "MS", "Missouri": "MO", "Montana": "MT", "Nebraska": "NE", "Nevada": "NV", "New Hampshire": "NH", "New Jersey": "NJ", "New Mexico": "NM", "New York": "NY", "North Carolina": "NC", "North Dakota": "ND", "Ohio": "OH", "Oklahoma": "OK", "Oregon": "OR", "Pennsylvania": "PA", "Rhode Island": "RI", "South Carolina": "SC", "South Dakota": "SD", "Tennessee": "TN", "Texas": "TX", "Utah": "UT", "Vermont": "VT", "Virginia": "VA", "Washington": "WA", "West Virginia": "WV", "Wisconsin": "WI", "Wyoming": "WY" };
 
                 var provinces = { "Alberta": "AB", "British Columbia": "BC", "Manitoba": "MB", "New Brunswick": "NB", "Newfoundland and Labrador": "NL", "Nova Scotia": "NS", "Northwest Territories": "NT", "Nunavut": "NU", "Ontario": "ON", "Prince Edward Island": "PE", "Quebec": "QC", "Saskatchewan": "SK", "Yukon": "YT" };
-                
+
                 var mexico = { "Aguascalientes": "AG","Baja California":"BC","Baja California Sur":"BS","Campeche":"CM","Chiapas":"CS","Chihuahua":"CH","Coahuila":"MX","Colima":"CL","Federal District":"DF","Durango":"DG","Guanajuato":"GT","Guerrero":"GR","Hidalgo":"HG","Jalisco":"JA","Mexico":"ME","Michoacán":"MI","Morelos":"MO","Nayarit":"NA","Nuevo León":"NL","Oaxaca":"OA","Puebla":"PU","Querétaro":"QE","Quintana Roo":"QR","San Luis Potosí":"SL","Sinaloa":"SI","Sonora":"SO","Tabasco":"TB","Tamaulipas":"TM","Tlaxcala":"TL","Veracruz":"VE","Yucatán":"YU","Zacatecas":"ZA" };
-                
-               
-                        
+
+
+
                 // this function orders our state object alphabetically by key
                 function sortObject(obj, order) {
                     var key,
@@ -476,7 +498,7 @@
                     }
                     return tempObj;
                 }
-                        
+
                 // function to combine the objects and call the sort function once that is done
                 // after object is complete, we create the html
                 var stateObj = sortObject($.extend(states, (input.usTerritory && territories), (input.canada && provinces), (input.mexico && mexico))),
@@ -501,7 +523,7 @@
                 return element;
             }
         };
-                
+
         // field validation messages
         this.userErrorMessage = {
 
@@ -544,7 +566,7 @@
                 }
             }
         };
-                
+
         // field validation functions
         this.validator = {
 
@@ -559,7 +581,7 @@
             zipcode: function (zip) {
                 return /^\d{5}(-\d{4})?$/.test(zip);
             },
-                    
+
             // sanitizes text-based form inputs
             sanitize: function (input) {
                 var output = input.replace(/<script[^>]*?>.*?<\/script>/gi, '').
@@ -570,10 +592,10 @@
             }
 
         };
-                
+
         // this function handles real time error messages while user is typing
         this.validate = function (fields) {
-            
+
             // manage touched/untouched classes
             function manageTouchedFields() {
                 var allFields = $($form + ' [data-nos]:not(:submit, :reset, :button, :image, :checkbox, :radio, input[type=color], input[type=range])');
@@ -583,7 +605,7 @@
                         $(this).alterClass('nos-untouched', 'nos-touched');
                     });
             }
-            
+
             // resets form
             function reset() {
                 $($form + ' :reset[data-nos]').click(function () {
@@ -591,7 +613,7 @@
                     $($form + ' .nos-help').nosSlideUp();
                 });
             }
-                    
+
             // checks maxlength on fields if browser doesn't catch/support it
             function maxLength(v) {
                 var maxLengthId = (v.id || v.name);
@@ -601,7 +623,7 @@
                     }
                 });
             }
-                    
+
             // validates that the minlength has been met and displays/hides message to user
             function minLength(v) {
                 var msg = '.msg-minlength-' + v.name;
@@ -618,7 +640,7 @@
                     $(this).removeClass('nos-valid-minlength');
                 });
             }
-                    
+
             // validates the min and max attributes on number fields
             function minMax(v) {
                 var minMsg = '.msg-min-' + v.name;
@@ -637,8 +659,8 @@
                     $(this).removeClass('nos-valid-min nos-valid-max');
                 });
             }
-                    
-            // validates regex patterns 
+
+            // validates regex patterns
             function validatePattern(v) {
                 var nm = v.name,
                     msg = '.msg-invalid-' + nm,
@@ -672,8 +694,8 @@
                     $(this).removeClass('nos-valid-match');
                 });
             }
-            
-                    
+
+
             // calls email/zip/phone validation functions and hides/displays messages to user
             function validateFields(v) {
                 var nm = v.name,
@@ -682,8 +704,8 @@
                     emval;
                 $(id).on('keyup input change blur paste focus', function () {
                     switch (v.type) {
-                                
-                        // once the user starts to type, email/zip/tel will be sent through a validator and a 
+
+                        // once the user starts to type, email/zip/tel will be sent through a validator and a
                         // message will be displayed to warn user about invalid input
                         // message will disappear once input is valid
                         case 'email':
@@ -729,7 +751,7 @@
                     $(this).removeClass('nos-valid-email nos-valid-zip nos-valid-tel');
                 });
             }
-            
+
             //|||||||remember which boxes were checked and recheck them on loner uncheck
             // function cbLoner(v) {
             //     var fieldset = $('#' + v.name),
@@ -744,7 +766,7 @@
             //                 if ($.inArray($(this).attr('value'), temp) > -1) {
             //                     console.log('true');
             //                     return true;
-            //                 } 
+            //                 }
             //                 return false;
             //             });
             //         }
@@ -758,8 +780,8 @@
             //                 } else {
             //                     temp.splice($.inArray($(this).attr('value'), temp), 1);
             //                 }
-                            
-                            
+
+
             //                 if ($(this).attr('value') === v.loner) {
             //                     if ($(this).is(':checked')) {
             //                         $(cb).not($(this)).attr({
@@ -771,8 +793,8 @@
             //                         });
             //                     }
             //                 }
-                            
-                            
+
+
             //             });
             //         });
             //     });
@@ -790,7 +812,7 @@
                     $($form + ' .nos-input-group.hidden').length === 0 && $(this).addClass('disabled');
                     $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('[data-nos-remove-button]').removeClass('disabled');
                 });
-                    
+
                 // clone field remove button functionality
                 $($form + ' [data-nos-remove-button]').click(function () {
                     $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('.nos-input-group:not(.hidden)').eq(-1).addClass('hidden');
@@ -798,42 +820,42 @@
                     $($form + ' .nos-input-group.hidden').length > 0 && $('[data-nos-add-button]').removeClass('disabled');
                 });
             }
-                    
+
             // calls the validation functions
             function callValidation(k, v) {
-                
+
                 // add touched/untouched classes
                 manageTouchedFields();
-                
+
                 // call the loner function for checkbox fields
                 //v.loner && cbLoner(v);
 
                 // clone add/remove button functionality
                 v.type === 'clone' && cloneButtons();
-                
+
                 // set mask
                 v.mask && addMask(v);
-                        
+
                 // call reset function
                 v.type === 'reset' && reset();
-        
+
                 // call email/zip/phone validation function
                 if ((v.type === 'email' || v.type === 'zip' || v.type === 'tel') && (v.validate || v.validate === undefined)) {
                     validateFields(v);
                 }
-                
+
                 // call pattern validation
                 v.pattern && validatePattern(v);
-                        
+
                 // call maxLength function
                 v.maxlength && maxLength(v);
-                        
-                // call minLength function 
+
+                // call minLength function
                 v.minlength && minLength(v);
-                        
+
                 // call min / max function
                 (v.min || v.max) && minMax(v);
-                
+
                 // call password match function
                 v.match && passwordMatch(v);
 
@@ -852,7 +874,7 @@
                 });
 
             }
-                    
+
             // find out if the form is one column or multi-column
             // multi-column forms send multiple objects
             $.each(fields, function (k, v) {
@@ -874,14 +896,14 @@
             });
 
         };
-        
+
         // validation that runs on form submit
         this.submitValidation = function (data) {
-            
+
             // initializing form submit object
             var form = $(data).serializeArray(),
                 formdata = {},
-                
+
                 // selectors for required fields
                 reqInput = $($form + ' [data-nos]:not(:radio, :checkbox, :button, :submit, :reset, :file, :image, select, .nos-clone)').filter('[required]:visible'),
                 reqSR = $($form + ' select[data-nos]').filter('[required]:visible'),
@@ -910,7 +932,7 @@
                     });
                 });
             }
-            
+
             // build submit object for clone types
             function buildClone() {
                 var cloneName = $(clone).parents().siblings('.nos-label').attr('for');
@@ -922,7 +944,7 @@
                     }
                 });
             }
-            
+
             // create checkbox object for form submit response
             function cbSubmitObject() {
                 var obj = {};
@@ -958,7 +980,7 @@
                     }
                 });
             }
-            
+
             // checkbox validation
             // build individual arrays for each required field and check to see if arrays are empty on form submit
             function validateCheckbox() {
@@ -978,7 +1000,7 @@
                     cba[i].length < 1 && $(cmsg[i]).nosSlideDown();
                 });
             }
-            
+
             // radio validation
             function validateRadio() {
                 var arr = [];
@@ -1037,7 +1059,7 @@
                     }
                 });
             }
-            
+
             // file Required field validation
             function validateFileFields() {
                 $(fileField).each(function (i) {
@@ -1057,7 +1079,7 @@
 
             // send form submit object back to user if all fields are valid
             function submitForm() {
-                
+
                 if (okToSend()) { send(); }
 
                 else if (!$($form + ' .nos-help').is(':visible') && $($form + ' .nos-untouched[required]').is(':visible')) {
@@ -1076,12 +1098,12 @@
                     });
                 }
             }
-            
+
             // check if the form is ready to send
             function okToSend() {
                 return !$($form + ' .nos-help').is(':visible') && !$($form + ' .nos-untouched[required]').is(':visible');
             }
-            
+
             // send the form
             function send() {
                 if (self.settings.honeypot !== false) {
@@ -1106,15 +1128,15 @@
                 validateFileFields();
 
             }
-            
+
             // call submit & validation functions
             init();
 
         };
-                
+
         // error messages to warn of incorrect types in the configuration
         this.errorMessages = function () {
-            
+
             var settings = this.settings;
             typeof settings.fields !== 'object' && console.warn('Your form data is not an object!');
             !settings.fields && console.warn('You must supply form fields!');
@@ -1125,12 +1147,28 @@
             settings.messages && typeof settings.messages !== 'object' && console.warn('"messages" must be an object!');
 
         };
-                
+
         // set some plugin behavior
         this.setBehavior = function (settings) {
-                    
+
             // toggles browser validation on/off based on user input - default is 'off'
             !this.settings.htmlValidation && this.form.attr('novalidate', '');
+
+            // Object.keys IE8 Polyfill
+            // IE8 doesn't support Object.keys (used in input groups)
+            if (!Object.keys) {
+                Object.keys = function(obj) {
+                    var keys = [];
+
+                    for (var i in obj) {
+                    if (obj.hasOwnProperty(i)) {
+                        keys.push(i);
+                    }
+                    }
+
+                    return keys;
+                };
+            }
 
             // helper function
             // changes names of classes and selects with wildcards
@@ -1161,7 +1199,7 @@
 
                 return !additions ? self : self.addClass(additions);
             };
-            
+
             // controls animation speed of the slideDown/slideUp effects
             // used for user error messages
             $.prototype.nosSlideDown = (function (slideDown) {
@@ -1179,10 +1217,10 @@
             })($.prototype.slideUp);
 
         },
-        
+
         // set of functions to build form
         this.build = {
-          
+
             // need to access this later
             self: this,
             // accepts objects that contain a form field
@@ -1190,10 +1228,10 @@
             buildElements: function (obj) {
 
                 var element = '';
-                
+
                 // loop through all element arrays and categorize each element type
                 $.each(self.elements, function (k) {
-                                  
+
                     // when element type is matched to an array, it is sent to be built in the associated 'getElements' function
                     if ($.inArray(obj.type, this) > -1) {
                         element += self.getElements[k](obj);
@@ -1204,7 +1242,7 @@
                 return element;
 
             },
-            
+
             // this function is used for nested columns
             // it will loop through and check each object to see if there is another nested column
             // if there is, it will run it and apply the proper rows
@@ -1213,62 +1251,62 @@
                 var str = block.row && '<div class="row nos-row">' || '',
 
                     self = this;
-                    
+
                 // initial function call
                 buildColumn(block);
 
                 // function to check each new branch of elements for another nested column
                 // this function will repeat until it reaches the end of the tree
                 function buildColumn(col) {
-                    
+
                     // first column class
                     str += col.classname && '<div class="' + col.classname + '">' || '';
 
                     $.each(col.column, function () {
 
                         if (this.column) {
-                            
+
                             // if there is another nested column with a row specified, add a row and check the next level
                             str += this.row && '<div class="row nos-row">' || '';
-                            
+
                             // check the next level
                             buildColumn(this);
-                            
+
                             // end div for row
                             str += this.row && '</div>' || '';
 
                         }
 
                         else {
-                            
+
                             // if no other nested column exists, build what we found
                             str += self.buildElements(this);
 
                         }
 
                     });
-                    
+
                     // end div for first column class
                     str += col.classname && '</div>' || '';
 
                 }
-                
+
                 // end divs for the rows
                 str += block.row && '</div>' || '';
 
                 return str;
 
             },
-            
+
             // the main build function
             // accepts the main form configuration object and sends the pieces where they need to go
             form: function () {
 
                 var self = this,
-                    
+
                     // our form string
                     formStr = this.self.settings.honeypot && this.self.getElements.honeypot() || '',
-                    
+
                     // user submitted json fields
                     field = this.self.settings.fields;
 
@@ -1283,58 +1321,58 @@
                     }
 
                     else {
-                        
+
                         // just a single column form
                         formStr += self.buildElements(this);
 
                     }
 
                 });
-                
+
                 // render the form string
                 this.self.render(formStr);
 
             }
 
         };
-                
-       
-                
+
+
+
         // renders form
         this.render = function (input) {
             $(element).html(input);
         },
-        
+
         // adds form validation messages to the end of the form tag
         this.addMessage = function () {
-            
+
             function hasCols() {
                 return $($form).find('[class^="col-"]').length > 0;
             }
-            
+
             // determines if you are using row classes in your form and mimics this
             var message = {
                 row: {
                     start: $($form).find('.nos-row').length && '<div class="row">' || '',
                     end: $($form).find('.nos-row').length && '</div>' || ''
                 },
-                
+
                 // if entire form is wrapped in a col-* class, apply the same class to the form messages
                 // this ensures that the form messages have the same placement and width as the form itself
                 structure: this.settings.fields.length === 1 ? this.settings.fields[0].classname : hasCols() && 'col-md-12 col-sm-12 col-xs-12' || ''
             };
-            
+
             var reqMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.required(this.form[0]) + '</div>' + message.row.end,
                 invMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end;
-            
+
             // append an error message onto the form for required and invalid fields
             this.settings.messageLocation.bottom && $(this.form[0]).append(reqMsg), $(this.form[0]).append(invMsg);
-                                        
+
             // prepend an error message onto the form for required and invalid fields
             this.settings.messageLocation.top && $(this.form[0]).prepend(reqMsg), $(this.form[0]).prepend(invMsg);
 
         },
-                
+
         // initialize the plugin
         this.init();
 
@@ -1343,31 +1381,31 @@
     // Avoid Plugin.prototype conflicts
     $.extend(Nos.prototype, {
         init: function () {
-            
+
             var self = this;
-                    
+
             // displays error messages if the config object has incorrect types
             this.errorMessages();
-                    
+
             // set some form behaviors
             this.setBehavior(this.settings);
-                    
+
             // build the form
             this.build.form();
-                    
+
             // hide honeypot fields
             this.settings.honeypot && $('#' + this.form[0].id + ' .nos-div-hp-js').css('display', 'none');
-                    
+
             // run validation
             this.settings.validate && this.validate(this.settings.fields), this.addMessage();
-                    
+
             // form submit function
             // runs validation and passes submit object to user
             this.form.submit(function (e) {
-                        
+
                 // prevent default form submit
                 e.preventDefault();
-                        
+
                 // run submit form validation, unless user specifies not to
                 self.submitValidation($(this));
 
@@ -1384,13 +1422,5 @@
             }
         });
     };
-    
-    // $.fn.nosForm.reset = function () {
-    //     return function () {
-    //         console.log('test');
-    //         $(this).closest('form').find(':input:not(:submit, :reset, :button, :image)').val('').alterClass('nos-*', '').addClass('nos-untouched');
-    //         $('#' + form.id + ' .nos-help').nosSlideUp();
-    //     };
-    // };
 
 })(jQuery, window, document);
