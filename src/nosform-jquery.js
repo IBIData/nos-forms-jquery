@@ -609,8 +609,9 @@
             // checks maxlength on fields if browser doesn't catch/support it
             function maxLength(v) {
                 var maxLengthId = (v.id || v.name);
-                $('#' + maxLengthId).keydown(function (e) {
+                $('#' + maxLengthId).on('keydown change', function (e) {
                     if ($(this).val().length > v.maxlength) {
+                        $(this).val($(this).val().substring(0, v.maxlength));
                         e.preventDefault();
                     }
                 });
