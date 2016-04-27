@@ -17,6 +17,9 @@
         messageLocation: {
             top: false,
             bottom: true
+        },
+        onDestroy: function () {
+            console.log('destroyed');
         }
     };
 
@@ -78,7 +81,7 @@
                 title: input.title && ' title="' + input.title + '"' || '',
                 size: input.size && ' size="' + input.size + '"' || '',
                 data: input.data && this.getElements.data(input.data) || '',
-                message: self.settings.validate && self.getUserErrorMessages(input) || { required: '', minlength: '', min: '', max: '', valid: '' } // returns object that stores user error messages
+                message: self.settings.validate && self.getUserErrorMessages(input) || { required: '', minlength: '', maxlength: '', min: '', max: '', valid: '' } // returns object that stores user error messages
             });
 
         },
@@ -90,6 +93,7 @@
                 required: element.required && self.userErrorMessage.required(element) || '',
                 valid: (element.type === 'email' || element.type === 'zip' || element.type === 'tel' || element.pattern || element.match) && self.userErrorMessage.valid(element) || '',
                 minlength: (element.minlength && element.minlength > 1) && self.userErrorMessage.minlength(element) || '',
+                maxlength: (element.maxlength && element.maxlength > 1) && self.userErrorMessage.maxlength(element) || '',
                 min: (element.min && element.min > 1) && self.userErrorMessage.min(element) || '',
                 max: element.max && self.userErrorMessage.max(element) || ''
             });
@@ -195,7 +199,7 @@
                     '<input data-nos' + el.type + el.name + el.id + el.data + el.minlength + el.maxlength + el.placeholder + el.classname +
                     el.value + el.title + el.min + el.max + el.step + el.size + el.pattern + el.autocomplete + el.multiple + el.readonly +
                     el.disabled + el.autofocus + el.required + '>' + el.inputGroup.right + el.inputGroup.end + el.helpBlock +
-                    el.message.required + el.message.minlength + el.message.valid + el.message.min + el.message.max +
+                    el.message.required + el.message.minlength + el.message.maxlength + el.message.valid + el.message.min + el.message.max +
                     el.formGroup.end;
                 return element;
             },
@@ -255,7 +259,7 @@
                     '<textarea data-nos' +
                     el.name + el.id + el.title + el.data + el.minlength + el.maxlength + el.placeholder + el.classname + el.value + el.rows + el.cols + el.wrap + el.readonly + el.disabled + el.autofocus + el.required +
                     '></textarea>' + el.helpBlock +
-                    el.message.required + el.message.minlength +
+                    el.message.required + el.message.minlength + el.message.maxlength +
                     el.formGroup.end;
                 return element;
             },
@@ -537,6 +541,12 @@
                 return '<div style="display: none;" class="alert alert-warning nos-help nos-invalid msg-minlength-' + el.name + '">' + (message || (el.label || el.placeholder || 'This field') + ' must have a minimum of ' + el.minlength + ' characters') + '</div>';
             },
 
+            maxlength: function (el) {
+                var message;
+                el.messages ? message = el.messages.maxlength : message = null;
+                return '<div style="display: none;" class="alert alert-warning nos-help nos-invalid msg-maxlength-' + el.name + '">' + (message || (el.label || el.placeholder || 'This field') + ' must have a maximum of ' + el.maxlength + ' characters') + '</div>';
+            },
+
             min: function (el) {
                 var message;
                 el.messages ? message = el.messages.min : message = null;
@@ -609,12 +619,17 @@
             // checks maxlength on fields if browser doesn't catch/support it
             function maxLength(v) {
                 var maxLengthId = (v.id || v.name);
-                $('#' + maxLengthId).on('keydown change', function (e) {
-                    if ($(this).val().length > v.maxlength) {
-                        $(this).val($(this).val().substring(0, v.maxlength));
-                        e.preventDefault();
-                    }
-                });
+                var msg = '.msg-maxlength-' + v.name;
+                $('#' + maxLengthId)
+                    .on('keydown', function (e) {
+                        if ($(this).val().length > v.maxlength) {
+                            $(this).val($(this).val().substring(0, v.maxlength));
+                            e.preventDefault();
+                        }
+                    })
+                    .on('blur keydown', function () {
+                        $(this).val().length > v.maxlength ? $(msg).nosSlideDown() : $(msg).nosSlideUp();
+                    });
             }
 
             // validates that the minlength has been met and displays/hides message to user
@@ -1412,6 +1427,10 @@
         return this.each(function () {
             if (!$.data(this, "plugin_nosForm")) {
                 $.data(this, "plugin_nosForm", new Nos(this, options));
+            }
+            if (options === 'destroy') {
+                $(this).remove();
+                $.data(this, 'plugin_nosForm', null);
             }
         });
     };
