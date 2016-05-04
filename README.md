@@ -408,6 +408,18 @@ There are five specific types of message that can appear for each field:
 
 There are also some default form messages that will display on the bottom of the form if the user tries to submit unsuccessfully. These can be customized in the plugin initilization, as mentioned in the 'Options' section.
 
+##Destroy Method
+
+------------------------------------------
+
+NosForm does come with a destroy method:
+
+```javascript
+$('#myform').nosForm('destroy')
+```
+
+This will empty the form, keeping your actual form tag intact, while removing all options and event listeners.
+
 
 
 

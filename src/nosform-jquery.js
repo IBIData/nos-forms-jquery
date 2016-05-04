@@ -18,9 +18,7 @@
             top: false,
             bottom: true
         },
-        onDestroy: function () {
-            console.log('destroyed');
-        }
+        onlySubmitWithValue: false
     };
 
     // The plugin constructor
@@ -36,10 +34,7 @@
         this.form = $(element);
 
         // final plugin settings
-        this.settings = $.extend({}, defaults, options);
-
-        // settings.messages is a nested object, we need to extend this as well
-        this.settings.messages = $.extend({}, defaults.messages, options.messages);
+        this.settings = $.extend(true, {}, defaults, options);
 
         // Store arrays of element types
         // These are used to determine which function will be called from the 'getElements' object below
@@ -283,16 +278,17 @@
                 var options = '';
                 var el = $.extend(this.self.getAttrs(input), {
                     classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"',
-                    selected: input.selected && input.selected.toString().toLowerCase() || ''
+                    selected: input.selected && input.selected.toString().toLowerCase() || '',
+                    inputGroup: input.inputGroup && this.inputGroup(input.inputGroup) || { start: '', left: '', right: '', end: '' }
                 });
                 $.each(selOptions, function (k, v) {
                     options += '<option value="' + k + '" ' + ((el.selected === k.toString().toLowerCase() || el.selected === v.toString().toLowerCase()) && ' selected' || '') + '>' + v + '</option>';
                 });
-                var element = el.formGroup.start + el.label +
+                var element = el.formGroup.start + el.label + el.inputGroup.start + el.inputGroup.left +
                     '<select data-nos' +
                     el.name + el.id + el.data + el.classname + el.multiple + el.title + el.size + el.readonly + el.disabled + el.autofocus + el.required + '>' +
                     options +
-                    '</select>' + el.helpBlock +
+                    '</select>' + el.inputGroup.right + el.inputGroup.end + el.helpBlock +
                     el.message.required +
                     el.formGroup.end;
                 return element;
@@ -925,7 +921,7 @@
             // assign serialized form object properties to new form submit object, unless it is a checkbox field
             function init() {
                 $.each(form, function (key, value) {
-                    if (value.name.indexOf('[]') === -1) {
+                    if (value.name.indexOf('[]') === -1 && (self.settings.onlySubmitWithValue ? (value.value && value.value !== "") : value)) {
                         formdata[value.name] = value.value;
                     }
                 });
@@ -1114,7 +1110,7 @@
 
             // send the form
             function send() {
-                if (self.settings.honeypot !== false) {
+                if (self.settings.honeypot) {
                     ($($form + ' .nos-text-css').val() === '' && $($form + ' .nos-email-js').val() === 'validemail@email.com') ? self.settings.submit(formdata) : self.settings.submit({honeypot: true});
                 }
                 else {
@@ -1374,10 +1370,14 @@
                 invMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end;
 
             // append an error message onto the form for required and invalid fields
-            this.settings.messageLocation.bottom && $(this.form[0]).append(reqMsg), $(this.form[0]).append(invMsg);
+            if (this.settings.messageLocation.bottom) {
+                $(this.form[0]).append(reqMsg).append(invMsg);
+            }
 
             // prepend an error message onto the form for required and invalid fields
-            this.settings.messageLocation.top && $(this.form[0]).prepend(reqMsg), $(this.form[0]).prepend(invMsg);
+            if (this.settings.messageLocation.top) {
+                $(this.form[0]).prepend(reqMsg).prepend(invMsg);
+            }
 
         },
 
@@ -1428,8 +1428,9 @@
             if (!$.data(this, "plugin_nosForm")) {
                 $.data(this, "plugin_nosForm", new Nos(this, options));
             }
+            // DESTROY METHOD
             if (options === 'destroy') {
-                $(this).remove();
+                $(this).off().empty();
                 $.data(this, 'plugin_nosForm', null);
             }
         });

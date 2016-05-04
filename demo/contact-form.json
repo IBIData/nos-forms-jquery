@@ -1,37 +1,5 @@
 [
     {
-        "name": "txtexample",
-        "id": "txtid",
-        "type": "text",
-        "autofocus": true,
-        "label": "Name",
-        "required": true,
-        "placeholder": "Your Name",
-        "pattern": "[A-Za-z]{3}",
-        "data": {
-            "test": 5,
-            "test2": 6
-        },
-        "inputGroup": {
-            "size": "large",
-            "left": {
-                "text": "$",
-                "classname": "testclass"
-            },
-            "right": {
-                "button": "Test",
-                "classname": "btn btn-primary"
-            }
-        },
-        "minlength": 2,
-        "maxlength": 60,
-        "messages": {
-            "required": "This is a required field",
-            "minlength": "This must be at least 2 characters long",
-            "invalid": "This must be a valid country code"
-        }
-    },
-    {
         "name": "emailexample",
         "type": "email",
         "label": "Email Example",
@@ -40,14 +8,10 @@
         "minlength": 1
     },
     {
-        "name": "select",
+        "name": "select2",
         "type": "select",
+        "title": "test",
         "label": "Select Option",
-        "required": true,
-        "multiple": false,
-        "disabled": false,
-        "title": "Select",
-        "readonly": false,
         "selected": "",
         "options": {
             "": "Select One...",
@@ -57,45 +21,35 @@
             "value4": "Fourth Value"
         }
     },
-
     {
-        "name": "mycb",
+        "name": "cbExample",
         "type": "checkbox",
-        "label": "Check a Box",
-        "required": true,
-        "inline": true,
+        "label": "Checkbox Example",
         "submit": "object",
-        "checked": [
-            "first",
-            "second"
-        ],
+        "inline": false,
+        "checked": "value2",
         "options": {
-            "first": "Option 1",
-            "second": "Option 2",
-            "third": "Option 3"
+            "value1": "First Option",
+            "value2": "Second Option",
+            "value3": "Third Option"
         }
     },
     {
-        "name": "myRadio",
+        "name": "radioExample",
         "type": "radio",
-        "label": "Radio",
-        "required": true,
+        "label": "Radio Example",
         "inline": true,
-        "checked": "",
-        "options": [
-            {
-                "first": "Option1"
-            },
-            {
-                "second": "Option2"
-            }
-        ]
+        "options": {
+            "value1": "First Option",
+            "value2": "Second Option",
+            "value3": "Third Option"
+        }
     },
     {
-        "name": "state",
-        "type": "state",
-        "selected": "mn",
-        "required": true
+        "name": "text2",
+        "type": "text",
+        "label": "Example 2",
+        "minlength": 1
     },
     {
         "name": "txtmessage",
