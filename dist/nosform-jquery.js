@@ -604,7 +604,7 @@
 
             // manage touched/untouched classes
             function manageTouchedFields() {
-                var allFields = $($form + ' [data-nos]:not(:submit, :reset, :button, :image, :checkbox, :radio, input[type=color], input[type=range])');
+                var allFields = $($form).find('[data-nos]').not(':submit, :reset, :button, :image, :checkbox, :radio, input[type=color], input[type=range]');
                 allFields
                     .addClass('nos-untouched')
                     .on('focus change input', function () {
