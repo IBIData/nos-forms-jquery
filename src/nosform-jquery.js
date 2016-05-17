@@ -909,13 +909,13 @@
                 formdata = {},
 
                 // selectors for required fields
-                reqInput = $($form + ' [data-nos]:not(:radio, :checkbox, :button, :submit, :reset, :file, :image, select, .nos-clone)').filter('[required]:visible'),
+                reqInput = $($form + ' [data-nos]').not(':radio, :checkbox, :button, :submit, :reset, :file, :image, select, .nos-clone').filter('[required]:visible'),
                 reqSR = $($form + ' select[data-nos]').filter('[required]:visible'),
                 fileField = $($form + ' :file[data-nos]'),
                 cbgroup = $($form + ' :checkbox[data-nos]').parents('fieldset'),
                 cb = $($form + ' :checkbox[data-nos]').filter('[required]:visible').parents('fieldset'),
                 radio = $($form + ' :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
-                requiredFields = $($form + ' [data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible'),
+                requiredFields = $($form + ' [data-nos]').not(':file, input[type=range], input[type=color]').filter('[required]:visible'),
                 clone = $($form + ' .nos-clone');
 
             // assign serialized form object properties to new form submit object, unless it is a checkbox field
