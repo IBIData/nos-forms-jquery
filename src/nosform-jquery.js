@@ -1088,7 +1088,8 @@
 
                 else if (!$($form + ' .nos-help').is(':visible') && $($form + ' .nos-untouched[required]').is(':visible')) {
                     $($form + ' [data-nos]').each(function () {
-                        $(this).focus();
+                        //$(this).focus();
+                        $(this).alterClass('nos-untouched', 'nos-touched');
                     });
                     if (okToSend()) { send(); }
                 }
