@@ -142,7 +142,7 @@ $("#myform").nosForm({
 
  Accepts a boolean. Optionally, there are two honeypot text fields rendered on each form (one is empty and one has a preset value). Both are hidden by CSS and JS. If either are modified, the form data will be ignored and the plugin will submit an object instead: **{ honeypot: true }**. You are free to handle this however needed in your submit function.
 
- ###**onlySubmitWithValue**
+###**onlySubmitWithValue**
 
  Accepts a boolean. When this field is set to true, only fields that have a value will be sent to your submit function. This essentially will ignore any field that a user has not filled out. This can be useful when you have a lot of optional fields and you don't want to post all of them all the time.
 
