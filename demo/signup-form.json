@@ -110,7 +110,6 @@
                                 "match": "pwdId",
                                 "placeholder": "Confirm Password",
                                 "required": true,
-                                "minlength": 8,
                                 "maxlength": 30,
                                 "messages": {
                                     "required": "You must type your password again!",

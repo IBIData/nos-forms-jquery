@@ -106,6 +106,7 @@ $("#myform").nosForm({
     htmlValidation: false, // toggle html browser validation
     animationSpeed: 100, // change speed of js animations (error message animations)
     honeypot: false, // adds two honeypot fields to filter out bots
+    onlySubmitWithValue: false, // if true, will only send form fields that have been filled out (empty fields don't get submitted)
     messages: { // these are the messages that will appear on the bottom of the form when an unsuccessful submit has occurred
         required: 'Please fill out all required fields', // warning about required fields
         invalid: 'Invalid fields' // warning about invalid fields (pattern, minlength, min, max)
@@ -140,6 +141,10 @@ $("#myform").nosForm({
 ###**honeypot**
 
  Accepts a boolean. Optionally, there are two honeypot text fields rendered on each form (one is empty and one has a preset value). Both are hidden by CSS and JS. If either are modified, the form data will be ignored and the plugin will submit an object instead: **{ honeypot: true }**. You are free to handle this however needed in your submit function.
+
+ ###**onlySubmitWithValue**
+
+ Accepts a boolean. When this field is set to true, only fields that have a value will be sent to your submit function. This essentially will ignore any field that a user has not filled out. This can be useful when you have a lot of optional fields and you don't want to post all of them all the time.
 
 ###**messages**
 

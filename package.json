@@ -1,40 +1,23 @@
 {
+  "name": "nos-forms-jquery",
+  "version": "1.0.1",
   "author": {
     "name": "IBI Data",
     "email": "admin@ibidata.com",
     "url": "http://ibidata.com/"
   },
   "contributors": [
-      {
-          "name": "Justin Williamson",
-          "email": "jwilliamson@ibidata.com"
-      }
+    {
+      "name": "Justin Williamson",
+      "email": "jwilliamson@ibidata.com"
+    }
   ],
   "description": "Build and validate DRY html forms in minutes with JSON, jQuery and Bootstrap",
-  "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-cli": "~0.1.13",
-    "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-connect": "^0.11.2",
-    "grunt-contrib-cssmin": "^0.14.0",
-    "grunt-contrib-jshint": "^0.11.0",
-    "grunt-contrib-uglify": "^0.8.0",
-    "grunt-contrib-watch": "^0.6.1"
-  },
   "homepage": "",
   "bugs": {
     "url": "https://github.com/IBIData/nos-forms-jquery/issues"
   },
-  "keywords": [
-    "jquery",
-    "jquery-plugin",
-    "form",
-    "jquery-forms",
-    "json",
-    "json-forms"
-  ],
   "license": "MIT",
-  "name": "nos-forms-jquery",
   "readmeFilename": "README.md",
   "repository": {
     "type": "git",
@@ -43,5 +26,27 @@
   "scripts": {
     "test": "grunt travis --verbose"
   },
-  "version": "1.0.0"
+  "keywords": [
+    "jquery",
+    "jquery plugin",
+    "build forms",
+    "json form builder",
+    "form",
+    "jquery forms",
+    "json",
+    "json forms",
+    "bootstrap",
+    "bootstrap forms",
+    "bootstrap form builder"
+  ],
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "^1.0.0"
+  }
 }

@@ -20,15 +20,12 @@ module.exports = function(grunt) {
         // Concat js
         concat: {
             options: {
-                banner: "<%= meta.banner %>"
+                banner: "<%= meta.banner %>",
+                sourceMap: true
             },
             js: {
                 src: ["src/nosform-jquery.js"],
                 dest: "dist/nosform-jquery.js"
-            },
-            css: {
-                src: ["src/nosform-jquery.css"],
-                dest: "dist/nosform-jquery.css"
             }
         },
 
@@ -50,7 +47,7 @@ module.exports = function(grunt) {
                 banner: "<%= meta.banner %>"
             }
         },
-        
+
         // Minify CSS
         cssmin: {
             options: {
@@ -58,7 +55,7 @@ module.exports = function(grunt) {
             },
             combine: {
             files: {
-                'dist/nosform-jquery.min.css': ['dist/nosform-jquery.css']
+                'dist/nosform-jquery.min.css': ['src/nosform-jquery.css']
             }
           }
         },
@@ -67,12 +64,22 @@ module.exports = function(grunt) {
         watch: {
             options: {
               livereload: true,
-              spawn: false  
+              spawn: false
             },
-            files: ["src/*", "demo/*"],
-            tasks: ["build-js"]
+            js: {
+                files: ['src/*.js'],
+                tasks: ['build-js']
+            },
+            css: {
+                files: ['src/*.css'],
+                tasks: ['build-css']
+            },
+            html: {
+                files: ['demo/**'],
+                tasks: ['build']
+            }
         },
-        
+
         // server
         connect: {
             server: {
@@ -92,8 +99,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-contrib-watch");
     grunt.loadNpmTasks("grunt-contrib-cssmin");
 
-    grunt.registerTask("build", ["concat", "uglify", "cssmin"]);
-    grunt.registerTask("build-js", ["jshint", "build"]);
+    grunt.registerTask("build", ['jshint', 'concat', 'uglify', 'cssmin']);
+    grunt.registerTask('build-js', ['jshint', 'concat', 'uglify']);
+    grunt.registerTask('build-css', ['cssmin']);
     grunt.registerTask("default", ["build", "connect", "watch"]);
     grunt.registerTask("travis", ["build-js"]);
 

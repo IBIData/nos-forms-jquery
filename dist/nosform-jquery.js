@@ -1,5 +1,5 @@
 /*
- *  nos-forms-jquery - v1.0.0
+ *  nos-forms-jquery - v1.0.1
  *  Build and validate DRY html forms in minutes with JSON, jQuery and Bootstrap
  *  
  *
@@ -607,7 +607,7 @@
                 var allFields = $($form + ' [data-nos]:not(:submit, :reset, :button, :image, :checkbox, :radio, input[type=color], input[type=range])');
                 allFields
                     .addClass('nos-untouched')
-                    .on('focus change input', function () {
+                    .on('focus change', function () {
                         $(this).alterClass('nos-untouched', 'nos-touched');
                     });
             }
@@ -764,54 +764,6 @@
                 });
             }
 
-            //|||||||remember which boxes were checked and recheck them on loner uncheck
-            // function cbLoner(v) {
-            //     var fieldset = $('#' + v.name),
-            //         cb = fieldset.find(':checkbox');
-
-            //     fieldset.each(function () {
-            //         var temp = [];
-            //         function wasChecked(checkbox) {
-            //             console.log(temp);
-            //             $.each(checkbox, function () {
-            //                 console.log($(this).attr('value'));
-            //                 if ($.inArray($(this).attr('value'), temp) > -1) {
-            //                     console.log('true');
-            //                     return true;
-            //                 }
-            //                 return false;
-            //             });
-            //         }
-            //         cb.each(function () {
-            //             if ($(this).is(':checked')) {
-            //                 temp.push($(this).attr('value'));
-            //             }
-            //             $(this).change(function () {
-            //                 if ($(this).is(':checked')) {
-            //                     temp.push($(this).attr('value'));
-            //                 } else {
-            //                     temp.splice($.inArray($(this).attr('value'), temp), 1);
-            //                 }
-
-
-            //                 if ($(this).attr('value') === v.loner) {
-            //                     if ($(this).is(':checked')) {
-            //                         $(cb).not($(this)).attr({
-            //                             'checked': false
-            //                         });
-            //                     } else {
-            //                         $(cb).not($(this)).attr({
-            //                             'checked': wasChecked($(cb).not($(this)))
-            //                         });
-            //                     }
-            //                 }
-
-
-            //             });
-            //         });
-            //     });
-            // }
-
             function addMask(v) {
                 $.mask ? $('#' + (v.id || v.name)).mask(v.mask) : console.warn('You must include the masked input plugin to use "mask". Go here: https://github.com/digitalBush/jquery.maskedinput');
                 $('#' + (v.id || v.name)).attr('data-mask', true);
@@ -838,9 +790,6 @@
 
                 // add touched/untouched classes
                 manageTouchedFields();
-
-                // call the loner function for checkbox fields
-                //v.loner && cbLoner(v);
 
                 // clone add/remove button functionality
                 v.type === 'clone' && cloneButtons();
@@ -960,6 +909,15 @@
             // create checkbox object for form submit response
             function cbSubmitObject() {
                 var obj = {};
+
+                // checks if object is full of false values
+                function allFalse(obj) {
+                    for (var i in obj) {
+                        if (obj[i] === true) return false;
+                    }
+                    return true;
+                }
+
                 cbgroup.each(function (i) {
                     var str = $(this).attr('id'),
                         fcb = $(this).find(':checkbox');
@@ -972,6 +930,7 @@
                             }
                         });
                         formdata[str] = arr.toString();
+                        if (self.settings.onlySubmitWithValue && !formdata[str]) delete formdata[str];
                     }
                     else if ($(this).hasClass('nos-submit-array')) {
                         var arr2 = [];
@@ -981,6 +940,7 @@
                             }
                         });
                         formdata[str] = arr2;
+                        if (self.settings.onlySubmitWithValue && formdata[str].length < 1) delete formdata[str];
                     }
                     else {
                         obj[i] = {};
@@ -989,6 +949,7 @@
                             obj[i][uid] = this.checked;
                         });
                         formdata[str] = obj[i];
+                        if (self.settings.onlySubmitWithValue && allFalse(formdata[str])) delete formdata[str];
                     }
                 });
             }
@@ -1096,7 +1057,7 @@
 
                 else if (!$($form + ' .nos-help').is(':visible') && $($form + ' .nos-untouched[required]').is(':visible')) {
                     $($form + ' [data-nos]').each(function () {
-                        //$(this).focus();
+                        $(this).trigger('change');
                         $(this).alterClass('nos-untouched', 'nos-touched');
                     });
                     if (okToSend()) { send(); }
@@ -1446,3 +1407,5 @@
     };
 
 })(jQuery, window, document);
+
+//# sourceMappingURL=nosform-jquery.js.map

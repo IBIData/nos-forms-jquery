@@ -25,18 +25,18 @@
 }
 
 .nos-invalid-required, .nos-invalid-required:focus {
-    border: 1px solid red !important; 
+    border: 1px solid red !important;
     box-shadow: none !important;
     -webkit-box-shadow: none !important;
 }
 
 .nos-invalid-minlength, .nos-invalid-minlength:focus, .nos-invalid-min, .nos-invalid-min:focus, .nos-invalid-max, .nos-invalid-max:focus, .nos-invalid-email, .nos-invalid-email:focus, .nos-invalid-zip, .nos-invalid-zip:focus, .nos-invalid-tel, .nos-invalid-tel:focus, .nos-invalid-pattern, .nos-invalid-pattern:focus, .nos-invalid-match, .nos-invalid-match:focus {
-   border: 1px solid orange !important; 
+   border: 1px solid orange !important;
    box-shadow: none !important;
    -webkit-box-shadow: none !important;
 }
 
 input:-webkit-autofill, textarea:-webkit-autofill, select:-webkit-autofill, input:-webkit-autofill:focus, textarea:-webkit-autofill:focus, select:-webkit-autofill:focus {
     box-shadow: 0 0 0 1000px white inset;
-    -webkit-box-shadow: 0 0 0 1000px white inset; 
+    -webkit-box-shadow: 0 0 0 1000px white inset;
 }
