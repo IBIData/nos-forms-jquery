@@ -1,0 +1,1 @@
+module.exports = require('./dist/nosform-jquery.js');
