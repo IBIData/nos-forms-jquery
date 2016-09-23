@@ -102,6 +102,7 @@ All options with default values
 ```javascript
 $("#myform").nosForm({
     fields: null, // Your json data {},
+    ajax: true, // receive data in your submit function and send it with ajax (if false, a classic submit occurs)
     validate: true, // toggle javascript validation
     htmlValidation: false, // toggle html browser validation
     animationSpeed: 100, // change speed of js animations (error message animations)
@@ -115,9 +116,13 @@ $("#myform").nosForm({
         top: false, // specifies the messages to be displayed on the top
         bottom: true  // specifies the messages to be displayed on the bottom
     },
-    submit: function (formdata) {
+    submit: function (formdata, form) {
         // your submit function
-        // this will pass back the entered form data as a formatted json object
+        // this will pass back the entered form data as a formatted json object and your form as a second argument
+    },
+    init: function (form) {
+        // fires after form is rendered
+        // passes back the form
     }
 });
 ```
@@ -125,6 +130,10 @@ $("#myform").nosForm({
 ###**fields**
 
  Accepts an object with your form element structure. This was originally intended to be imported from a json file (for easy reuse of forms), but you can write the object in your js file as well. This allows you to write your own functions that return the correct values to individual fields.
+
+###**ajax**
+
+ Accepts a boolean value. If set to true, your form will send a serialized object to your submit function, where you will be responsible for sending an ajax request with your form data. If set to false, a classic form submit will occur and your submit function will not be necessary.
 
 ###**validate**
 
@@ -155,7 +164,11 @@ $("#myform").nosForm({
 
 ###**submit**
 
- Accepts a function that receives the form data passed to it.
+ Accepts a function that receives the form data passed to it. Passes two arguments: the form data and the form.
+
+###**init**
+
+ Function that will fire as soon as the form renders. Passes the form as it's only argument.
 
 ##Structure
  ---

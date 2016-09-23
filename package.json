@@ -1,6 +1,7 @@
 {
   "name": "nos-forms-jquery",
   "version": "1.0.1",
+  "main": "./src/nosform-jquery.js",
   "author": {
     "name": "IBI Data",
     "email": "admin@ibidata.com",

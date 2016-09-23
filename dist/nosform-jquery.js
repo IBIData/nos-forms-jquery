@@ -7,7 +7,13 @@
  *  Under MIT License
  */
 /* global jQuery */
-; (function ($, window, document, undefined) {
+; (function (factory) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        factory(require('jquery'), window, document);
+    } else {
+        factory(jQuery, window, document);
+    }
+} (function ($, window, document, undefined) {
 
     "use strict";
 
@@ -17,6 +23,7 @@
         animationSpeed: 100,
         validate: true,
         htmlValidation: false,
+        ajax: true,
         honeypot: false,
         messages: {
             required: 'Please fill out all required fields',
@@ -26,7 +33,10 @@
             top: false,
             bottom: true
         },
-        onlySubmitWithValue: false
+        onlySubmitWithValue: false,
+        submit: function () {
+            return noop;
+        }
     };
 
     // The plugin constructor
@@ -89,18 +99,18 @@
 
         },
 
-        // assigns an object to the 'message' property above
-        // this will contain the user error messages that will display on the form
-        this.getUserErrorMessages = function (element) {
-            return $.extend({}, {
-                required: element.required && self.userErrorMessage.required(element) || '',
-                valid: (element.type === 'email' || element.type === 'zip' || element.type === 'tel' || element.pattern || element.match) && self.userErrorMessage.valid(element) || '',
-                minlength: (element.minlength && element.minlength > 1) && self.userErrorMessage.minlength(element) || '',
-                maxlength: (element.maxlength && element.maxlength > 1) && self.userErrorMessage.maxlength(element) || '',
-                min: (element.min && element.min > 1) && self.userErrorMessage.min(element) || '',
-                max: element.max && self.userErrorMessage.max(element) || ''
-            });
-        };
+            // assigns an object to the 'message' property above
+            // this will contain the user error messages that will display on the form
+            this.getUserErrorMessages = function (element) {
+                return $.extend({}, {
+                    required: element.required && self.userErrorMessage.required(element) || '',
+                    valid: (element.type === 'email' || element.type === 'zip' || element.type === 'tel' || element.pattern || element.match) && self.userErrorMessage.valid(element) || '',
+                    minlength: (element.minlength && element.minlength > 1) && self.userErrorMessage.minlength(element) || '',
+                    maxlength: (element.maxlength && element.maxlength > 1) && self.userErrorMessage.maxlength(element) || '',
+                    min: (element.min && element.min > 1) && self.userErrorMessage.min(element) || '',
+                    max: element.max && self.userErrorMessage.max(element) || ''
+                });
+            };
 
         // Group of functions used to return a form element
         this.getElements = {
@@ -234,7 +244,7 @@
                 var nosgroup = input.formGroup && 'nos-form-group nos-group ' || '',
                     align = input.align && 'pull-' + input.align || '',
                     vert = input.vertical && '-vertical ' || ' ';
-                    console.log(vert);
+                console.log(vert);
                 var i, buttons = '', button = input.buttons;
                 var el = $.extend(this.self.getAttrs(input), {
                     classname: input.classname && ' class="btn-group' + vert + input.classname + '"' || ' class="btn-group' + vert + '"',
@@ -337,17 +347,17 @@
                         console.warn('Your checkbox/radio "checked" property must be an object or string');
                     }
                     element += el.div.start +
-                    '<label' + el.inline + '><input data-nos' +
-                    el.type + el.name + el.data + el.title + el.id + k + '" ' + el.classname + ' value="' + k + '"' + checked + el.disabled + el.autofocus + el.required +
-                    '>' +
-                    v +
-                    '</label>' + el.helpBlock +
-                    el.div.end;
+                        '<label' + el.inline + '><input data-nos' +
+                        el.type + el.name + el.data + el.title + el.id + k + '" ' + el.classname + ' value="' + k + '"' + checked + el.disabled + el.autofocus + el.required +
+                        '>' +
+                        v +
+                        '</label>' + el.helpBlock +
+                        el.div.end;
                 });
 
                 element += el.fieldset.end +
-                el.message.required +
-                el.formGroup.end;
+                    el.message.required +
+                    el.formGroup.end;
                 return element;
             },
 
@@ -433,16 +443,16 @@
 
                     element +=
 
-                    el.formGroup.start +
+                        el.formGroup.start +
 
-                    div.start +
+                        div.start +
 
-                    '<span class="input-group-addon nos-input-group-addon">' + addon + '</span>' +
-                    '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.data + el.name + i + '[]" ' + el.required + '>' +
+                        '<span class="input-group-addon nos-input-group-addon">' + addon + '</span>' +
+                        '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.data + el.name + i + '[]" ' + el.required + '>' +
 
-                    div.end +
+                        div.end +
 
-                    el.formGroup.end;
+                        el.formGroup.end;
 
                 }
 
@@ -468,7 +478,7 @@
 
                 var provinces = { "Alberta": "AB", "British Columbia": "BC", "Manitoba": "MB", "New Brunswick": "NB", "Newfoundland and Labrador": "NL", "Nova Scotia": "NS", "Northwest Territories": "NT", "Nunavut": "NU", "Ontario": "ON", "Prince Edward Island": "PE", "Quebec": "QC", "Saskatchewan": "SK", "Yukon": "YT" };
 
-                var mexico = { "Aguascalientes": "AG","Baja California":"BC","Baja California Sur":"BS","Campeche":"CM","Chiapas":"CS","Chihuahua":"CH","Coahuila":"MX","Colima":"CL","Federal District":"DF","Durango":"DG","Guanajuato":"GT","Guerrero":"GR","Hidalgo":"HG","Jalisco":"JA","Mexico":"ME","Michoacán":"MI","Morelos":"MO","Nayarit":"NA","Nuevo León":"NL","Oaxaca":"OA","Puebla":"PU","Querétaro":"QE","Quintana Roo":"QR","San Luis Potosí":"SL","Sinaloa":"SI","Sonora":"SO","Tabasco":"TB","Tamaulipas":"TM","Tlaxcala":"TL","Veracruz":"VE","Yucatán":"YU","Zacatecas":"ZA" };
+                var mexico = { "Aguascalientes": "AG", "Baja California": "BC", "Baja California Sur": "BS", "Campeche": "CM", "Chiapas": "CS", "Chihuahua": "CH", "Coahuila": "MX", "Colima": "CL", "Federal District": "DF", "Durango": "DG", "Guanajuato": "GT", "Guerrero": "GR", "Hidalgo": "HG", "Jalisco": "JA", "Mexico": "ME", "Michoacán": "MI", "Morelos": "MO", "Nayarit": "NA", "Nuevo León": "NL", "Oaxaca": "OA", "Puebla": "PU", "Querétaro": "QE", "Quintana Roo": "QR", "San Luis Potosí": "SL", "Sinaloa": "SI", "Sonora": "SO", "Tabasco": "TB", "Tamaulipas": "TM", "Tlaxcala": "TL", "Veracruz": "VE", "Yucatán": "YU", "Zacatecas": "ZA" };
 
 
 
@@ -1081,11 +1091,34 @@
             // send the form
             function send() {
                 if (self.settings.honeypot) {
-                    ($($form + ' .nos-text-css').val() === '' && $($form + ' .nos-email-js').val() === 'validemail@email.com') ? self.settings.submit(formdata) : self.settings.submit({honeypot: true});
+                    if ($($form + ' .nos-text-css').val() === '' && $($form + ' .nos-email-js').val() === 'validemail@email.com') {
+                        if (self.settings.ajax) {
+                            self.settings.submit(formdata, $($form));
+                        } else {
+                            classicSubmit();
+                        }
+                    } else {
+                        if (self.settings.ajax) {
+                            self.settings.submit({ honeypot: true }, $($form));
+                        } else {
+                            self.form.empty();
+                            self.form.append('<input type="text" value="true" name="honeypot">');
+                            classicSubmit();
+                        }
+                    }
                 }
                 else {
-                    self.settings.submit(formdata);
+                    if (self.settings.ajax) {
+                        self.settings.submit(formdata, $($form));
+                    } else {
+                        classicSubmit();
+                    }
                 }
+            }
+
+            // classic submit (no ajax)
+            function classicSubmit() {
+                self.form.off('submit').submit();
             }
 
             clone.length && buildClone();
@@ -1095,10 +1128,10 @@
             if (this.settings.validate) {
 
                 checkRequiredFields(),
-                validateRequiredFields(),
-                validateCheckbox(),
-                validateRadio(),
-                validateSelectFields();
+                    validateRequiredFields(),
+                    validateCheckbox(),
+                    validateRadio(),
+                    validateSelectFields();
                 validateFileFields();
 
             }
@@ -1131,13 +1164,13 @@
             // Object.keys IE8 Polyfill
             // IE8 doesn't support Object.keys (used in input groups)
             if (!Object.keys) {
-                Object.keys = function(obj) {
+                Object.keys = function (obj) {
                     var keys = [];
 
                     for (var i in obj) {
-                    if (obj.hasOwnProperty(i)) {
-                        keys.push(i);
-                    }
+                        if (obj.hasOwnProperty(i)) {
+                            keys.push(i);
+                        }
                     }
 
                     return keys;
@@ -1192,167 +1225,168 @@
 
         },
 
-        // set of functions to build form
-        this.build = {
+            // set of functions to build form
+            this.build = {
 
-            // need to access this later
-            self: this,
-            // accepts objects that contain a form field
-            // runs them through the proper build functions
-            buildElements: function (obj) {
+                // need to access this later
+                self: this,
+                // accepts objects that contain a form field
+                // runs them through the proper build functions
+                buildElements: function (obj) {
 
-                var element = '';
+                    var element = '';
 
-                // loop through all element arrays and categorize each element type
-                $.each(self.elements, function (k) {
+                    // loop through all element arrays and categorize each element type
+                    $.each(self.elements, function (k) {
 
-                    // when element type is matched to an array, it is sent to be built in the associated 'getElements' function
-                    if ($.inArray(obj.type, this) > -1) {
-                        element += self.getElements[k](obj);
+                        // when element type is matched to an array, it is sent to be built in the associated 'getElements' function
+                        if ($.inArray(obj.type, this) > -1) {
+                            element += self.getElements[k](obj);
+                        }
+
+                    });
+
+                    return element;
+
+                },
+
+                // this function is used for nested columns
+                // it will loop through and check each object to see if there is another nested column
+                // if there is, it will run it and apply the proper rows
+                buildBlock: function (block) {
+
+                    var str = block.row && '<div class="row nos-row">' || '',
+
+                        self = this;
+
+                    // initial function call
+                    buildColumn(block);
+
+                    // function to check each new branch of elements for another nested column
+                    // this function will repeat until it reaches the end of the tree
+                    function buildColumn(col) {
+
+                        // first column class
+                        str += col.classname && '<div class="' + col.classname + '">' || '';
+
+                        $.each(col.column, function () {
+
+                            if (this.column) {
+
+                                // if there is another nested column with a row specified, add a row and check the next level
+                                str += this.row && '<div class="row nos-row">' || '';
+
+                                // check the next level
+                                buildColumn(this);
+
+                                // end div for row
+                                str += this.row && '</div>' || '';
+
+                            }
+
+                            else {
+
+                                // if no other nested column exists, build what we found
+                                str += self.buildElements(this);
+
+                            }
+
+                        });
+
+                        // end div for first column class
+                        str += col.classname && '</div>' || '';
+
                     }
 
-                });
+                    // end divs for the rows
+                    str += block.row && '</div>' || '';
 
-                return element;
+                    return str;
 
-            },
+                },
 
-            // this function is used for nested columns
-            // it will loop through and check each object to see if there is another nested column
-            // if there is, it will run it and apply the proper rows
-            buildBlock: function (block) {
+                // the main build function
+                // accepts the main form configuration object and sends the pieces where they need to go
+                form: function () {
 
-                var str = block.row && '<div class="row nos-row">' || '',
+                    var self = this,
 
-                    self = this;
+                        // our form string
+                        formStr = this.self.settings.honeypot && this.self.getElements.honeypot() || '',
 
-                // initial function call
-                buildColumn(block);
+                        // user submitted json fields
+                        field = this.self.settings.fields;
 
-                // function to check each new branch of elements for another nested column
-                // this function will repeat until it reaches the end of the tree
-                function buildColumn(col) {
+                    $.each(field, function () {
 
-                    // first column class
-                    str += col.classname && '<div class="' + col.classname + '">' || '';
-
-                    $.each(col.column, function () {
-
+                        // if there is a column
                         if (this.column) {
 
-                            // if there is another nested column with a row specified, add a row and check the next level
-                            str += this.row && '<div class="row nos-row">' || '';
-
-                            // check the next level
-                            buildColumn(this);
-
-                            // end div for row
-                            str += this.row && '</div>' || '';
+                            // build the columns
+                            formStr += self.buildBlock(this);
 
                         }
 
                         else {
 
-                            // if no other nested column exists, build what we found
-                            str += self.buildElements(this);
+                            // just a single column form
+                            formStr += self.buildElements(this);
 
                         }
 
                     });
 
-                    // end div for first column class
-                    str += col.classname && '</div>' || '';
+                    // render the form string
+                    this.self.render(formStr);
 
                 }
 
-                // end divs for the rows
-                str += block.row && '</div>' || '';
-
-                return str;
-
-            },
-
-            // the main build function
-            // accepts the main form configuration object and sends the pieces where they need to go
-            form: function () {
-
-                var self = this,
-
-                    // our form string
-                    formStr = this.self.settings.honeypot && this.self.getElements.honeypot() || '',
-
-                    // user submitted json fields
-                    field = this.self.settings.fields;
-
-                $.each(field, function () {
-
-                    // if there is a column
-                    if (this.column) {
-
-                        // build the columns
-                        formStr += self.buildBlock(this);
-
-                    }
-
-                    else {
-
-                        // just a single column form
-                        formStr += self.buildElements(this);
-
-                    }
-
-                });
-
-                // render the form string
-                this.self.render(formStr);
-
-            }
-
-        };
+            };
 
 
 
         // renders form
         this.render = function (input) {
             $(element).html(input);
+            if (self.settings.init) self.settings.init(self.form);
         },
 
-        // adds form validation messages to the end of the form tag
-        this.addMessage = function () {
+            // adds form validation messages to the end of the form tag
+            this.addMessage = function () {
 
-            function hasCols() {
-                return $($form).find('[class^="col-"]').length > 0;
-            }
+                function hasCols() {
+                    return $($form).find('[class^="col-"]').length > 0;
+                }
 
-            // determines if you are using row classes in your form and mimics this
-            var message = {
-                row: {
-                    start: $($form).find('.nos-row').length && '<div class="row">' || '',
-                    end: $($form).find('.nos-row').length && '</div>' || ''
-                },
+                // determines if you are using row classes in your form and mimics this
+                var message = {
+                    row: {
+                        start: $($form).find('.nos-row').length && '<div class="row">' || '',
+                        end: $($form).find('.nos-row').length && '</div>' || ''
+                    },
 
-                // if entire form is wrapped in a col-* class, apply the same class to the form messages
-                // this ensures that the form messages have the same placement and width as the form itself
-                structure: this.settings.fields.length === 1 ? this.settings.fields[0].classname : hasCols() && 'col-md-12 col-sm-12 col-xs-12' || ''
-            };
+                    // if entire form is wrapped in a col-* class, apply the same class to the form messages
+                    // this ensures that the form messages have the same placement and width as the form itself
+                    structure: this.settings.fields.length === 1 ? this.settings.fields[0].classname : hasCols() && 'col-md-12 col-sm-12 col-xs-12' || ''
+                };
 
-            var reqMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.required(this.form[0]) + '</div>' + message.row.end,
-                invMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end;
+                var reqMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.required(this.form[0]) + '</div>' + message.row.end,
+                    invMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end;
 
-            // append an error message onto the form for required and invalid fields
-            if (this.settings.messageLocation.bottom) {
-                $(this.form[0]).append(reqMsg).append(invMsg);
-            }
+                // append an error message onto the form for required and invalid fields
+                if (this.settings.messageLocation.bottom) {
+                    $(this.form[0]).append(reqMsg).append(invMsg);
+                }
 
-            // prepend an error message onto the form for required and invalid fields
-            if (this.settings.messageLocation.top) {
-                $(this.form[0]).prepend(reqMsg).prepend(invMsg);
-            }
+                // prepend an error message onto the form for required and invalid fields
+                if (this.settings.messageLocation.top) {
+                    $(this.form[0]).prepend(reqMsg).prepend(invMsg);
+                }
 
-        },
+            },
 
-        // initialize the plugin
-        this.init();
+            // initialize the plugin
+            this.init();
 
     }
 
@@ -1406,6 +1440,7 @@
         });
     };
 
-})(jQuery, window, document);
+}));
+
 
 //# sourceMappingURL=nosform-jquery.js.map
