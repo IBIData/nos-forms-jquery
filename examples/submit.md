@@ -1,11 +1,13 @@
 #Type
 ##submit
 
+> As a side note, with buttons the name property doesn't actually assign it a name attribute, but an id instead.
+
 ####Example with all options
 
 ```javascript
 {
-    "name": "submit",
+    "name": "submitButton", // NEVER NAME A SUBMIT BUTTON 'SUBMIT'!!!
     "type": "submit",
     "classname": "btn btn-success",
     "formGroup": true,
@@ -28,7 +30,7 @@
 
 ```javascript
 {
-    "name": "submit",
+    "name": "submitButton", // NEVER NAME A SUBMIT BUTTON 'SUBMIT'!!!
     "type": "submit",
     "classname": "btn btn-success",
     "formGroup": true,

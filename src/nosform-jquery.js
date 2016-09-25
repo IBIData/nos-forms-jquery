@@ -67,26 +67,27 @@
         this.getAttrs = function (input) {
 
             return $.extend({}, input, {
-                type: input.type && ' type="' + input.type + '"' || '',
-                name: input.name && ' name="' + input.name + '"' || '',
-                id: (input.id || input.name) && ' id="' + (input.id || input.name) + '"' || '',
-                minlength: input.minlength && ' minlength="' + input.minlength + '"' || '',
-                maxlength: input.maxlength && ' maxlength="' + input.maxlength + '"' || '',
-                required: input.required && ' required' || '',
-                value: input.value && ' value="' + input.value + '"' || '',
-                placeholder: input.placeholder && ' placeholder="' + input.placeholder + '"' || '',
-                formGroup: (input.formGroup || input.formGroup === undefined) && this.getElements.formGroup() || { start: '', end: '' },
-                label: input.label && this.getElements.label(input) || '',
-                helpBlock: input.helpBlock && '<span id="' + (input.id || input.name) + '-help-block" class="help-block nos-help-block">' + input.helpBlock + '</span>' || '',
-                classname: input.classname && ' class="' + input.classname + '"' || '',
-                multiple: input.multiple && ' multiple' || '',
-                autofocus: input.autofocus && ' autofocus' || '',
-                disabled: input.disabled && ' disabled' || '',
-                readonly: input.readonly && ' readonly' || '',
-                title: input.title && ' title="' + input.title + '"' || '',
-                size: input.size && ' size="' + input.size + '"' || '',
-                data: input.data && this.getElements.data(input.data) || '',
-                message: self.settings.validate && self.getUserErrorMessages(input) || { required: '', minlength: '', maxlength: '', min: '', max: '', valid: '' } // returns object that stores user error messages
+                type: input.type ? ' type="' + input.type + '"' : '',
+                name: input.name ? ' name="' + input.name + '"' : '',
+                id: (input.id || input.name) ? ' id="' + (input.id || input.name) + '"' : '',
+                minlength: input.minlength ? ' minlength="' + input.minlength + '"' : '',
+                maxlength: input.maxlength ? ' maxlength="' + input.maxlength + '"' : '',
+                required: input.required ? ' required' : '',
+                value: input.value ? ' value="' + input.value + '"' : '',
+                placeholder: input.placeholder ? ' placeholder="' + input.placeholder + '"' : '',
+                formGroup: (input.formGroup || input.formGroup === undefined) ? this.getElements.formGroup() : { start: '', end: '' },
+                label: input.label ? this.getElements.label(input) : '',
+                helpBlock: input.helpBlock ? '<span id="' + (input.id || input.name) + '-help-block" class="help-block nos-help-block">' + input.helpBlock + '</span>' : '',
+                classname: input.classname ? ' class="' + input.classname + '"' : '',
+                multiple: input.multiple ? ' multiple' : '',
+                autofocus: input.autofocus ? ' autofocus' : '',
+                disabled: input.disabled ? ' disabled' : '',
+                readonly: input.readonly ? ' readonly' : '',
+                title: input.title ? ' title="' + input.title + '"' : '',
+                size: input.size ? ' size="' + input.size + '"' : '',
+                data: input.data ? this.getElements.data(input.data) : '',
+                message: self.settings.validate ? self.getUserErrorMessages(input) : { required: '', minlength: '', maxlength: '', min: '', max: '', valid: '' }, // returns object that stores user error messages
+                tabindex: input.tabindex ? ' tabindex="' + input.tabindex + '"' : ''
             });
 
         },
@@ -95,12 +96,12 @@
             // this will contain the user error messages that will display on the form
             this.getUserErrorMessages = function (element) {
                 return $.extend({}, {
-                    required: element.required && self.userErrorMessage.required(element) || '',
-                    valid: (element.type === 'email' || element.type === 'zip' || element.type === 'tel' || element.pattern || element.match) && self.userErrorMessage.valid(element) || '',
-                    minlength: (element.minlength && element.minlength > 1) && self.userErrorMessage.minlength(element) || '',
-                    maxlength: (element.maxlength && element.maxlength > 1) && self.userErrorMessage.maxlength(element) || '',
-                    min: (element.min && element.min > 1) && self.userErrorMessage.min(element) || '',
-                    max: element.max && self.userErrorMessage.max(element) || ''
+                    required: element.required ? self.userErrorMessage.required(element) : '',
+                    valid: (element.type === 'email' || element.type === 'zip' || element.type === 'tel' || element.pattern || element.match) ? self.userErrorMessage.valid(element) : '',
+                    minlength: (element.minlength && element.minlength > 1) ? self.userErrorMessage.minlength(element) : '',
+                    maxlength: (element.maxlength && element.maxlength > 1) ? self.userErrorMessage.maxlength(element) : '',
+                    min: (element.min && element.min > 1) ? self.userErrorMessage.min(element) : '',
+                    max: element.max ? self.userErrorMessage.max(element) : ''
                 });
             };
 
@@ -141,19 +142,19 @@
 
             // returns bootstrap input group
             inputGroup: function (input) {
-                var leftkeys = input.left && Object.keys(input.left) || '',
-                    rightkeys = input.right && Object.keys(input.right) || '';
+                var leftkeys = input.left ? Object.keys(input.left) : '',
+                    rightkeys = input.right ? Object.keys(input.right) : '';
                 var leftchoice = input.left ? leftkeys[$.inArray('text', leftkeys)] || leftkeys[$.inArray('button', leftkeys)] : '';
                 var rightchoice = input.right ? rightkeys[$.inArray('text', rightkeys)] || rightkeys[$.inArray('button', rightkeys)] : '';
                 var options = {
-                    left: input.left && {
+                    left: input.left ? {
                         text: '<span class="input-group-addon ' + (input.left.classname || '') + '">' + (input.left.text || '') + '</span>',
                         button: '<span class="input-group-btn"><button class="' + (input.left.classname || '') + '" type="button">' + (input.left.button || '') + '</button></span>'
-                    } || '',
-                    right: input.right && {
+                    } : '',
+                    right: input.right ? {
                         text: '<span class="input-group-addon ' + (input.right.classname || '') + '">' + (input.right.text || '') + '</span>',
                         button: '<span class="input-group-btn"><button class="' + (input.right.classname || '') + '" type="button">' + (input.right.button || '') + '</button></span>'
-                    } || ''
+                    } : ''
                 };
                 var sizes = {
                     large: 'input-group-lg',
@@ -163,8 +164,8 @@
                 };
                 return {
                     start: input && '<div class="input-group ' + (input.size && sizes[input.size] || '') + '">',
-                    left: input.left && options.left[leftchoice] || '',
-                    right: input.right && options.right[rightchoice] || '',
+                    left: input.left ? options.left[leftchoice] : '',
+                    right: input.right ? options.right[rightchoice] : '',
                     //left: input.left && '<span class="input-group-addon ' + (input.left.classname || '') + '">' + (input.left.text || '') + '</span>' || '',
                     //right: input.right && '<span class="input-group-addon ' + (input.right.classname || '') + '">' + (input.right.text || '') + '</span>' || '',
                     end: input && '</div>'
@@ -192,16 +193,16 @@
             // returns text-based elements
             text: function (input) {
                 var el = $.extend(this.self.getAttrs(input), {
-                    pattern: input.pattern && ' pattern="' + input.pattern + '"' || '',
-                    autocomplete: input.autocomplete && ' autocomplete="' + input.autocomplete + '"' || '',
-                    step: input.step && ' step="' + input.step + '"' || '',
-                    min: input.min && ' min="' + input.min + '"' || '',
-                    max: input.max && ' max="' + input.max + '"' || '',
-                    classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"',
-                    inputGroup: input.inputGroup && this.inputGroup(input.inputGroup) || { start: '', left: '', right: '', end: '' }
+                    pattern: input.pattern ? ' pattern="' + input.pattern + '"' : '',
+                    autocomplete: input.autocomplete ? ' autocomplete="' + input.autocomplete + '"' : '',
+                    step: input.step ? ' step="' + input.step + '"' : '',
+                    min: input.min ? ' min="' + input.min + '"' : '',
+                    max: input.max ? ' max="' + input.max + '"' : '',
+                    classname: input.classname ? ' class="form-control ' + input.classname + '"' : ' class="form-control"',
+                    inputGroup: input.inputGroup ? this.inputGroup(input.inputGroup) : { start: '', left: '', right: '', end: '' }
                 });
                 var element = el.formGroup.start + el.label + el.inputGroup.start + el.inputGroup.left +
-                    '<input data-nos' + el.type + el.name + el.id + el.data + el.minlength + el.maxlength + el.placeholder + el.classname +
+                    '<input data-nos' + el.type + el.name + el.id + el.data + el.minlength + el.maxlength + el.placeholder + el.classname + el.tabindex +
                     el.value + el.title + el.min + el.max + el.step + el.size + el.pattern + el.autocomplete + el.multiple + el.readonly +
                     el.disabled + el.autofocus + el.required + '>' + el.inputGroup.right + el.inputGroup.end + el.helpBlock +
                     el.message.required + el.message.minlength + el.message.maxlength + el.message.valid + el.message.min + el.message.max +
@@ -211,39 +212,38 @@
 
             // returns buttons
             buttons: function (input) {
-                var nosgroup = input.formGroup && 'nos-form-group nos-group ' || '',
-                    inline = input.inline && 'nos-inline ' || '',
-                    align = input.align && 'pull-' + input.align || '',
+                var nosgroup = input.formGroup ? 'nos-form-group nos-group ' : '',
+                    inline = input.inline ? 'nos-inline ' : '',
+                    align = input.align ? 'pull-' + input.align : '',
                     prespace = input.align === 'right' ? '&nbsp;' : '',
                     postspace = input.align === 'left' || input.align === undefined ? '&nbsp;' : '';
                 var el = $.extend(this.self.getAttrs(input), {
-                    formaction: input.formaction && ' formaction="' + input.formaction + '"' || '',
-                    formenctype: input.formenctype && ' formenctype="' + input.formenctype + '"' || '',
-                    formmethod: input.formmethod && ' formmethod="' + input.formmethod + '"' || '',
-                    formnovalidate: input.formnovalidate && ' formnovalidate' || '',
-                    formtarget: input.formtarget && ' formtarget="' + input.formtarget + '"' || '',
-                    value: input.value && input.value || '',
-                    formGroup: (input.formGroup || input.inline) && this.div(nosgroup + inline + align) || { start: '', end: '' }
+                    formaction: input.formaction ? ' formaction="' + input.formaction + '"' : '',
+                    formenctype: input.formenctype ? ' formenctype="' + input.formenctype + '"' : '',
+                    formmethod: input.formmethod ? ' formmethod="' + input.formmethod + '"' : '',
+                    formnovalidate: input.formnovalidate ? ' formnovalidate' : '',
+                    formtarget: input.formtarget ? ' formtarget="' + input.formtarget + '"' : '',
+                    value: input.value ? input.value : '',
+                    formGroup: (input.formGroup || input.inline) ? this.div(nosgroup + inline + align) : { start: '', end: '' }
                 });
                 var element = el.formGroup.start +
-                    prespace + '<button data-nos' + el.type + el.name + el.id + el.data + el.classname + el.title + el.formtarget + el.formmethod + el.formaction +
+                    prespace + '<button data-nos' + el.type + el.id + el.data + el.classname + el.title + el.formtarget + el.formmethod + el.formaction + el.tabindex +
                     el.formenctype + el.formnovalidate + el.disabled + '>' + el.value + '</button>' + postspace + el.formGroup.end;
                 return element;
             },
 
             // returns a button group
             buttonGroup: function (input) {
-                var nosgroup = input.formGroup && 'nos-form-group nos-group ' || '',
-                    align = input.align && 'pull-' + input.align || '',
-                    vert = input.vertical && '-vertical ' || ' ';
-                console.log(vert);
+                var nosgroup = input.formGroup ? 'nos-form-group nos-group ' : '',
+                    align = input.align ? 'pull-' + input.align : '',
+                    vert = input.vertical ? '-vertical ' : ' ';
                 var i, buttons = '', button = input.buttons;
                 var el = $.extend(this.self.getAttrs(input), {
-                    classname: input.classname && ' class="btn-group' + vert + input.classname + '"' || ' class="btn-group' + vert + '"',
-                    formGroup: (input.formGroup || input.align) && this.div(nosgroup + align) || { start: '', end: '' }
+                    classname: input.classname ? ' class="btn-group' + vert + input.classname + '"' : ' class="btn-group' + vert + '"',
+                    formGroup: (input.formGroup || input.align) ? this.div(nosgroup + align) : { start: '', end: '' }
                 });
                 for (i = 0; i < button.length; i++) {
-                    buttons += '<button data-nos type="' + button[i].type + '" class="' + button[i].classname + '">' + button[i].value + '</button>';
+                    buttons += '<button data-nos type="' + button[i].type + '" class="' + button[i].classname + '" tabindex="' + button[i].tabindex + '">' + button[i].value + '</button>';
                 }
                 var element = el.formGroup.start + el.label + '<br>' +
                     '<div ' + el.classname + ' role="group">' +
@@ -255,14 +255,14 @@
             // returns textarea elements
             textarea: function (input) {
                 var el = $.extend(this.self.getAttrs(input), {
-                    rows: input.rows && ' rows="' + input.rows + '"' || '',
-                    cols: input.cols && ' cols="' + input.cols + '"' || '',
-                    wrap: input.wrap && ' wrap="' + input.wrap + '"' || '',
-                    classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"'
+                    rows: input.rows ? ' rows="' + input.rows + '"' : '',
+                    cols: input.cols ? ' cols="' + input.cols + '"' : '',
+                    wrap: input.wrap ? ' wrap="' + input.wrap + '"' : '',
+                    classname: input.classname ? ' class="form-control ' + input.classname + '"' : ' class="form-control"'
                 });
                 var element = el.formGroup.start + el.label +
                     '<textarea data-nos' +
-                    el.name + el.id + el.title + el.data + el.minlength + el.maxlength + el.placeholder + el.classname + el.value + el.rows + el.cols + el.wrap + el.readonly + el.disabled + el.autofocus + el.required +
+                    el.name + el.id + el.title + el.data + el.minlength + el.maxlength + el.placeholder + el.classname + el.tabindex + el.value + el.rows + el.cols + el.wrap + el.readonly + el.disabled + el.autofocus + el.required +
                     '></textarea>' + el.helpBlock +
                     el.message.required + el.message.minlength + el.message.maxlength +
                     el.formGroup.end;
@@ -287,16 +287,16 @@
                 }
                 var options = '';
                 var el = $.extend(this.self.getAttrs(input), {
-                    classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"',
-                    selected: input.selected && input.selected.toString().toLowerCase() || '',
-                    inputGroup: input.inputGroup && this.inputGroup(input.inputGroup) || { start: '', left: '', right: '', end: '' }
+                    classname: input.classname ? ' class="form-control ' + input.classname + '"' : ' class="form-control"',
+                    selected: input.selected ? input.selected.toString().toLowerCase() : '',
+                    inputGroup: input.inputGroup ? this.inputGroup(input.inputGroup) : { start: '', left: '', right: '', end: '' }
                 });
                 $.each(selOptions, function (k, v) {
-                    options += '<option value="' + k + '" ' + ((el.selected === k.toString().toLowerCase() || el.selected === v.toString().toLowerCase()) && ' selected' || '') + '>' + v + '</option>';
+                    options += '<option value="' + k + '" ' + ((el.selected === k.toString().toLowerCase() || el.selected === v.toString().toLowerCase()) ? ' selected' : '') + '>' + v + '</option>';
                 });
                 var element = el.formGroup.start + el.label + el.inputGroup.start + el.inputGroup.left +
                     '<select data-nos' +
-                    el.name + el.id + el.data + el.classname + el.multiple + el.title + el.size + el.readonly + el.disabled + el.autofocus + el.required + '>' +
+                    el.name + el.id + el.data + el.classname + el.multiple + el.title + el.size + el.readonly + el.tabindex + el.disabled + el.autofocus + el.required + '>' +
                     options +
                     '</select>' + el.inputGroup.right + el.inputGroup.end + el.helpBlock +
                     el.message.required +
@@ -322,10 +322,10 @@
                 }
                 var checked = '';
                 var el = $.extend(this.self.getAttrs(input), {
-                    inline: input.inline && ' class="' + input.type + '-inline"' || '',
+                    inline: input.inline ? ' class="' + input.type + '-inline"' : '',
                     name: (input.name && input.type === 'checkbox') ? ' name="' + input.name + '[]' + '"' : ' name="' + input.name + '"',
                     id: ' id="' + input.name + '-',
-                    div: !input.inline && this.div(input.type) || { start: '', end: '' },
+                    div: !input.inline ? this.div(input.type) : { start: '', end: '' },
                     fieldset: this.fieldset(input.name, input.submitType) || { start: '', end: '' }
                 });
 
@@ -361,7 +361,7 @@
                 });
                 var element = el.formGroup.start + el.label +
                     el.div.start +
-                    '<input data-nos' + el.type + el.name + el.id + el.data + el.title + el.accept + el.multiple + el.disabled + el.autofocus + el.required +
+                    '<input data-nos' + el.type + el.name + el.id + el.data + el.title + el.accept + el.multiple + el.tabindex + el.disabled + el.autofocus + el.required +
                     '>' + el.helpBlock +
                     el.message.required +
                     el.div.end +
@@ -379,18 +379,18 @@
             // returns input type range & color
             other: function (input) {
                 var el = $.extend(this.self.getAttrs(input), {
-                    step: input.step && ' step="' + input.step + '"' || '',
-                    min: input.min && ' min="' + input.min + '"' || '',
-                    max: input.max && ' max="' + input.max + '"' || '',
-                    height: input.height && ' height="' + input.height + '"' || '',
-                    width: input.width && ' width="' + input.width + '"' || '',
-                    src: input.src && ' src="' + input.src + '"' || '',
-                    alt: input.alt && ' alt="' + input.alt + '"' || ''
+                    step: input.step ? ' step="' + input.step + '"' : '',
+                    min: input.min ? ' min="' + input.min + '"' : '',
+                    max: input.max ? ' max="' + input.max + '"' : '',
+                    height: input.height ? ' height="' + input.height + '"' : '',
+                    width: input.width ? ' width="' + input.width + '"' : '',
+                    src: input.src ? ' src="' + input.src + '"' : '',
+                    alt: input.alt ? ' alt="' + input.alt + '"' : ''
                 });
                 var element = el.formGroup.start + el.label +
                     '<input data-nos' + el.type + el.name + el.id + el.data + el.classname +
                     el.value + el.title + el.height + el.width + el.src + el.alt +
-                    el.min + el.max + el.step + el.readonly +
+                    el.tabindex + el.min + el.max + el.step + el.readonly +
                     el.disabled + el.autofocus + el.required + '>' + el.helpBlock +
                     el.message.required + el.message.min + el.message.max +
                     el.formGroup.end;
@@ -408,13 +408,13 @@
 
                 // assign attributes
                 var el = $.extend(this.self.getAttrs(input), {
-                    placeholder: input.placeholder && input.placeholder || '',
-                    classname: input.classname && input.classname || 'form-control',
-                    addValue: input.addButtonValue && input.addButtonValue || 'Add Field',
-                    removeValue: input.removeButtonValue && input.removeButtonValue || 'Remove Field',
-                    addButtonClass: input.addButtonClass && input.addButtonClass || 'btn btn-primary',
-                    removeButtonClass: input.removeButtonClass && input.removeButtonClass || 'btn btn-danger',
-                    name: input.name && ' name="' + input.name || '',
+                    placeholder: input.placeholder ? input.placeholder : '',
+                    classname: input.classname ? input.classname : 'form-control',
+                    addValue: input.addButtonValue ? input.addButtonValue : 'Add Field',
+                    removeValue: input.removeButtonValue ? input.removeButtonValue : 'Remove Field',
+                    addButtonClass: input.addButtonClass ? input.addButtonClass : 'btn btn-primary',
+                    removeButtonClass: input.removeButtonClass ? input.removeButtonClass : 'btn btn-danger',
+                    name: input.name ? ' name="' + input.name : '',
                     message: {
                         required: '<div style="display: none;" class="alert alert-danger nos-help nos-required msg-required-' + input.name + '">' + (input.label || 'This') + ' is a required field</div>'
                     }
@@ -507,16 +507,16 @@
                     options = '<option value="">' + (input.defaultSelected || "Select One...") + '</option>';
 
                 var el = $.extend(this.self.getAttrs(input), {
-                    classname: input.classname && ' class="form-control ' + input.classname + '"' || ' class="form-control"',
-                    selected: input.selected && input.selected.toString().toLowerCase() || ''
+                    classname: input.classname ? ' class="form-control ' + input.classname + '"' : ' class="form-control"',
+                    selected: input.selected ? input.selected.toString().toLowerCase() : ''
                 });
 
                 $.each(stateObj, function (k, v) {
-                    options += '<option value="' + v + '" ' + ((el.selected === v.toString().toLowerCase() || el.selected === k.toString().toLowerCase()) && ' selected' || '') + '>' + k + '</option>';
+                    options += '<option value="' + v + '" ' + ((el.selected === v.toString().toLowerCase() || el.selected === k.toString().toLowerCase()) ? ' selected' : '') + '>' + k + '</option>';
                 });
 
                 var element = el.formGroup.start + el.label +
-                    '<select data-nos ' + el.name + el.id + el.data + el.classname + el.size + el.multiple + el.readonly + el.disabled + el.autofocus + el.required +
+                    '<select data-nos ' + el.name + el.id + el.data + el.classname + el.size + el.multiple + el.readonly + el.tabindex + el.disabled + el.autofocus + el.required +
                     '>' +
                     options +
                     '</select>' + el.helpBlock +
@@ -794,13 +794,13 @@
                 manageTouchedFields();
 
                 // clone add/remove button functionality
-                v.type === 'clone' && cloneButtons();
+                if (v.type === 'clone') cloneButtons();
 
                 // set mask
-                v.mask && addMask(v);
+                if (v.mask) addMask(v);
 
                 // call reset function
-                v.type === 'reset' && reset();
+                if (v.type === 'reset') reset();
 
                 // call email/zip/phone validation function
                 if ((v.type === 'email' || v.type === 'zip' || v.type === 'tel') && (v.validate || v.validate === undefined)) {
@@ -808,19 +808,19 @@
                 }
 
                 // call pattern validation
-                v.pattern && validatePattern(v);
+                if (v.pattern) validatePattern(v);
 
                 // call maxLength function
-                v.maxlength && maxLength(v);
+                if (v.maxlength) maxLength(v);
 
                 // call minLength function
-                v.minlength && minLength(v);
+                if (v.minlength) minLength(v);
 
                 // call min / max function
-                (v.min || v.max) && minMax(v);
+                if (v.min || v.max) minMax(v);
 
                 // call password match function
-                v.match && passwordMatch(v);
+                if (v.match) passwordMatch(v);
 
             }
 
@@ -966,13 +966,13 @@
                     cmsg[i] = '.msg-required-' + $(this).attr('id');
                     cba[i] = [];
                     $(checkboxes).each(function () {
-                        $(this).is(':checked') && cba[i].push(this.value);
+                        if ($(this).is(':checked')) cba[i].push(this.value);
                         $(this).change(function () {
                             $.inArray($(this).val(), cba[i]) > -1 ? cba[i].splice($.inArray($(this).val(), cba[i]), 1) : cba[i].push($(this).val());
                             cba[i].length > 0 ? $(cmsg[i]).nosSlideUp() : $(cmsg[i]).nosSlideDown();
                         });
                     });
-                    cba[i].length < 1 && $(cmsg[i]).nosSlideDown();
+                    if (cba[i].length < 1) $(cmsg[i]).nosSlideDown();
                 });
             }
 
@@ -983,12 +983,12 @@
                     var controls = $(this).find(':radio'),
                         msg = '.msg-required-' + $(this).attr('id');
                     $(controls).each(function () {
-                        $(this).is(':checked') && arr.push(this.value);
+                        if ($(this).is(':checked')) arr.push(this.value);
                         $(this).on('change', function () {
-                            $(this).is(':checked') && arr.push(this.value), $(msg).nosSlideUp();
+                            if ($(this).is(':checked')) arr.push(this.value), $(msg).nosSlideUp();
                         });
                     });
-                    arr.length < 1 && $(msg).nosSlideDown();
+                    if (arr.length < 1) $(msg).nosSlideDown();
                 });
             }
 
@@ -1003,16 +1003,16 @@
                         if ($(field).caret().begin < 1) {
                             $(msg).nosSlideDown();
                             $(this).on('keyup keydown change blur paste input', function () {
-                                $(this).caret().begin > 0 && $(msg).nosSlideUp();
-                                $(this).caret().begin < 1 && $(msg).nosSlideDown();
+                                if ($(this).caret().begin > 0) $(msg).nosSlideUp();
+                                if ($(this).caret().begin < 1) $(msg).nosSlideDown();
                             });
                         }
                     } else {
                         if ($(field).val().length < 1) {
                             $(msg).nosSlideDown();
                             $(this).on('keyup keydown change blur paste input', function () {
-                                this.value.length > 0 && $(msg).nosSlideUp();
-                                this.value.length < 1 && $(msg).nosSlideDown();
+                                if (this.value.length > 0) $(msg).nosSlideUp();
+                                if (this.value.length < 1) $(msg).nosSlideDown();
                             });
                         }
                     }
@@ -1028,8 +1028,8 @@
                     if ($(sfield).val() === '') {
                         $(msg).nosSlideDown();
                         $(this).change(function () {
-                            $(this).val() !== '' && $(msg).nosSlideUp();
-                            $(this).val() === '' && $(msg).nosSlideDown();
+                            if ($(this).val() !== '') $(msg).nosSlideUp();
+                            if ($(this).val() === '') $(msg).nosSlideDown();
                         });
                     }
                 });
@@ -1044,8 +1044,8 @@
                     if (filelist.length === 0 && $(field).attr('required', true)) {
                         $(msg).nosSlideDown();
                         $(this).change(function () {
-                            $(this).val() !== '' && $(msg).nosSlideUp();
-                            $(this).val() === '' && $(msg).nosSlideDown();
+                            if ($(this).val() !== '') $(msg).nosSlideUp();
+                            if ($(this).val() === '') $(msg).nosSlideDown();
                         });
                     }
                     formdata[field.name] = filelist;
@@ -1087,6 +1087,8 @@
                         if (self.settings.ajax) {
                             self.settings.submit(formdata, $($form));
                         } else {
+                            $('div.nos-div-hp-css').remove();
+                            $('div.nos-div-hp-js').remove();
                             classicSubmit();
                         }
                     } else {
@@ -1110,20 +1112,23 @@
 
             // classic submit (no ajax)
             function classicSubmit() {
+                if (self.settings.honeypot) {
+
+                }
                 self.form.off('submit').submit();
             }
 
-            clone.length && buildClone();
+            if (clone.length) buildClone();
 
-            cbgroup && cbSubmitObject();
+            if (cbgroup) cbSubmitObject();
 
             if (this.settings.validate) {
 
                 checkRequiredFields(),
-                    validateRequiredFields(),
-                    validateCheckbox(),
-                    validateRadio(),
-                    validateSelectFields();
+                validateRequiredFields(),
+                validateCheckbox(),
+                validateRadio(),
+                validateSelectFields(),
                 validateFileFields();
 
             }
@@ -1137,13 +1142,18 @@
         this.errorMessages = function () {
 
             var settings = this.settings;
-            typeof settings.fields !== 'object' && console.warn('Your form data is not an object!');
-            !settings.fields && console.warn('You must supply form fields!');
-            settings.validate && typeof settings.validate !== 'boolean' && console.warn('"validate" must have a boolean value!');
-            settings.htmlValidation && typeof settings.htmlValidation !== 'boolean' && console.warn('"htmlValidation" must have a boolean value!');
-            settings.submit && typeof settings.submit !== 'function' && console.warn('"submit" must be a function!');
-            settings.animationSpeed && typeof settings.animationSpeed !== 'number' && console.warn('"animationSpeed" must be a number!');
-            settings.messages && typeof settings.messages !== 'object' && console.warn('"messages" must be an object!');
+            if (typeof settings.fields !== 'object') console.warn('Your form data is not an object!');
+            if (!settings.fields) console.warn('You must supply form fields!');
+            if (settings.validate && typeof settings.validate !== 'boolean') console.warn('"validate" must have a boolean value!');
+            if (settings.htmlValidation && typeof settings.htmlValidation !== 'boolean') console.warn('"htmlValidation" must have a boolean value!');
+            if (settings.submit && typeof settings.submit !== 'function') console.warn('"submit" must be a function!');
+            if (settings.init && typeof settings.init !== 'function') console.warn('"init" must be a function!');
+            if (settings.animationSpeed && typeof settings.animationSpeed !== 'number') console.warn('"animationSpeed" must be a number!');
+            if (settings.messages && typeof settings.messages !== 'object') console.warn('"messages" must be an object!');
+            if (settings.messageLocation && typeof settings.messageLocation !== 'object') console.warn('"messageLocation" must be an object!');
+            if (settings.ajax && typeof settings.ajax !== 'boolean') console.warn('"ajax" must have a boolean value!');
+            if (settings.honeypot && typeof settings.honeypot !== 'boolean') console.warn('"honeypot" must have a boolean value!');
+            if (settings.onlySubmitWithValue && typeof settings.onlySubmitWithValue !== 'boolean') console.warn('"onlySubmitWithValue" must have a boolean value!');
 
         };
 
@@ -1151,7 +1161,7 @@
         this.setBehavior = function (settings) {
 
             // toggles browser validation on/off based on user input - default is 'off'
-            !this.settings.htmlValidation && this.form.attr('novalidate', '');
+            if (!this.settings.htmlValidation) this.form.attr('novalidate', '');
 
             // Object.keys IE8 Polyfill
             // IE8 doesn't support Object.keys (used in input groups)
@@ -1247,7 +1257,7 @@
                 // if there is, it will run it and apply the proper rows
                 buildBlock: function (block) {
 
-                    var str = block.row && '<div class="row nos-row">' || '',
+                    var str = block.row ? '<div class="row nos-row">' : '',
 
                         self = this;
 
@@ -1259,20 +1269,20 @@
                     function buildColumn(col) {
 
                         // first column class
-                        str += col.classname && '<div class="' + col.classname + '">' || '';
+                        str += col.classname ? '<div class="' + col.classname + '">' : '';
 
                         $.each(col.column, function () {
 
                             if (this.column) {
 
                                 // if there is another nested column with a row specified, add a row and check the next level
-                                str += this.row && '<div class="row nos-row">' || '';
+                                str += this.row ? '<div class="row nos-row">' : '';
 
                                 // check the next level
                                 buildColumn(this);
 
                                 // end div for row
-                                str += this.row && '</div>' || '';
+                                str += this.row ? '</div>' : '';
 
                             }
 
@@ -1286,12 +1296,12 @@
                         });
 
                         // end div for first column class
-                        str += col.classname && '</div>' || '';
+                        str += col.classname ? '</div>' : '';
 
                     }
 
                     // end divs for the rows
-                    str += block.row && '</div>' || '';
+                    str += block.row ? '</div>' : '';
 
                     return str;
 
@@ -1304,7 +1314,7 @@
                     var self = this,
 
                         // our form string
-                        formStr = this.self.settings.honeypot && this.self.getElements.honeypot() || '',
+                        formStr = this.self.settings.honeypot ? this.self.getElements.honeypot() : '',
 
                         // user submitted json fields
                         field = this.self.settings.fields;
@@ -1353,8 +1363,8 @@
                 // determines if you are using row classes in your form and mimics this
                 var message = {
                     row: {
-                        start: $($form).find('.nos-row').length && '<div class="row">' || '',
-                        end: $($form).find('.nos-row').length && '</div>' || ''
+                        start: $($form).find('.nos-row').length ? '<div class="row">' : '',
+                        end: $($form).find('.nos-row').length ? '</div>' : ''
                     },
 
                     // if entire form is wrapped in a col-* class, apply the same class to the form messages
@@ -1398,10 +1408,10 @@
             this.build.form();
 
             // hide honeypot fields
-            this.settings.honeypot && $('#' + this.form[0].id + ' .nos-div-hp-js').css('display', 'none');
+            if (this.settings.honeypot) $('#' + this.form[0].id + ' .nos-div-hp-js').css('display', 'none');
 
             // run validation
-            this.settings.validate && this.validate(this.settings.fields), this.addMessage();
+            if (this.settings.validate) this.validate(this.settings.fields), this.addMessage();
 
             // form submit function
             // runs validation and passes submit object to user

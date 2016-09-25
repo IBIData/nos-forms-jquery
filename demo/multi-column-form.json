@@ -127,13 +127,13 @@
                 "height": 50,
                 "width": 50
             }
-        ]  
+        ]
     },
     {
         "classname": "col-md-12 col-sm-12 col-xs-12",
         "column": [
             {
-                "name": "submit2",
+                "name": "submitForm",
                 "type": "submit",
                 "title": "test",
                 "classname": "btn btn-success",
