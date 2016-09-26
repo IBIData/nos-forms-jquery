@@ -38,7 +38,7 @@
                 }
             },
             {
-                "name": "submit",
+                "name": "submitForm",
                 "type": "submit",
                 "classname": "btn btn-primary btn-block",
                 "formGroup": true,

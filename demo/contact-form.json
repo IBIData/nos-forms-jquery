@@ -62,7 +62,7 @@
         "rows": 8
     },
     {
-        "name": "submit",
+        "name": "submitForm",
         "type": "submit",
         "classname": "btn btn-success",
         "formGroup": true,
