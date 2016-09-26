@@ -367,6 +367,7 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 | start             | number        | *Used with type 'clone'* - Sets the number of text fields to start with. See [clone](./examples/clone.md).
 | step              | number        | *Used with types 'number, range, date, datetime-local, month, time'* - Sets the step attribute.
 | submitType        | string        | *Used with type 'checkbox' - Sets the type of value you would like the form to submit for you. See [checkbox](./examples/checkbox.md).
+| tabindex          | number        | Sets the tab index (not working with checkboxes, radios yet)
 | title             | string        | Sets the HTML title attribute.
 | type              | string        | Sets the element type.
 | validate          | boolean       | *Used with types 'email, zip, tel'* - Specifies if you would like to validate the form field.
