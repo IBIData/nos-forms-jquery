@@ -85,7 +85,7 @@ $.get('contact-form.json', function (jsonData) {
         "rows": 8
     },
     {
-        "name": "submit",
+        "name": "submitButton", // NEVER NAME THIS 'submit'!!!
         "type": "submit",
         "classname": "btn btn-success",
         "formGroup": true,
@@ -133,7 +133,7 @@ $("#myform").nosForm({
 
 ###**ajax**
 
- Accepts a boolean value. If set to true, your form will send a serialized object to your submit function, where you will be responsible for sending an ajax request with your form data. If set to false, a classic form submit will occur and your submit function will not be necessary.
+ Accepts a boolean value. If set to true, your form will send a serialized object to your submit function, where you will be responsible for sending an ajax request with your form data. If set to false, a classic form submit will occur and your submit function will not be necessary. **Worth noting:**: never name your submit button 'submit' or your form will not submit properly.
 
 ###**validate**
 
