@@ -34,9 +34,8 @@
             bottom: true
         },
         onlySubmitWithValue: false,
-        submit: function () {
-            return noop;
-        }
+        init: null,
+        submit: null
     };
 
     // The plugin constructor
@@ -54,9 +53,10 @@
         // final plugin settings
         this.settings = $.extend(true, {}, defaults, options);
 
+
         // Store arrays of element types
-        // These are used to determine which function will be called from the 'getElements' object below
-        this.elements = {
+        // These are used to determine which function will be called from the '_getElements' object below
+        var _elements = {
             text: ['text', 'email', 'tel', 'password', 'number', 'hidden', 'zip', 'date', 'week', 'time', 'month', 'datetime-local', 'search', 'url'],
             textarea: ['textarea'],
             buttons: ['submit', 'reset', 'button'],
@@ -64,7 +64,7 @@
             file: ['file'],
             check: ['checkbox', 'radio'],
             state: ['state'],
-            clone: ['clone'],
+            // clone: ['clone'],
             html: ['html'],
             other: ['range', 'color', 'image'],
             lbl: ['label'],
@@ -72,7 +72,7 @@
         };
 
         // takes user form object and converts to string fragments for creating html
-        this.getAttrs = function (input) {
+        var _getAttrs = function (input) {
 
             return $.extend({}, input, {
                 type: input.type ? ' type="' + input.type + '"' : '',
@@ -83,8 +83,8 @@
                 required: input.required ? ' required' : '',
                 value: input.value ? ' value="' + input.value + '"' : '',
                 placeholder: input.placeholder ? ' placeholder="' + input.placeholder + '"' : '',
-                formGroup: (input.formGroup || input.formGroup === undefined) ? this.getElements.formGroup() : { start: '', end: '' },
-                label: input.label ? this.getElements.label(input) : '',
+                formGroup: (input.formGroup || input.formGroup === undefined) ? _getElements.formGroup() : { start: '', end: '' },
+                label: input.label ? _getElements.label(input) : '',
                 helpBlock: input.helpBlock ? '<span id="' + (input.id || input.name) + '-help-block" class="help-block nos-help-block">' + input.helpBlock + '</span>' : '',
                 classname: input.classname ? ' class="' + input.classname + '"' : '',
                 multiple: input.multiple ? ' multiple' : '',
@@ -93,28 +93,28 @@
                 readonly: input.readonly ? ' readonly' : '',
                 title: input.title ? ' title="' + input.title + '"' : '',
                 size: input.size ? ' size="' + input.size + '"' : '',
-                data: input.data ? this.getElements.data(input.data) : '',
-                message: self.settings.validate ? self.getUserErrorMessages(input) : { required: '', minlength: '', maxlength: '', min: '', max: '', valid: '' }, // returns object that stores user error messages
+                data: input.data ? _getElements.data(input.data) : '',
+                message: self.settings.validate ? _getUserErrorMessages(input) : { required: '', minlength: '', maxlength: '', min: '', max: '', valid: '' }, // returns object that stores user error messages
                 tabindex: input.tabindex ? ' tabindex="' + input.tabindex + '"' : ''
             });
 
-        },
+        };
 
-            // assigns an object to the 'message' property above
-            // this will contain the user error messages that will display on the form
-            this.getUserErrorMessages = function (element) {
-                return $.extend({}, {
-                    required: element.required ? self.userErrorMessage.required(element) : '',
-                    valid: (element.type === 'email' || element.type === 'zip' || element.type === 'tel' || element.pattern || element.match) ? self.userErrorMessage.valid(element) : '',
-                    minlength: (element.minlength && element.minlength > 1) ? self.userErrorMessage.minlength(element) : '',
-                    maxlength: (element.maxlength && element.maxlength > 1) ? self.userErrorMessage.maxlength(element) : '',
-                    min: (element.min && element.min > 1) ? self.userErrorMessage.min(element) : '',
-                    max: element.max ? self.userErrorMessage.max(element) : ''
-                });
-            };
+        // assigns an object to the 'message' property above
+        // this will contain the user error messages that will display on the form
+        var _getUserErrorMessages = function (element) {
+            return $.extend({}, {
+                required: element.required ? _userErrorMessage.required(element) : '',
+                valid: (element.type === 'email' || element.type === 'zip' || element.type === 'tel' || element.pattern || element.match) ? _userErrorMessage.valid(element) : '',
+                minlength: (element.minlength && element.minlength > 1) ? _userErrorMessage.minlength(element) : '',
+                maxlength: (element.maxlength && element.maxlength > 1) ? _userErrorMessage.maxlength(element) : '',
+                min: (element.min && element.min > 1) ? _userErrorMessage.min(element) : '',
+                max: element.max ? _userErrorMessage.max(element) : ''
+            });
+        };
 
         // Group of functions used to return a form element
-        this.getElements = {
+        var _getElements = {
 
             self: this,
 
@@ -200,7 +200,7 @@
 
             // returns text-based elements
             text: function (input) {
-                var el = $.extend(this.self.getAttrs(input), {
+                var el = $.extend(_getAttrs(input), {
                     pattern: input.pattern ? ' pattern="' + input.pattern + '"' : '',
                     autocomplete: input.autocomplete ? ' autocomplete="' + input.autocomplete + '"' : '',
                     step: input.step ? ' step="' + input.step + '"' : '',
@@ -225,7 +225,7 @@
                     align = input.align ? 'pull-' + input.align : '',
                     prespace = input.align === 'right' ? '&nbsp;' : '',
                     postspace = input.align === 'left' || input.align === undefined ? '&nbsp;' : '';
-                var el = $.extend(this.self.getAttrs(input), {
+                var el = $.extend(_getAttrs(input), {
                     formaction: input.formaction ? ' formaction="' + input.formaction + '"' : '',
                     formenctype: input.formenctype ? ' formenctype="' + input.formenctype + '"' : '',
                     formmethod: input.formmethod ? ' formmethod="' + input.formmethod + '"' : '',
@@ -246,7 +246,7 @@
                     align = input.align ? 'pull-' + input.align : '',
                     vert = input.vertical ? '-vertical ' : ' ';
                 var i, buttons = '', button = input.buttons;
-                var el = $.extend(this.self.getAttrs(input), {
+                var el = $.extend(_getAttrs(input), {
                     classname: input.classname ? ' class="btn-group' + vert + input.classname + '"' : ' class="btn-group' + vert + '"',
                     formGroup: (input.formGroup || input.align) ? this.div(nosgroup + align) : { start: '', end: '' }
                 });
@@ -262,7 +262,7 @@
 
             // returns textarea elements
             textarea: function (input) {
-                var el = $.extend(this.self.getAttrs(input), {
+                var el = $.extend(_getAttrs(input), {
                     rows: input.rows ? ' rows="' + input.rows + '"' : '',
                     cols: input.cols ? ' cols="' + input.cols + '"' : '',
                     wrap: input.wrap ? ' wrap="' + input.wrap + '"' : '',
@@ -294,7 +294,7 @@
                     selOptions = input.options;
                 }
                 var options = '';
-                var el = $.extend(this.self.getAttrs(input), {
+                var el = $.extend(_getAttrs(input), {
                     classname: input.classname ? ' class="form-control ' + input.classname + '"' : ' class="form-control"',
                     selected: input.selected ? input.selected.toString().toLowerCase() : '',
                     inputGroup: input.inputGroup ? this.inputGroup(input.inputGroup) : { start: '', left: '', right: '', end: '' }
@@ -329,7 +329,7 @@
                     inputOptions = input.options;
                 }
                 var checked = '';
-                var el = $.extend(this.self.getAttrs(input), {
+                var el = $.extend(_getAttrs(input), {
                     inline: input.inline ? ' class="' + input.type + '-inline"' : '',
                     name: (input.name && input.type === 'checkbox') ? ' name="' + input.name + '[]' + '"' : ' name="' + input.name + '"',
                     id: ' id="' + input.name + '-',
@@ -363,7 +363,7 @@
 
             // returns file elements
             file: function (input) {
-                var el = $.extend(this.self.getAttrs(input), {
+                var el = $.extend(_getAttrs(input), {
                     accept: input.accept && ' accept="' + input.accept + '"' || '',
                     div: input.classname && this.div(input.classname) || { start: '', end: '' }
                 });
@@ -386,7 +386,7 @@
 
             // returns input type range & color
             other: function (input) {
-                var el = $.extend(this.self.getAttrs(input), {
+                var el = $.extend(_getAttrs(input), {
                     step: input.step ? ' step="' + input.step + '"' : '',
                     min: input.min ? ' min="' + input.min + '"' : '',
                     max: input.max ? ' max="' + input.max + '"' : '',
@@ -406,67 +406,67 @@
             },
 
             // build clone fields
-            clone: function (input) {
+            // clone: function (input) {
 
-                var maxFields = (input.maxFields || 10) + 1,
-                    startFields = (input.start || 1),
-                    hideFields,
-                    element = '',
-                    i;
+            //     var maxFields = (input.maxFields || 10) + 1,
+            //         startFields = (input.start || 1),
+            //         hideFields,
+            //         element = '',
+            //         i;
 
-                // assign attributes
-                var el = $.extend(this.self.getAttrs(input), {
-                    placeholder: input.placeholder ? input.placeholder : '',
-                    classname: input.classname ? input.classname : 'form-control',
-                    addValue: input.addButtonValue ? input.addButtonValue : 'Add Field',
-                    removeValue: input.removeButtonValue ? input.removeButtonValue : 'Remove Field',
-                    addButtonClass: input.addButtonClass ? input.addButtonClass : 'btn btn-primary',
-                    removeButtonClass: input.removeButtonClass ? input.removeButtonClass : 'btn btn-danger',
-                    name: input.name ? ' name="' + input.name : '',
-                    message: {
-                        required: '<div style="display: none;" class="alert alert-danger nos-help nos-required msg-required-' + input.name + '">' + (input.label || 'This') + ' is a required field</div>'
-                    }
-                });
+            //     // assign attributes
+            //     var el = $.extend(_getAttrs(input), {
+            //         placeholder: input.placeholder ? input.placeholder : '',
+            //         classname: input.classname ? input.classname : 'form-control',
+            //         addValue: input.addButtonValue ? input.addButtonValue : 'Add Field',
+            //         removeValue: input.removeButtonValue ? input.removeButtonValue : 'Remove Field',
+            //         addButtonClass: input.addButtonClass ? input.addButtonClass : 'btn btn-primary',
+            //         removeButtonClass: input.removeButtonClass ? input.removeButtonClass : 'btn btn-danger',
+            //         name: input.name ? ' name="' + input.name : '',
+            //         message: {
+            //             required: '<div style="display: none;" class="alert alert-danger nos-help nos-required msg-required-' + input.name + '">' + (input.label || 'This') + ' is a required field</div>'
+            //         }
+            //     });
 
-                element += el.formGroup.start;
+            //     element += el.formGroup.start;
 
-                element += el.label;
+            //     element += el.label;
 
-                // loop to build clone input fields
-                for (i = 1; i < maxFields; i++) {
+            //     // loop to build clone input fields
+            //     for (i = 1; i < maxFields; i++) {
 
-                    var addon = (input.addon || i);
+            //         var addon = (input.addon || i);
 
-                    i <= startFields ? hideFields = '' : hideFields = ' hidden';
+            //         i <= startFields ? hideFields = '' : hideFields = ' hidden';
 
-                    var div = this.div('input-group nos-input-group' + hideFields);
+            //         var div = this.div('input-group nos-input-group' + hideFields);
 
-                    element +=
+            //         element +=
 
-                        el.formGroup.start +
+            //             el.formGroup.start +
 
-                        div.start +
+            //             div.start +
 
-                        '<span class="input-group-addon nos-input-group-addon">' + addon + '</span>' +
-                        '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.data + el.name + i + '[]" ' + el.required + '>' +
+            //             '<span class="input-group-addon nos-input-group-addon">' + addon + '</span>' +
+            //             '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.data + el.name + i + '[]" ' + el.required + '>' +
 
-                        div.end +
+            //             div.end +
 
-                        el.formGroup.end;
+            //             el.formGroup.end;
 
-                }
+            //     }
 
-                element += el.formGroup.end;
+            //     element += el.formGroup.end;
 
-                element += el.helpBlock;
+            //     element += el.helpBlock;
 
-                element += '<input type="button" data-nos-add-button class="' + el.addButtonClass + ' nos-form-group" value="' + el.addValue + '">&nbsp;<input type="button" data-nos-remove-button value="' + el.removeValue + '" class="' + el.removeButtonClass + ' nos-form-group">';
+            //     element += '<input type="button" data-nos-add-button class="' + el.addButtonClass + ' nos-form-group" value="' + el.addValue + '">&nbsp;<input type="button" data-nos-remove-button value="' + el.removeValue + '" class="' + el.removeButtonClass + ' nos-form-group">';
 
-                element += el.message.required;
+            //     element += el.message.required;
 
-                return element;
+            //     return element;
 
-            },
+            // },
 
             // returns select box with 50 states/territories/Canadian Provinces
             // the user specifies what to include, and this function will combine the appropriate objects to create the select element
@@ -514,7 +514,7 @@
                 var stateObj = sortObject($.extend(states, (input.usTerritory && territories), (input.canada && provinces), (input.mexico && mexico))),
                     options = '<option value="">' + (input.defaultSelected || "Select One...") + '</option>';
 
-                var el = $.extend(this.self.getAttrs(input), {
+                var el = $.extend(_getAttrs(input), {
                     classname: input.classname ? ' class="form-control ' + input.classname + '"' : ' class="form-control"',
                     selected: input.selected ? input.selected.toString().toLowerCase() : ''
                 });
@@ -535,7 +535,7 @@
         };
 
         // field validation messages
-        this.userErrorMessage = {
+        var _userErrorMessage = {
 
             required: function (el) {
                 var message;
@@ -584,7 +584,7 @@
         };
 
         // field validation functions
-        this.validator = {
+        var _validator = {
 
             email: function (email) {
                 return /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email);
@@ -610,7 +610,7 @@
         };
 
         // this function handles real time error messages while user is typing
-        this.validate = function (fields) {
+        this._validate = function (fields) {
 
             // manage touched/untouched classes
             function manageTouchedFields() {
@@ -733,7 +733,7 @@
                         case 'email':
                             emval = $(this).val();
                             if (emval.length > 0) {
-                                self.validator.email(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-email', 'nos-valid-email')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-email', 'nos-invalid-email'));
+                                _validator.email(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-email', 'nos-valid-email')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-email', 'nos-invalid-email'));
                             }
                             emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-email nos-valid-email'));
                             break;
@@ -742,12 +742,12 @@
                             emval = $(this).val();
                             if ($.mask && v.mask) {
                                 if ($(this).caret().begin > 0) {
-                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-zip', 'nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-zip', 'nos-invalid-zip'));
+                                    _validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-zip', 'nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-zip', 'nos-invalid-zip'));
                                 }
                                 $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip nos-valid-zip'));
                             } else {
                                 if (emval.length > 0) {
-                                    self.validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-zip', 'nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-zip', 'nos-invalid-zip'));
+                                    _validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-zip', 'nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-zip', 'nos-invalid-zip'));
                                 }
                                 emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip nos-valid-zip'));
                             }
@@ -757,12 +757,12 @@
                             emval = $(this).val();
                             if ($.mask && v.mask) {
                                 if ($(this).caret().begin > 0) {
-                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-tel', 'nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-tel', 'nos-invalid-tel'));
+                                    _validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-tel', 'nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-tel', 'nos-invalid-tel'));
                                 }
                                 $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel nos-valid-tel'));
                             } else {
                                 if (emval.length > 0) {
-                                    self.validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-tel', 'nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-tel', 'nos-invalid-tel'));
+                                    _validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-tel', 'nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-tel', 'nos-invalid-tel'));
                                 }
                                 emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel nos-valid-tel'));
                             }
@@ -779,21 +779,21 @@
                 $('#' + (v.id || v.name)).attr('data-mask', true);
             }
 
-            function cloneButtons() {
-                // clone field add button functionality
-                $($form + ' [data-nos-add-button]').click(function () {
-                    $($form + ' .nos-input-group.hidden').length > 0 && $('.nos-input-group.hidden').eq(0).removeClass('hidden');
-                    $($form + ' .nos-input-group.hidden').length === 0 && $(this).addClass('disabled');
-                    $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('[data-nos-remove-button]').removeClass('disabled');
-                });
+            // function cloneButtons() {
+            //     // clone field add button functionality
+            //     $($form + ' [data-nos-add-button]').click(function () {
+            //         $($form + ' .nos-input-group.hidden').length > 0 && $('.nos-input-group.hidden').eq(0).removeClass('hidden');
+            //         $($form + ' .nos-input-group.hidden').length === 0 && $(this).addClass('disabled');
+            //         $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('[data-nos-remove-button]').removeClass('disabled');
+            //     });
 
-                // clone field remove button functionality
-                $($form + ' [data-nos-remove-button]').click(function () {
-                    $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('.nos-input-group:not(.hidden)').eq(-1).addClass('hidden');
-                    $($form + ' .nos-input-group:not(.hidden)').length === 1 && $(this).addClass('disabled');
-                    $($form + ' .nos-input-group.hidden').length > 0 && $('[data-nos-add-button]').removeClass('disabled');
-                });
-            }
+            //     // clone field remove button functionality
+            //     $($form + ' [data-nos-remove-button]').click(function () {
+            //         $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('.nos-input-group:not(.hidden)').eq(-1).addClass('hidden');
+            //         $($form + ' .nos-input-group:not(.hidden)').length === 1 && $(this).addClass('disabled');
+            //         $($form + ' .nos-input-group.hidden').length > 0 && $('[data-nos-add-button]').removeClass('disabled');
+            //     });
+            // }
 
             // calls the validation functions
             function callValidation(k, v) {
@@ -802,7 +802,7 @@
                 manageTouchedFields();
 
                 // clone add/remove button functionality
-                if (v.type === 'clone') cloneButtons();
+                // if (v.type === 'clone') cloneButtons();
 
                 // set mask
                 if (v.mask) addMask(v);
@@ -869,7 +869,7 @@
         };
 
         // validation that runs on form submit
-        this.submitValidation = function (data) {
+        this._submitValidation = function (data) {
 
             // initializing form submit object
             var form = $(data).serializeArray(),
@@ -882,14 +882,20 @@
                 cbgroup = $($form + ' :checkbox[data-nos]').parents('fieldset'),
                 cb = $($form + ' :checkbox[data-nos]').filter('[required]:visible').parents('fieldset'),
                 radio = $($form + ' :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
-                requiredFields = $($form + ' [data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible'),
-                clone = $($form + ' .nos-clone');
+                requiredFields = $($form + ' [data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible');
+                // clone = $($form + ' .nos-clone');
 
             // assign serialized form object properties to new form submit object, unless it is a checkbox field
             function init() {
                 $.each(form, function (key, value) {
                     if (value.name.indexOf('[]') === -1 && (self.settings.onlySubmitWithValue ? (value.value && value.value !== "") : value)) {
-                        formdata[value.name] = value.value;
+                        if (value.name.indexOf('.') > -1) {
+                            var notation = value.name.split('.');
+                            if (!formdata[notation[0]]) formdata[notation[0]] = {};
+                            formdata[notation[0]][notation[1]] = value.value;
+                        } else {
+                            formdata[value.name] = value.value;
+                        }
                     }
                 });
                 submitForm();
@@ -905,16 +911,16 @@
             }
 
             // build submit object for clone types
-            function buildClone() {
-                var cloneName = $(clone).parents().siblings('.nos-label').attr('for');
-                formdata[cloneName] = {};
-                $.each(clone, function () {
-                    var cloneFieldName = $(this).attr('name').split('[]');
-                    if ($(this).val() !== "") {
-                        formdata[cloneName][cloneFieldName[0]] = $(this).val();
-                    }
-                });
-            }
+            // function buildClone() {
+            //     var cloneName = $(clone).parents().siblings('.nos-label').attr('for');
+            //     formdata[cloneName] = {};
+            //     $.each(clone, function () {
+            //         var cloneFieldName = $(this).attr('name').split('[]');
+            //         if ($(this).val() !== "") {
+            //             formdata[cloneName][cloneFieldName[0]] = $(this).val();
+            //         }
+            //     });
+            // }
 
             // create checkbox object for form submit response
             function cbSubmitObject() {
@@ -930,7 +936,9 @@
 
                 cbgroup.each(function (i) {
                     var str = $(this).attr('id'),
-                        fcb = $(this).find(':checkbox');
+                        fcb = $(this).find(':checkbox'),
+                        notation = str.split('.'),
+                        isStrObj = str.indexOf('.');
 
                     if ($(this).hasClass('nos-submit-string')) {
                         var arr = [];
@@ -939,7 +947,11 @@
                                 arr.push($(this).attr('value'));
                             }
                         });
-                        formdata[str] = arr.toString();
+                        if (!isStrObj) formdata[str] = arr.toString();
+                        else {
+                            if (!formdata[notation[0]]) formdata[notation[0]] = {};
+                            formdata[notation[0]][notation[1]] = arr.toString();
+                        }
                         if (self.settings.onlySubmitWithValue && !formdata[str]) delete formdata[str];
                     }
                     else if ($(this).hasClass('nos-submit-array')) {
@@ -949,7 +961,11 @@
                                 arr2.push($(this).attr('value'));
                             }
                         });
-                        formdata[str] = arr2;
+                        if (!isStrObj) formdata[str] = arr2;
+                        else {
+                            if (!formdata[notation[0]]) formdata[notation[0]] = {};
+                            formdata[notation[0]][notation[1]] = arr2;
+                        }
                         if (self.settings.onlySubmitWithValue && formdata[str].length < 1) delete formdata[str];
                     }
                     else {
@@ -958,7 +974,11 @@
                             var uid = $(this).attr('value');
                             obj[i][uid] = this.checked;
                         });
-                        formdata[str] = obj[i];
+                        if (!isStrObj) formdata[str] = obj[i];
+                        else {
+                            if (!formdata[notation[0]]) formdata[notation[0]] = {};
+                            formdata[notation[0]][notation[1]] = obj[i];
+                        }
                         if (self.settings.onlySubmitWithValue && allFalse(formdata[str])) delete formdata[str];
                     }
                 });
@@ -1006,7 +1026,7 @@
                     var field = reqInput[i],
                         msg = $form + ' .msg-required-' + field.name,
                         mask = $(this).attr('data-mask');
-                    field.value = self.validator.sanitize(field.value);
+                    field.value = _validator.sanitize(field.value);
                     if (mask) {
                         if ($(field).caret().begin < 1) {
                             $(msg).nosSlideDown();
@@ -1120,24 +1140,25 @@
 
             // classic submit (no ajax)
             function classicSubmit() {
-                if (self.settings.honeypot) {
-
+                if (self.settings.submit) {
+                    self.form.off('submit');
+                    self.settings.submit(formdata, $($form));
                 }
-                self.form.off('submit').submit();
+                else self.form.off('submit').submit();
             }
 
-            if (clone.length) buildClone();
+            // if (clone.length) buildClone();
 
             if (cbgroup) cbSubmitObject();
 
             if (this.settings.validate) {
 
                 checkRequiredFields(),
-                validateRequiredFields(),
-                validateCheckbox(),
-                validateRadio(),
-                validateSelectFields(),
-                validateFileFields();
+                    validateRequiredFields(),
+                    validateCheckbox(),
+                    validateRadio(),
+                    validateSelectFields(),
+                    validateFileFields();
 
             }
 
@@ -1147,7 +1168,7 @@
         };
 
         // error messages to warn of incorrect types in the configuration
-        this.errorMessages = function () {
+        this._errorMessages = function () {
 
             var settings = this.settings;
             if (typeof settings.fields !== 'object') console.warn('Your form data is not an object!');
@@ -1166,7 +1187,7 @@
         };
 
         // set some plugin behavior
-        this.setBehavior = function (settings) {
+        this._setBehavior = function (settings) {
 
             // toggles browser validation on/off based on user input - default is 'off'
             if (!this.settings.htmlValidation) this.form.attr('novalidate', '');
@@ -1233,193 +1254,191 @@
                 };
             })($.prototype.slideUp);
 
-        },
+        };
 
-            // set of functions to build form
-            this.build = {
+        // renders form
+        var _render = function (input) {
+            $(element).html(input);
+        };
 
-                // need to access this later
-                self: this,
-                // accepts objects that contain a form field
-                // runs them through the proper build functions
-                buildElements: function (obj) {
+        // set of functions to build form
+        this._build = {
 
-                    var element = '';
+            // need to access this later
+            self: this,
+            // accepts objects that contain a form field
+            // runs them through the proper build functions
+            buildElements: function (obj) {
 
-                    // loop through all element arrays and categorize each element type
-                    $.each(self.elements, function (k) {
+                var element = '';
 
-                        // when element type is matched to an array, it is sent to be built in the associated 'getElements' function
-                        if ($.inArray(obj.type, this) > -1) {
-                            element += self.getElements[k](obj);
-                        }
+                // loop through all element arrays and categorize each element type
+                $.each(_elements, function (k) {
 
-                    });
-
-                    return element;
-
-                },
-
-                // this function is used for nested columns
-                // it will loop through and check each object to see if there is another nested column
-                // if there is, it will run it and apply the proper rows
-                buildBlock: function (block) {
-
-                    var str = block.row ? '<div class="row nos-row">' : '',
-
-                        self = this;
-
-                    // initial function call
-                    buildColumn(block);
-
-                    // function to check each new branch of elements for another nested column
-                    // this function will repeat until it reaches the end of the tree
-                    function buildColumn(col) {
-
-                        // first column class
-                        str += col.classname ? '<div class="' + col.classname + '">' : '';
-
-                        $.each(col.column, function () {
-
-                            if (this.column) {
-
-                                // if there is another nested column with a row specified, add a row and check the next level
-                                str += this.row ? '<div class="row nos-row">' : '';
-
-                                // check the next level
-                                buildColumn(this);
-
-                                // end div for row
-                                str += this.row ? '</div>' : '';
-
-                            }
-
-                            else {
-
-                                // if no other nested column exists, build what we found
-                                str += self.buildElements(this);
-
-                            }
-
-                        });
-
-                        // end div for first column class
-                        str += col.classname ? '</div>' : '';
-
+                    // when element type is matched to an array, it is sent to be built in the associated '_getElements' function
+                    if ($.inArray(obj.type, this) > -1) {
+                        element += _getElements[k](obj);
                     }
 
-                    // end divs for the rows
-                    str += block.row ? '</div>' : '';
+                });
 
-                    return str;
+                return element;
 
-                },
+            },
 
-                // the main build function
-                // accepts the main form configuration object and sends the pieces where they need to go
-                form: function () {
+            // this function is used for nested columns
+            // it will loop through and check each object to see if there is another nested column
+            // if there is, it will run it and apply the proper rows
+            buildBlock: function (block) {
 
-                    var self = this,
+                var str = block.row ? '<div class="row nos-row">' : '',
 
-                        // our form string
-                        formStr = this.self.settings.honeypot ? this.self.getElements.honeypot() : '',
+                    self = this;
 
-                        // user submitted json fields
-                        field = this.self.settings.fields;
+                // initial function call
+                buildColumn(block);
 
-                    $.each(field, function () {
+                // function to check each new branch of elements for another nested column
+                // this function will repeat until it reaches the end of the tree
+                function buildColumn(col) {
 
-                        // if there is a column
+                    // first column class
+                    str += col.classname ? '<div class="' + col.classname + '">' : '';
+
+                    $.each(col.column, function () {
+
                         if (this.column) {
 
-                            // build the columns
-                            formStr += self.buildBlock(this);
+                            // if there is another nested column with a row specified, add a row and check the next level
+                            str += this.row ? '<div class="row nos-row">' : '';
+
+                            // check the next level
+                            buildColumn(this);
+
+                            // end div for row
+                            str += this.row ? '</div>' : '';
 
                         }
 
                         else {
 
-                            // just a single column form
-                            formStr += self.buildElements(this);
+                            // if no other nested column exists, build what we found
+                            str += self.buildElements(this);
 
                         }
 
                     });
 
-                    // render the form string
-                    this.self.render(formStr);
+                    // end div for first column class
+                    str += col.classname ? '</div>' : '';
 
                 }
 
-            };
+                // end divs for the rows
+                str += block.row ? '</div>' : '';
 
-
-
-        // renders form
-        this.render = function (input) {
-            $(element).html(input);
-            if (self.settings.init) self.settings.init(self.form);
-        },
-
-            // adds form validation messages to the end of the form tag
-            this.addMessage = function () {
-
-                function hasCols() {
-                    return $($form).find('[class^="col-"]').length > 0;
-                }
-
-                // determines if you are using row classes in your form and mimics this
-                var message = {
-                    row: {
-                        start: $($form).find('.nos-row').length ? '<div class="row">' : '',
-                        end: $($form).find('.nos-row').length ? '</div>' : ''
-                    },
-
-                    // if entire form is wrapped in a col-* class, apply the same class to the form messages
-                    // this ensures that the form messages have the same placement and width as the form itself
-                    structure: this.settings.fields.length === 1 ? this.settings.fields[0].classname : hasCols() && 'col-md-12 col-sm-12 col-xs-12' || ''
-                };
-
-                var reqMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.required(this.form[0]) + '</div>' + message.row.end,
-                    invMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + this.userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end;
-
-                // append an error message onto the form for required and invalid fields
-                if (this.settings.messageLocation.bottom) {
-                    $(this.form[0]).append(reqMsg).append(invMsg);
-                }
-
-                // prepend an error message onto the form for required and invalid fields
-                if (this.settings.messageLocation.top) {
-                    $(this.form[0]).prepend(reqMsg).prepend(invMsg);
-                }
+                return str;
 
             },
 
-            // initialize the plugin
-            this.init();
+            // the main build function
+            // accepts the main form configuration object and sends the pieces where they need to go
+            form: function () {
+
+                var self = this,
+
+                    // our form string
+                    formStr = this.self.settings.honeypot ? _getElements.honeypot() : '',
+
+                    // user submitted json fields
+                    field = this.self.settings.fields;
+
+                $.each(field, function () {
+
+                    // if there is a column
+                    if (this.column) {
+
+                        // build the columns
+                        formStr += self.buildBlock(this);
+
+                    }
+
+                    else {
+
+                        // just a single column form
+                        formStr += self.buildElements(this);
+
+                    }
+
+                });
+
+                // render the form string
+                _render(formStr);
+
+            }
+
+        };
+
+
+        // adds form validation messages to the end of the form tag
+        this._addMessage = function () {
+
+            function hasCols() {
+                return $($form).find('[class^="col-"]').length > 0;
+            }
+
+            // determines if you are using row classes in your form and mimics this
+            var message = {
+                row: {
+                    start: $($form).find('.nos-row').length ? '<div class="row">' : '',
+                    end: $($form).find('.nos-row').length ? '</div>' : ''
+                },
+
+                // if entire form is wrapped in a col-* class, apply the same class to the form messages
+                // this ensures that the form messages have the same placement and width as the form itself
+                structure: this.settings.fields.length === 1 ? this.settings.fields[0].classname : hasCols() && 'col-md-12 col-sm-12 col-xs-12' || ''
+            };
+
+            var reqMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + _userErrorMessage.form.required(this.form[0]) + '</div>' + message.row.end,
+                invMsg = '<div class="clearfix"></div>' + message.row.start + '<div class="' + message.structure + '">' + _userErrorMessage.form.invalid(this.form[0]) + '</div>' + message.row.end;
+
+            // append an error message onto the form for required and invalid fields
+            if (this.settings.messageLocation.bottom) {
+                $(this.form[0]).append(reqMsg).append(invMsg);
+            }
+
+            // prepend an error message onto the form for required and invalid fields
+            if (this.settings.messageLocation.top) {
+                $(this.form[0]).prepend(reqMsg).prepend(invMsg);
+            }
+
+        };
+
+        // initialize the plugin
+        this._init();
 
     }
 
     // Avoid Plugin.prototype conflicts
     $.extend(Nos.prototype, {
-        init: function () {
+        _init: function () {
 
             var self = this;
 
             // displays error messages if the config object has incorrect types
-            this.errorMessages();
+            this._errorMessages();
 
             // set some form behaviors
-            this.setBehavior(this.settings);
+            this._setBehavior(this.settings);
 
             // build the form
-            this.build.form();
-
+            this._build.form();
+            this.form.trigger('init.nos');
             // hide honeypot fields
             if (this.settings.honeypot) $('#' + this.form[0].id + ' .nos-div-hp-js').css('display', 'none');
 
             // run validation
-            if (this.settings.validate) this.validate(this.settings.fields), this.addMessage();
+            if (this.settings.validate) this._validate(this.settings.fields), this._addMessage();
 
             // form submit function
             // runs validation and passes submit object to user
@@ -1429,7 +1448,7 @@
                 e.preventDefault();
 
                 // run submit form validation, unless user specifies not to
-                self.submitValidation($(this));
+                self._submitValidation($(this));
 
             });
         }
@@ -1438,17 +1457,26 @@
     // A really lightweight plugin wrapper around the constructor,
     // preventing against multiple instantiations
     $.fn.nosForm = function Run(options) {
+
         return this.each(function () {
+
             if (!$.data(this, "plugin_nosForm")) {
                 $.data(this, "plugin_nosForm", new Nos(this, options));
             }
+
             // DESTROY METHOD
             if (options === 'destroy') {
                 $(this).off().empty();
                 $.data(this, 'plugin_nosForm', null);
             }
+
+            // INIT EVENT
+            if (options && options.init) return options.init($(this));
+
         });
     };
+
+
 
 }));
 

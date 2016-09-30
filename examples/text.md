@@ -21,6 +21,7 @@
         "field": 0,
         "testing": 123,
     },
+    "tabindex": 0,
     "value": "",
     "title": "Simple Text Field",
     "autocomplete": "on",
@@ -28,7 +29,7 @@
     "readonly": false,
     "size": 60,
     "messages": {
-        "required": "This simple text field is required",  
+        "required": "This simple text field is required",
         "invalid": "This field must be valid",
         "minlength": "This field must be at least 5 characters long"
     }

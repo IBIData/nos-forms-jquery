@@ -53,6 +53,8 @@ $.get('contact-form.json', function (jsonData) {
 ```
 ####contact-form.json
 
+> Note: you don't have to store your config in a json file. You can just write this in your plugin initilization as JavaScript.
+
 ```json
 [
     {
@@ -133,7 +135,7 @@ $("#myform").nosForm({
 
 ###**ajax**
 
- Accepts a boolean value. If set to true, your form will send a serialized object to your submit function, where you will be responsible for sending an ajax request with your form data. If set to false, a classic form submit will occur and your submit function will not be necessary. **Worth noting:**: never name your submit button 'submit' or your form will not submit properly.
+ Accepts a boolean value. If set to true, your form will send a serialized object to your submit function, where you will be responsible for sending an ajax request with your form data. If set to false, a classic form submit will occur and your submit function will not be necessary. If you set ajax to false and a submit function is still present, you will still receive the form data as usual and you will have to manually submit the form. This can be useful for deleting out fields you don't want to send to the server (e.g.: confirm password fields) or if you need to manually check something before sending the form. **Worth noting:**: never name your submit button 'submit' or your form will not submit properly.
 
 ###**validate**
 

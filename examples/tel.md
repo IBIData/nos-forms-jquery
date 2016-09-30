@@ -10,13 +10,13 @@ Has built-in US telephone number validation enabled by default. If you don't req
     "id": "telId",
     "type": "tel",
     "autofocus": false,
-    "label": "Email Example",
+    "label": "Telephone Example",
     "validate": true, // will validate phone numbers by default (999-999-9999). disable this to turn it off
     "pattern": "", // use your own regex. be sure to turn off 'validate' above when you use this - you'll have to escape some characters and omit the beginning/end forward slashes
     "required": true,
     "classname": "form-control secondClass",
     "formGroup": true,
-    "placeholder": "Email Address",
+    "placeholder": "Phone Number",
     "minlength": 1,
     "maxlength": 100,
     "data": {
@@ -24,14 +24,14 @@ Has built-in US telephone number validation enabled by default. If you don't req
         "testing": 123,
     },
     "value": "",
-    "title": "Email Address",
+    "title": "Phone Number",
     "autocomplete": "on",
     "disabled": false,
     "readonly": false,
     "size": 100,
     "mask": "999-999-9999", // requires masked input plugin https://github.com/digitalBush/jquery.maskedinput
     "messages": {
-        "required": "Your phone number is required",  
+        "required": "Your phone number is required",
         "invalid": "Your phone number must be valid"
     }
 }
@@ -42,8 +42,8 @@ Has built-in US telephone number validation enabled by default. If you don't req
 {
     "name": "telExample",
     "type": "tel",
-    "label": "Email Example",
+    "label": "Telephone Example",
     "required": true,
-    "maxlength": 100
+    "maxlength": 15
 }
 ```
