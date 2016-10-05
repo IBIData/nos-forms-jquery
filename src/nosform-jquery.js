@@ -258,12 +258,13 @@
                     rows: input.rows ? ' rows="' + input.rows + '"' : '',
                     cols: input.cols ? ' cols="' + input.cols + '"' : '',
                     wrap: input.wrap ? ' wrap="' + input.wrap + '"' : '',
-                    classname: input.classname ? ' class="form-control ' + input.classname + '"' : ' class="form-control"'
+                    classname: input.classname ? ' class="form-control ' + input.classname + '"' : ' class="form-control"',
+                    value: input.value ? input.value : ''
                 });
                 var element = el.formGroup.start + el.label +
                     '<textarea data-nos' +
-                    el.name + el.id + el.title + el.data + el.minlength + el.maxlength + el.placeholder + el.classname + el.tabindex + el.value + el.rows + el.cols + el.wrap + el.readonly + el.disabled + el.autofocus + el.required +
-                    '></textarea>' + el.helpBlock +
+                    el.name + el.id + el.title + el.data + el.minlength + el.maxlength + el.placeholder + el.classname + el.tabindex + el.rows + el.cols + el.wrap + el.readonly + el.disabled + el.autofocus + el.required +
+                    '>' + el.value + '</textarea>' + el.helpBlock +
                     el.message.required + el.message.minlength + el.message.maxlength +
                     el.formGroup.end;
                 return element;
