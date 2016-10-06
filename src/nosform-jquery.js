@@ -931,7 +931,7 @@
                     var str = $(this).attr('id'),
                         fcb = $(this).find(':checkbox'),
                         notation = str.split('.'),
-                        isStrObj = str.indexOf('.');
+                        isStrObj = str.indexOf('.') > -1;
 
                     if ($(this).hasClass('nos-submit-string')) {
                         var arr = [];
