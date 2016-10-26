@@ -1,5 +1,5 @@
 /*
- *  nos-forms-jquery - v1.0.1
+ *  nos-forms-jquery - v1.0.2
  *  Build and validate DRY html forms in minutes with JSON, jQuery and Bootstrap
  *  
  *
