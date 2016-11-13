@@ -896,9 +896,9 @@
 
             function checkRequiredFields() {
                 requiredFields.each(function () {
-                    ($(this).val() && $(this).val().length < 1) ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
+                    ($(this).val().length < 1) ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
                     $(this).on('change keyup keydown blur paste input', function () {
-                        ($(this).val() && $(this).val().length < 1) ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
+                        ($(this).val().length < 1) ? $(this).alterClass('nos-valid-required', 'nos-invalid-required') : $(this).alterClass('nos-invalid-required', 'nos-valid-required');
                     });
                 });
             }
