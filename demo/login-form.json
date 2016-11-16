@@ -14,6 +14,7 @@
                 "classname": "form-control",
                 "formGroup": true,
                 "placeholder": "User Name or Email Address",
+                "minlength": 0,
                 "maxlength": 60,
                 "autocomplete": "on",
                 "messages": {

@@ -70,10 +70,10 @@
                 type: input.type ? ' type="' + input.type + '"' : '',
                 name: input.name ? ' name="' + input.name + '"' : '',
                 id: (input.id || input.name) ? ' id="' + (input.id || input.name) + '"' : '',
-                minlength: input.minlength ? ' minlength="' + input.minlength + '"' : '',
-                maxlength: input.maxlength ? ' maxlength="' + input.maxlength + '"' : '',
+                minlength: (input.minlength || typeof input.minlength === 'number') ? ' minlength="' + input.minlength + '"' : '',
+                maxlength: (input.maxlength || typeof input.maxlength === 'number') ? ' maxlength="' + input.maxlength + '"' : '',
                 required: input.required ? ' required' : '',
-                value: input.value ? ' value="' + input.value + '"' : '',
+                value: (input.value || typeof input.value === 'number') ? ' value="' + input.value + '"' : '',
                 placeholder: input.placeholder ? ' placeholder="' + input.placeholder + '"' : '',
                 formGroup: (input.formGroup || input.formGroup === undefined) ? _getElements.formGroup() : { start: '', end: '' },
                 label: input.label ? _getElements.label(input) : '',
@@ -259,7 +259,7 @@
                     cols: input.cols ? ' cols="' + input.cols + '"' : '',
                     wrap: input.wrap ? ' wrap="' + input.wrap + '"' : '',
                     classname: input.classname ? ' class="form-control ' + input.classname + '"' : ' class="form-control"',
-                    value: input.value ? input.value : ''
+                    value: (input.value || typeof input.value === 'number') ? input.value : ''
                 });
                 var element = el.formGroup.start + el.label +
                     '<textarea data-nos' +
@@ -381,10 +381,10 @@
             other: function (input) {
                 var el = $.extend(_getAttrs(input), {
                     step: input.step ? ' step="' + input.step + '"' : '',
-                    min: input.min ? ' min="' + input.min + '"' : '',
-                    max: input.max ? ' max="' + input.max + '"' : '',
-                    height: input.height ? ' height="' + input.height + '"' : '',
-                    width: input.width ? ' width="' + input.width + '"' : '',
+                    min: (input.min || typeof input.min === 'number') ? ' min="' + input.min + '"' : '',
+                    max: (input.max || typeof input.max === 'number') ? ' max="' + input.max + '"' : '',
+                    height: (input.height || typeof input.height === 'number') ? ' height="' + input.height + '"' : '',
+                    width: (input.width || typeof input.width === 'number') ? ' width="' + input.width + '"' : '',
                     src: input.src ? ' src="' + input.src + '"' : '',
                     alt: input.alt ? ' alt="' + input.alt + '"' : ''
                 });
@@ -399,67 +399,67 @@
             },
 
             // build clone fields
-            // clone: function (input) {
+            clone: function (input) {
 
-            //     var maxFields = (input.maxFields || 10) + 1,
-            //         startFields = (input.start || 1),
-            //         hideFields,
-            //         element = '',
-            //         i;
+                var maxFields = (input.maxFields || 10) + 1,
+                    startFields = (input.start || 1),
+                    hideFields,
+                    element = '',
+                    i;
 
-            //     // assign attributes
-            //     var el = $.extend(_getAttrs(input), {
-            //         placeholder: input.placeholder ? input.placeholder : '',
-            //         classname: input.classname ? input.classname : 'form-control',
-            //         addValue: input.addButtonValue ? input.addButtonValue : 'Add Field',
-            //         removeValue: input.removeButtonValue ? input.removeButtonValue : 'Remove Field',
-            //         addButtonClass: input.addButtonClass ? input.addButtonClass : 'btn btn-primary',
-            //         removeButtonClass: input.removeButtonClass ? input.removeButtonClass : 'btn btn-danger',
-            //         name: input.name ? ' name="' + input.name : '',
-            //         message: {
-            //             required: '<div style="display: none;" class="alert alert-danger nos-help nos-required msg-required-' + input.name + '">' + (input.label || 'This') + ' is a required field</div>'
-            //         }
-            //     });
+                // assign attributes
+                var el = $.extend(_getAttrs(input), {
+                    placeholder: input.placeholder ? input.placeholder : '',
+                    classname: input.classname ? input.classname : 'form-control',
+                    addValue: input.addButtonValue ? input.addButtonValue : 'Add Field',
+                    removeValue: input.removeButtonValue ? input.removeButtonValue : 'Remove Field',
+                    addButtonClass: input.addButtonClass ? input.addButtonClass : 'btn btn-primary',
+                    removeButtonClass: input.removeButtonClass ? input.removeButtonClass : 'btn btn-danger',
+                    name: input.name ? ' name="' + input.name : '',
+                    message: {
+                        required: '<div style="display: none;" class="alert alert-danger nos-help nos-required msg-required-' + input.name + '">' + (input.label || 'This') + ' is a required field</div>'
+                    }
+                });
 
-            //     element += el.formGroup.start;
+                element += el.formGroup.start;
 
-            //     element += el.label;
+                element += el.label;
 
-            //     // loop to build clone input fields
-            //     for (i = 1; i < maxFields; i++) {
+                // loop to build clone input fields
+                for (i = 1; i < maxFields; i++) {
 
-            //         var addon = (input.addon || i);
+                    var addon = (input.addon || i);
 
-            //         i <= startFields ? hideFields = '' : hideFields = ' hidden';
+                    i <= startFields ? hideFields = '' : hideFields = ' hidden';
 
-            //         var div = this.div('input-group nos-input-group' + hideFields);
+                    var div = this.div('input-group nos-input-group' + hideFields);
 
-            //         element +=
+                    element +=
 
-            //             el.formGroup.start +
+                        el.formGroup.start +
 
-            //             div.start +
+                        div.start +
 
-            //             '<span class="input-group-addon nos-input-group-addon">' + addon + '</span>' +
-            //             '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.data + el.name + i + '[]" ' + el.required + '>' +
+                        '<span class="input-group-addon nos-input-group-addon">' + addon + '</span>' +
+                        '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.data + el.name + i + '[]" ' + el.required + '>' +
 
-            //             div.end +
+                        div.end +
 
-            //             el.formGroup.end;
+                        el.formGroup.end;
 
-            //     }
+                }
 
-            //     element += el.formGroup.end;
+                element += el.formGroup.end;
 
-            //     element += el.helpBlock;
+                element += el.helpBlock;
 
-            //     element += '<input type="button" data-nos-add-button class="' + el.addButtonClass + ' nos-form-group" value="' + el.addValue + '">&nbsp;<input type="button" data-nos-remove-button value="' + el.removeValue + '" class="' + el.removeButtonClass + ' nos-form-group">';
+                element += '<input type="button" data-nos-add-button class="' + el.addButtonClass + ' nos-form-group" value="' + el.addValue + '">&nbsp;<input type="button" data-nos-remove-button value="' + el.removeValue + '" class="' + el.removeButtonClass + ' nos-form-group">';
 
-            //     element += el.message.required;
+                element += el.message.required;
 
-            //     return element;
+                return element;
 
-            // },
+            },
 
             // returns select box with 50 states/territories/Canadian Provinces
             // the user specifies what to include, and this function will combine the appropriate objects to create the select element
@@ -772,21 +772,21 @@
                 $('#' + (v.id || v.name)).attr('data-mask', true);
             }
 
-            // function cloneButtons() {
-            //     // clone field add button functionality
-            //     $($form + ' [data-nos-add-button]').click(function () {
-            //         $($form + ' .nos-input-group.hidden').length > 0 && $('.nos-input-group.hidden').eq(0).removeClass('hidden');
-            //         $($form + ' .nos-input-group.hidden').length === 0 && $(this).addClass('disabled');
-            //         $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('[data-nos-remove-button]').removeClass('disabled');
-            //     });
+            function cloneButtons() {
+                // clone field add button functionality
+                $($form + ' [data-nos-add-button]').click(function () {
+                    $($form + ' .nos-input-group.hidden').length > 0 && $('.nos-input-group.hidden').eq(0).removeClass('hidden');
+                    $($form + ' .nos-input-group.hidden').length === 0 && $(this).addClass('disabled');
+                    $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('[data-nos-remove-button]').removeClass('disabled');
+                });
 
-            //     // clone field remove button functionality
-            //     $($form + ' [data-nos-remove-button]').click(function () {
-            //         $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('.nos-input-group:not(.hidden)').eq(-1).addClass('hidden');
-            //         $($form + ' .nos-input-group:not(.hidden)').length === 1 && $(this).addClass('disabled');
-            //         $($form + ' .nos-input-group.hidden').length > 0 && $('[data-nos-add-button]').removeClass('disabled');
-            //     });
-            // }
+                // clone field remove button functionality
+                $($form + ' [data-nos-remove-button]').click(function () {
+                    $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('.nos-input-group:not(.hidden)').eq(-1).addClass('hidden');
+                    $($form + ' .nos-input-group:not(.hidden)').length === 1 && $(this).addClass('disabled');
+                    $($form + ' .nos-input-group.hidden').length > 0 && $('[data-nos-add-button]').removeClass('disabled');
+                });
+            }
 
             // calls the validation functions
             function callValidation(k, v) {
@@ -795,7 +795,7 @@
                 manageTouchedFields();
 
                 // clone add/remove button functionality
-                // if (v.type === 'clone') cloneButtons();
+                if (v.type === 'clone') cloneButtons();
 
                 // set mask
                 if (v.mask) addMask(v);
@@ -904,16 +904,16 @@
             }
 
             // build submit object for clone types
-            // function buildClone() {
-            //     var cloneName = $(clone).parents().siblings('.nos-label').attr('for');
-            //     formdata[cloneName] = {};
-            //     $.each(clone, function () {
-            //         var cloneFieldName = $(this).attr('name').split('[]');
-            //         if ($(this).val() !== "") {
-            //             formdata[cloneName][cloneFieldName[0]] = $(this).val();
-            //         }
-            //     });
-            // }
+            function buildClone() {
+                var cloneName = $(clone).parents().siblings('.nos-label').attr('for');
+                formdata[cloneName] = {};
+                $.each(clone, function () {
+                    var cloneFieldName = $(this).attr('name').split('[]');
+                    if ($(this).val() !== "") {
+                        formdata[cloneName][cloneFieldName[0]] = $(this).val();
+                    }
+                });
+            }
 
             // create checkbox object for form submit response
             function cbSubmitObject() {
@@ -1140,7 +1140,7 @@
                 else self.form.off('submit').submit();
             }
 
-            // if (clone.length) buildClone();
+            if (clone.length) buildClone();
 
             if (cbgroup) cbSubmitObject();
 
