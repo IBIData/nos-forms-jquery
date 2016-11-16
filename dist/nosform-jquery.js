@@ -64,7 +64,7 @@
             file: ['file'],
             check: ['checkbox', 'radio'],
             state: ['state'],
-            // clone: ['clone'],
+            clone: ['clone'],
             html: ['html'],
             other: ['range', 'color', 'image'],
             lbl: ['label'],
@@ -883,8 +883,8 @@
                 cbgroup = $($form + ' :checkbox[data-nos]').parents('fieldset'),
                 cb = $($form + ' :checkbox[data-nos]').filter('[required]:visible').parents('fieldset'),
                 radio = $($form + ' :radio[data-nos]').filter('[required]:visible').parents('fieldset'),
-                requiredFields = $($form + ' [data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible');
-                // clone = $($form + ' .nos-clone');
+                requiredFields = $($form + ' [data-nos]:not(:file, input[type=range], input[type=color])').filter('[required]:visible'),
+                clone = $($form + ' .nos-clone');
 
             // assign serialized form object properties to new form submit object, unless it is a checkbox field
             function init() {
