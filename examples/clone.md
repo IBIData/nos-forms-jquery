@@ -14,7 +14,7 @@ A clone field is basically a set of text boxes with add/remove buttons. This all
     "label": "Clone Example",
     "data": {
         "field": 0,
-        "testing": 123,
+        "testing": 123
     },
     "placeholder": "Item", // will display on each field with a number appended to the end
     "start": 3, // how many inputs you want to display on page load

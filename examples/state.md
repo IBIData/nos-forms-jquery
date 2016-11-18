@@ -22,8 +22,10 @@
     "multiple": false,
     "selected": "", // use two letter state abbreviations to select a state, a blank value to select the default
     "defaultSelected": "Select One...", // gives the default (blank) value some text. this is the default
-    "usTerritory": true, 
-    "canada": true
+    "us": true,
+    "usTerritory": false,
+    "canada": false,
+    "mexico": false
 }
 ```
 
@@ -37,7 +39,7 @@
     "required": true,
     "selected": "MN", // two letter abbreviations or full state names will select them (case insensitive), a blank value to select the default
     "defaultSelected": "Select One...", // gives the default (blank) value some text. this is the default
-    "usTerritory": true, 
+    "usTerritory": true,
     "canada": true,
     "mexico": true
 }

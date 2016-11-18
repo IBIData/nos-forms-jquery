@@ -26,7 +26,9 @@
             bottom: true
         },
         onlySubmitWithValue: false,
-        init: null,
+        init: function () {
+            return null;
+        },
         submit: null
     };
 
@@ -143,31 +145,29 @@
             // returns bootstrap input group
             inputGroup: function (input) {
                 var leftkeys = input.left ? Object.keys(input.left) : '',
-                    rightkeys = input.right ? Object.keys(input.right) : '';
-                var leftchoice = input.left ? leftkeys[$.inArray('text', leftkeys)] || leftkeys[$.inArray('button', leftkeys)] : '';
-                var rightchoice = input.right ? rightkeys[$.inArray('text', rightkeys)] || rightkeys[$.inArray('button', rightkeys)] : '';
-                var options = {
-                    left: input.left ? {
-                        text: '<span class="input-group-addon ' + (input.left.classname || '') + '">' + (input.left.text || '') + '</span>',
-                        button: '<span class="input-group-btn"><button class="' + (input.left.classname || '') + '" type="button">' + (input.left.button || '') + '</button></span>'
-                    } : '',
-                    right: input.right ? {
-                        text: '<span class="input-group-addon ' + (input.right.classname || '') + '">' + (input.right.text || '') + '</span>',
-                        button: '<span class="input-group-btn"><button class="' + (input.right.classname || '') + '" type="button">' + (input.right.button || '') + '</button></span>'
-                    } : ''
-                };
-                var sizes = {
-                    large: 'input-group-lg',
-                    lg: 'input-group-lg',
-                    small: 'input-group-sm',
-                    sm: 'input-group-sm'
+                    rightkeys = input.right ? Object.keys(input.right) : '',
+                    leftchoice = input.left ? leftkeys[$.inArray('text', leftkeys)] || leftkeys[$.inArray('button', leftkeys)] : '',
+                    rightchoice = input.right ? rightkeys[$.inArray('text', rightkeys)] || rightkeys[$.inArray('button', rightkeys)] : '',
+                    options = {
+                        left: input.left ? {
+                            text: '<span class="input-group-addon ' + (input.left.classname || '') + '">' + (input.left.text || '') + '</span>',
+                            button: '<span class="input-group-btn"><button class="' + (input.left.classname || '') + '" type="button">' + (input.left.button || '') + '</button></span>'
+                        } : '',
+                        right: input.right ? {
+                            text: '<span class="input-group-addon ' + (input.right.classname || '') + '">' + (input.right.text || '') + '</span>',
+                            button: '<span class="input-group-btn"><button class="' + (input.right.classname || '') + '" type="button">' + (input.right.button || '') + '</button></span>'
+                        } : ''
+                    },
+                    sizes = {
+                        large: 'input-group-lg',
+                        lg: 'input-group-lg',
+                        small: 'input-group-sm',
+                        sm: 'input-group-sm'
                 };
                 return {
                     start: input && '<div class="input-group ' + (input.size && sizes[input.size] || '') + '">',
                     left: input.left ? options.left[leftchoice] : '',
                     right: input.right ? options.right[rightchoice] : '',
-                    //left: input.left && '<span class="input-group-addon ' + (input.left.classname || '') + '">' + (input.left.text || '') + '</span>' || '',
-                    //right: input.right && '<span class="input-group-addon ' + (input.right.classname || '') + '">' + (input.right.text || '') + '</span>' || '',
                     end: input && '</div>'
                 };
             },
@@ -440,7 +440,7 @@
 
                         div.start +
 
-                        '<span class="input-group-addon nos-input-group-addon">' + addon + '</span>' +
+                        '<span class="input-group-addon nos-input-group-addon">' + (el.placeholder || '') + ' ' + addon + '</span>' +
                         '<input data-nos type="text" class="nos-clone ' + el.classname + '"' + el.data + el.name + i + '[]" ' + el.required + '>' +
 
                         div.end +
@@ -464,6 +464,8 @@
             // returns select box with 50 states/territories/Canadian Provinces
             // the user specifies what to include, and this function will combine the appropriate objects to create the select element
             state: function (input) {
+
+                var defaultToUs = input.us || input.us === undefined;
 
                 var territories = { "American Samoa": "AS", "Federated States Of Micronesia": "FM", "Guam": "GU", "Marshall Islands": "MH", "Northern Mariana Islands": "MP", "Palau": "PW", "Puerto Rico": "PR", "Virgin Islands": "VI" };
 
@@ -504,7 +506,7 @@
 
                 // function to combine the objects and call the sort function once that is done
                 // after object is complete, we create the html
-                var stateObj = sortObject($.extend(states, (input.usTerritory && territories), (input.canada && provinces), (input.mexico && mexico))),
+                var stateObj = sortObject($.extend((defaultToUs && states), (input.usTerritory && territories), (input.canada && provinces), (input.mexico && mexico))),
                     options = '<option value="">' + (input.defaultSelected || "Select One...") + '</option>';
 
                 var el = $.extend(_getAttrs(input), {
@@ -617,7 +619,7 @@
 
             // resets form
             function reset() {
-                $($form + ' :reset[data-nos]').click(function () {
+                $($form + ' :reset[data-nos]').off('click').on('click', function () {
                     $(this).closest('form').find(':input:not(:submit, :reset, :button, :image)').val('').alterClass('nos-*', '').addClass('nos-untouched');
                     $($form + ' .nos-help').nosSlideUp();
                 });
@@ -774,14 +776,14 @@
 
             function cloneButtons() {
                 // clone field add button functionality
-                $($form + ' [data-nos-add-button]').click(function () {
+                $($form + ' [data-nos-add-button]').off('click').on('click', function () {
                     $($form + ' .nos-input-group.hidden').length > 0 && $('.nos-input-group.hidden').eq(0).removeClass('hidden');
                     $($form + ' .nos-input-group.hidden').length === 0 && $(this).addClass('disabled');
                     $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('[data-nos-remove-button]').removeClass('disabled');
                 });
 
                 // clone field remove button functionality
-                $($form + ' [data-nos-remove-button]').click(function () {
+                $($form + ' [data-nos-remove-button]').off('click').on('click', function () {
                     $($form + ' .nos-input-group:not(.hidden)').length > 1 && $('.nos-input-group:not(.hidden)').eq(-1).addClass('hidden');
                     $($form + ' .nos-input-group:not(.hidden)').length === 1 && $(this).addClass('disabled');
                     $($form + ' .nos-input-group.hidden').length > 0 && $('[data-nos-add-button]').removeClass('disabled');
@@ -790,9 +792,6 @@
 
             // calls the validation functions
             function callValidation(k, v) {
-
-                // add touched/untouched classes
-                manageTouchedFields();
 
                 // clone add/remove button functionality
                 if (v.type === 'clone') cloneButtons();
@@ -859,10 +858,14 @@
 
             });
 
+
+            // add touched/untouched classes
+            manageTouchedFields();
+
         };
 
         // validation that runs on form submit
-        this._submitValidation = function (data) {
+        this._submitValidation = function (data, evt) {
 
             // initializing form submit object
             var form = $(data).serializeArray(),
@@ -987,8 +990,8 @@
                     cmsg[i] = '.msg-required-' + $(this).attr('id');
                     cba[i] = [];
                     $(checkboxes).each(function () {
-                        if ($(this).is(':checked')) cba[i].push(this.value);
-                        $(this).change(function () {
+                        if ($(this).is(':checked')) cba[i].push($(this).val());
+                        $(this).off('change').on('change', function () {
                             $.inArray($(this).val(), cba[i]) > -1 ? cba[i].splice($.inArray($(this).val(), cba[i]), 1) : cba[i].push($(this).val());
                             cba[i].length > 0 ? $(cmsg[i]).nosSlideUp() : $(cmsg[i]).nosSlideDown();
                         });
@@ -1048,7 +1051,7 @@
                         msg = $form + ' .msg-required-' + sfield.name;
                     if ($(sfield).val() === '') {
                         $(msg).nosSlideDown();
-                        $(this).change(function () {
+                        $(this).off('change').on('change', function () {
                             if ($(this).val() !== '') $(msg).nosSlideUp();
                             if ($(this).val() === '') $(msg).nosSlideDown();
                         });
@@ -1064,7 +1067,7 @@
                     var filelist = (document.getElementById(field.id || field.name).files || document.getElementById(field.id || field.name).value); // ie8 doesn't support 'files'
                     if (filelist.length === 0 && $(field).attr('required', true)) {
                         $(msg).nosSlideDown();
-                        $(this).change(function () {
+                        $(this).off('change').on('change', function () {
                             if ($(this).val() !== '') $(msg).nosSlideUp();
                             if ($(this).val() === '') $(msg).nosSlideDown();
                         });
@@ -1106,7 +1109,7 @@
                 if (self.settings.honeypot) {
                     if ($($form + ' .nos-text-css').val() === '' && $($form + ' .nos-email-js').val() === 'validemail@email.com') {
                         if (self.settings.ajax) {
-                            self.settings.submit(formdata, $($form));
+                            self.settings.submit(formdata, $($form), evt);
                         } else {
                             $('div.nos-div-hp-css').remove();
                             $('div.nos-div-hp-js').remove();
@@ -1114,7 +1117,7 @@
                         }
                     } else {
                         if (self.settings.ajax) {
-                            self.settings.submit({ honeypot: true }, $($form));
+                            self.settings.submit({ honeypot: true }, $($form), evt);
                         } else {
                             self.form.empty();
                             self.form.append('<input type="text" value="true" name="honeypot">');
@@ -1124,7 +1127,7 @@
                 }
                 else {
                     if (self.settings.ajax) {
-                        self.settings.submit(formdata, $($form));
+                        self.settings.submit(formdata, $($form), evt);
                     } else {
                         classicSubmit();
                     }
@@ -1135,7 +1138,7 @@
             function classicSubmit() {
                 if (self.settings.submit) {
                     self.form.off('submit');
-                    self.settings.submit(formdata, $($form));
+                    self.settings.submit(formdata, $($form), evt);
                 }
                 else self.form.off('submit').submit();
             }
@@ -1157,6 +1160,30 @@
 
             // call submit & validation functions
             init();
+
+        };
+
+        this._bindEvents = function () {
+
+            var self = this;
+
+            // Init event
+            self.form.on('init.nos', function () {
+                self.settings.init(self.form);
+            });
+
+
+            // form submit function
+            // runs validation and passes submit object to user
+            self.form.on('submit', function (e) {
+
+                // prevent default form submit
+                e.preventDefault();
+
+                // run submit form validation, unless user specifies not to
+                self._submitValidation($(this), e);
+
+            });
 
         };
 
@@ -1184,6 +1211,9 @@
 
             // toggles browser validation on/off based on user input - default is 'off'
             if (!this.settings.htmlValidation) this.form.attr('novalidate', '');
+
+            // hide honeypot fields
+            if (this.settings.honeypot) $('#' + this.form[0].id + ' .nos-div-hp-js').css('display', 'none');
 
             // Object.keys IE8 Polyfill
             // IE8 doesn't support Object.keys (used in input groups)
@@ -1416,8 +1446,6 @@
     $.extend(Nos.prototype, {
         _init: function () {
 
-            var self = this;
-
             // displays error messages if the config object has incorrect types
             this._errorMessages();
 
@@ -1426,24 +1454,24 @@
 
             // build the form
             this._build.form();
+
+            // bind all events
+            this._bindEvents();
+
+            // Trigger init event
             this.form.trigger('init.nos');
-            // hide honeypot fields
-            if (this.settings.honeypot) $('#' + this.form[0].id + ' .nos-div-hp-js').css('display', 'none');
 
             // run validation
-            if (this.settings.validate) this._validate(this.settings.fields), this._addMessage();
+            if (this.settings.validate) {
 
-            // form submit function
-            // runs validation and passes submit object to user
-            this.form.submit(function (e) {
+                this._validate(this.settings.fields);
 
-                // prevent default form submit
-                e.preventDefault();
+                this._addMessage();
 
-                // run submit form validation, unless user specifies not to
-                self._submitValidation($(this));
+            }
 
-            });
+            return this;
+
         }
     });
 
@@ -1463,8 +1491,6 @@
                 $.data(this, 'plugin_nosForm', null);
             }
 
-            // INIT EVENT
-            if (options && options.init) return options.init($(this));
 
         });
     };

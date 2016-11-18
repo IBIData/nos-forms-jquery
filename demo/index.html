@@ -28,13 +28,13 @@
     <script>
         $(function() {
 
-                $.get('login-form.json', function (data) {
+                $.get('contact-form.json', function (data) {
 
                     var form = $("#myform").nosForm({
                         fields: data,
                         animationSpeed: 50,
                         validate: true,
-                        ajax: false,
+                        ajax: true,
                         htmlValidation: false,
                         honeypot: true,
                         messages: {
@@ -45,9 +45,10 @@
                             top: false,
                             bottom: true
                         },
-                        submit: function (formdata, form) {
+                        submit: function (formdata, form, evt) {
                             console.log(formdata);
                             console.log(form);
+                            console.log(evt);
                         },
                         init: function (form) {
                             console.log(form);
@@ -55,10 +56,6 @@
                         onlySubmitWithValue: true
                     });
 
-                    $('#myform').on('nos', function () {
-                        alert('hey')
-                        console.log('rendered');
-                    });
 
 
                 });

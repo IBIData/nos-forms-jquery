@@ -44,8 +44,10 @@ $.get('contact-form.json', function (jsonData) {
 
     $("#myform").nosForm({
         fields: jsonData,
-        submit: function (formdata) {
-            console.log(formdata);
+        submit: function (formdata, $form, evt) {
+            console.log(formdata); // JSON form data
+            console.log($form); // jQuery Form Object
+            console.log(evt); // Original submit event
         }
     });
 
@@ -118,9 +120,9 @@ $("#myform").nosForm({
         top: false, // specifies the messages to be displayed on the top
         bottom: true  // specifies the messages to be displayed on the bottom
     },
-    submit: function (formdata, form) {
+    submit: function (formdata, form, evt) {
         // your submit function
-        // this will pass back the entered form data as a formatted json object and your form as a second argument
+        // this will pass back the entered form data as a formatted json object, your form as a jQuery Object, and the original submit event
     },
     init: function (form) {
         // fires after form is rendered
@@ -166,7 +168,7 @@ $("#myform").nosForm({
 
 ###**submit**
 
- Accepts a function that receives the form data passed to it. Passes two arguments: the form data and the form.
+ Accepts a function that receives the form data passed to it. Passes three arguments: the form data, the form, and the original submit event.
 
 ###**init**
 
