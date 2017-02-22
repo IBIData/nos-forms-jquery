@@ -29,7 +29,7 @@ Has built-in US telephone number validation enabled by default. If you don't req
     "disabled": false,
     "readonly": false,
     "size": 100,
-    "mask": "999-999-9999", // requires masked input plugin https://github.com/digitalBush/jquery.maskedinput
+    "mask": "999-999-9999", // requires jQuery-Mask-Plugin https://github.com/igorescobar/jQuery-Mask-Plugin
     "messages": {
         "required": "Your phone number is required",
         "invalid": "Your phone number must be valid"

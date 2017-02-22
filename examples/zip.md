@@ -25,7 +25,7 @@ Has built-in US zip code validation by default. If you don't require it, you can
     "readonly": false,
     "formGroup": true,
     "placeholder": "Zip Code",
-    "mask": "99999?-9999" // requires masked input plugin https://github.com/digitalBush/jquery.maskedinput 
+    "mask": "99999?-9999" // requires jQuery-Mask-Plugin https://github.com/igorescobar/jQuery-Mask-Plugin
 }
 ```
 

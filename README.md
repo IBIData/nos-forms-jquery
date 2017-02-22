@@ -349,7 +349,7 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 | inline            | boolean       | *Used with type 'button, submit, reset, image, checkbox, radio'* - Assigns 'inline-block' css property to element.
 | [inputGroup](./examples/properties/inputGroup.md)| object        | Adds a Bootstrap input group to the element. See [inputGroup](./examples/properties/inputGroup.md).
 | label             | string        | Adds a label before the element.
-| mask              | string        | Adds a masked input to a text element. [Requires external plugin](https://github.com/digitalBush/jquery.maskedinput).
+| mask              | string        | Adds a masked input to a text element. [Requires external plugin](https://github.com/igorescobar/jQuery-Mask-Plugin).
 | match             | string        | *Used with type 'password'* - used to match passwords when you have a 'repeat password' field. See [password](./examples/password.md).
 | max               | number        | *Used with types 'number, date, range, datetime-local, month, time, week'* - sets maximum accepted value. See [number](./examples/number.md).
 | maxFields         | number        | *Used with type 'clone'* - sets the maximum allowed fields to be dynamically generated. See [clone](./examples/clone.md).
