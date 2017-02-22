@@ -1,0 +1,8 @@
+title: Nos-forms-jquery
+description: Build and validate DRY html forms in minutes with JSON, jQuery and Bootstrap
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-slate
+
+gems:
+  - jekyll-mentions
