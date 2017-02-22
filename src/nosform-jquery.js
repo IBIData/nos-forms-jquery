@@ -735,32 +735,18 @@
 
                         case 'zip':
                             emval = $(this).val();
-                            if ($.mask && v.mask) {
-                                if ($(this).caret().begin > 0) {
-                                    _validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-zip', 'nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-zip', 'nos-invalid-zip'));
-                                }
-                                $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip nos-valid-zip'));
-                            } else {
-                                if (emval.length > 0) {
-                                    _validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-zip', 'nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-zip', 'nos-invalid-zip'));
-                                }
-                                emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip nos-valid-zip'));
+                            if (emval.length > 0) {
+                                _validator.zipcode(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-zip', 'nos-valid-zip')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-zip', 'nos-invalid-zip'));
                             }
+                            emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-zip nos-valid-zip'));
                             break;
 
                         case 'tel':
                             emval = $(this).val();
-                            if ($.mask && v.mask) {
-                                if ($(this).caret().begin > 0) {
-                                    _validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-tel', 'nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-tel', 'nos-invalid-tel'));
-                                }
-                                $(this).caret().end === 0 && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel nos-valid-tel'));
-                            } else {
-                                if (emval.length > 0) {
-                                    _validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-tel', 'nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-tel', 'nos-invalid-tel'));
-                                }
-                                emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel nos-valid-tel'));
+                            if (emval.length > 0) {
+                                _validator.phone(emval) ? ($(msg).nosSlideUp(), $(this).alterClass('nos-invalid-tel', 'nos-valid-tel')) : ($(msg).nosSlideDown(), $(this).alterClass('nos-valid-tel', 'nos-invalid-tel'));
                             }
+                            emval === '' && ($(msg).nosSlideUp(), $(this).removeClass('nos-invalid-tel nos-valid-tel'));
                             break;
 
                     }
@@ -770,8 +756,12 @@
             }
 
             function addMask(v) {
-                $.mask ? $('#' + (v.id || v.name)).mask(v.mask) : console.warn('You must include the masked input plugin to use "mask". Go here: https://github.com/digitalBush/jquery.maskedinput');
-                $('#' + (v.id || v.name)).attr('data-mask', true);
+                if ($.maskWatchers) {
+                    $('#' + (v.id || v.name)).mask(v.mask);
+                    $('#' + (v.id || v.name)).attr('data-mask', true);
+                } else {
+                    console.warn('You must include jQUery-Mask-Plugin to use "mask". Go here: https://igorescobar.github.io/jQuery-Mask-Plugin/');
+                }
             }
 
             function cloneButtons() {
@@ -1020,25 +1010,14 @@
             function validateRequiredFields() {
                 $(reqInput).each(function (i) {
                     var field = reqInput[i],
-                        msg = $form + ' .msg-required-' + field.name,
-                        mask = $(this).attr('data-mask');
+                        msg = $form + ' .msg-required-' + field.name;
                     field.value = _validator.sanitize(field.value);
-                    if (mask) {
-                        if ($(field).caret().begin < 1) {
-                            $(msg).nosSlideDown();
-                            $(this).on('keyup keydown change blur paste input', function () {
-                                if ($(this).caret().begin > 0) $(msg).nosSlideUp();
-                                if ($(this).caret().begin < 1) $(msg).nosSlideDown();
-                            });
-                        }
-                    } else {
-                        if ($(field).val().length < 1) {
-                            $(msg).nosSlideDown();
-                            $(this).on('keyup keydown change blur paste input', function () {
-                                if (this.value.length > 0) $(msg).nosSlideUp();
-                                if (this.value.length < 1) $(msg).nosSlideDown();
-                            });
-                        }
+                    if ($(field).val().length < 1) {
+                        $(msg).nosSlideDown();
+                        $(this).on('keyup keydown change blur paste input', function () {
+                            if (this.value.length > 0) $(msg).nosSlideUp();
+                            if (this.value.length < 1) $(msg).nosSlideDown();
+                        });
                     }
 
                 });

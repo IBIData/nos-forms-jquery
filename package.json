@@ -1,6 +1,6 @@
 {
   "name": "nos-forms-jquery",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "main": "./src/nosform-jquery.js",
   "author": {
     "name": "IBI Data",
@@ -29,16 +29,15 @@
   },
   "keywords": [
     "jquery",
-    "jquery plugin",
-    "build forms",
-    "json form builder",
+    "plugin",
     "form",
-    "jquery forms",
     "json",
-    "json forms",
     "bootstrap",
-    "bootstrap forms",
-    "bootstrap form builder"
+    "forms",
+    "html",
+    "validate",
+    "validation",
+    "builder"
   ],
   "devDependencies": {
     "grunt": "^1.0.1",

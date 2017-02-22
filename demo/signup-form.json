@@ -67,6 +67,15 @@
                         }
                     },
                     {
+                        "name": "phone",
+                        "type": "tel",
+                        "placeholder": "phone",
+                        "required": true,
+                        "mask": "000-000-0000",
+                        "value": "999-999-9999",
+                        "maxlength": 15
+                    },
+                    {
                         "name": "email",
                         "type": "email",
                         "placeholder": "Email Address",
