@@ -14,7 +14,7 @@
     }
   ],
   "description": "Build and validate DRY html forms in minutes with JSON, jQuery and Bootstrap",
-  "homepage": "",
+  "homepage": "http://ibidata.github.io/nos-forms-jquery/",
   "bugs": {
     "url": "https://github.com/IBIData/nos-forms-jquery/issues"
   },

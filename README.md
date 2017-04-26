@@ -296,34 +296,34 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 |---------------------------------------|-------------------------------------------------------------------------------------------------------------------|
 | [button](./examples/button.md)        | Standard HTML button element - rendered with button tag, not input.
 | [buttonGroup](./examples/buttonGroup.md)| Bootstrap Button Group
-| [checkbox]('./examples/checkbox.md)   | Standard HTML checkbox input.
-| [clone]('./examples/clone.md)         | A set of text fields with a button to add/remove fields.
-| [color]('./examples/color.md)         | Standard HTML color input.
-| [date]('./examples/date.md)           | Standard HTML date input.
-| [datetime-local]('./examples/datetime-local.md)| Standard HTML datetime-local input.
-| [email]('./examples/email.md)         | Standard HTML email input. Email validation is built in, but optional.
-| [file]('./examples/file.md)           | Standard HTML file input.
-| [hidden]('./examples/hidden.md)       | Standard HTML hidden input.
-| [html]('./examples/html.md)           | Enter your own html string.
-| [image]('./examples/image.md)         | Standard HTML image input.
-| [label]('./examples/label.md)         | Standard HTML label element.
-| [month]('./examples/month.md)         | Standard HTML month input.
-| [number]('./examples/number.md)       | Standard HTML number input.
-| [password]('./examples/password.md)   | Standard HTML password input.
-| [radio]('./examples/radio.md)         | Standard HTML radio input.
-| [range]('./examples/range.md)         | Standard HTML range input.
-| [reset]('./examples/reset.md)         | Standard HTML reset button element - rendered with button tag, not input. Will automatically reset your form without configuration.
-| [search]('./examples/search.md)       | Standard HTML search input.
-| [select]('./examples/select.md)       | Standard HTML select element.
-| [state]('./examples/state.md)         | Sets all 50 US states in a select element. Also able to add US Territories, Mexican states, and Canadian Provinces.
-| [submit]('./examples/submit.md)       | Standard HTML submit button element - rendered with button tag, not input.
-| [tel]('./examples/tel.md)             | Standard HTML tel input. Phone validation is built in, but optional.
-| [text]('./examples/text.md)           | Standard HTML text input.
-| [textarea]('./examples/textarea.md)   | Standard HTML textarea element.
-| [time]('./examples/time.md)           | Standard HTML time input.
-| [url]('./examples/url.md)             | Standard HTML url input.
-| [week]('./examples/week.md)           | Standard HTML week input.
-| [zip]('./examples/zip.md)             | HTML text input with zip code validation built in, but optional.
+| [checkbox](./examples/checkbox.md)   | Standard HTML checkbox input.
+| [clone](./examples/clone.md)         | A set of text fields with a button to add/remove fields.
+| [color](./examples/color.md)         | Standard HTML color input.
+| [date](./examples/date.md)           | Standard HTML date input.
+| [datetime-local](./examples/datetime-local.md)| Standard HTML datetime-local input.
+| [email](./examples/email.md)         | Standard HTML email input. Email validation is built in, but optional.
+| [file](./examples/file.md)           | Standard HTML file input.
+| [hidden](./examples/hidden.md)       | Standard HTML hidden input.
+| [html](./examples/html.md)           | Enter your own html string.
+| [image](./examples/image.md)         | Standard HTML image input.
+| [label](./examples/label.md)         | Standard HTML label element.
+| [month](./examples/month.md)         | Standard HTML month input.
+| [number](./examples/number.md)       | Standard HTML number input.
+| [password](./examples/password.md)   | Standard HTML password input.
+| [radio](./examples/radio.md)         | Standard HTML radio input.
+| [range](./examples/range.md)         | Standard HTML range input.
+| [reset](./examples/reset.md)         | Standard HTML reset button element - rendered with button tag, not input. Will automatically reset your form without configuration.
+| [search](./examples/search.md)       | Standard HTML search input.
+| [select](./examples/select.md)       | Standard HTML select element.
+| [state](./examples/state.md)         | Sets all 50 US states in a select element. Also able to add US Territories, Mexican states, and Canadian Provinces.
+| [submit](./examples/submit.md)       | Standard HTML submit button element - rendered with button tag, not input.
+| [tel](./examples/tel.md)             | Standard HTML tel input. Phone validation is built in, but optional.
+| [text](./examples/text.md)           | Standard HTML text input.
+| [textarea](./examples/textarea.md)   | Standard HTML textarea element.
+| [time](./examples/time.md)           | Standard HTML time input.
+| [url](./examples/url.md)             | Standard HTML url input.
+| [week](./examples/week.md)           | Standard HTML week input.
+| [zip](./examples/zip.md)             | HTML text input with zip code validation built in, but optional.
 
 
 ## Properties ##
