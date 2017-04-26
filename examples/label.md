@@ -1,5 +1,5 @@
-#Type
-##Label
+# Type #
+## Label ##
 
 Render a label element.
 

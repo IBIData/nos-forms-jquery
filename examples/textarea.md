@@ -1,7 +1,7 @@
-#Type
-##textarea
+# Type #
+## textarea ##
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -27,7 +27,7 @@
 }
 ```
 
-####More practical example
+#### More practical example ####
 
 ```javascript
 {

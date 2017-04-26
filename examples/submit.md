@@ -1,9 +1,9 @@
-#Type
-##submit
+# Type #
+## submit ##
 
 > As a side note, with buttons the name property doesn't actually assign it a name attribute, but an id instead.
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -26,7 +26,7 @@
 }
 ```
 
-####More practical example
+#### More practical example ####
 
 ```javascript
 {

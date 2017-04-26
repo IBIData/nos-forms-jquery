@@ -1,7 +1,7 @@
-#Type
-##radio
+# Type #
+## radio ##
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -25,7 +25,7 @@
 }
 ```
 
-####More practical example
+#### More practical example ####
 
 ```javascript
 {
@@ -43,7 +43,7 @@
 }
 ```
 
-##Radio Options
+## Radio Options ##
 
 There are a few ways to enter your radio options.
 
@@ -61,7 +61,7 @@ There are a few ways to enter your radio options.
 ```javascript
 "options": [
     {
-        "value1": "First Option"   
+        "value1": "First Option"
     },
     {
         "value2": "Second Option"
@@ -74,6 +74,6 @@ There are a few ways to enter your radio options.
 ```javascript
 "options": [
     "First Option",
-    "Second Option"   
+    "Second Option"
 ]
 ```

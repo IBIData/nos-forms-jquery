@@ -1,9 +1,9 @@
-#Property
-##inputGroup
+# Property #
+## inputGroup ##
 
 Render your text element as a Bootstrap input group.
 
-####Input Group with text addons
+#### Input Group with text addons ####
 
 ```javascript
 
@@ -21,7 +21,7 @@ Render your text element as a Bootstrap input group.
 
 ```
 
-####Input Group with button addons
+#### Input Group with button addons ####
 
 ```javascript
 
@@ -38,7 +38,7 @@ Render your text element as a Bootstrap input group.
 
 ```
 
-####Input Group with glyphicon addons
+#### Input Group with glyphicon addons ####
 
 ```javascript
 

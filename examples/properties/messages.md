@@ -1,9 +1,9 @@
-#Property
-##messages
+# Property #
+## messages ##
 
 Override the default validation messages for individual elements.
 
-####Default values
+#### Default values ####
 
 ```javascript
 "messages": {

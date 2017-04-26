@@ -1,7 +1,7 @@
-#Type
-##checkbox
+# Type #
+## checkbox ##
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -27,7 +27,7 @@
 }
 ```
 
-####More practical example
+#### More practical example ####
 
 ```javascript
 {
@@ -38,7 +38,7 @@
     "submit": "object",
     "inline": false,
     "checked": "value2",
-    "options": { 
+    "options": {
         "value1": "First Option",
         "value2": "Second Option",
         "value3": "Third Option"
@@ -46,7 +46,7 @@
 }
 ```
 
-##Checkbox Options
+## Checkbox Options ##
 
 There are a few ways to enter your checkbox options.
 
@@ -64,7 +64,7 @@ There are a few ways to enter your checkbox options.
 ```javascript
 "options": [
     {
-        "value1": "First Option"   
+        "value1": "First Option"
     },
     {
         "value2": "Second Option"
@@ -77,11 +77,11 @@ There are a few ways to enter your checkbox options.
 ```javascript
 "options": [
     "First Option",
-    "Second Option"   
+    "Second Option"
 ]
 ```
 
-##Submit Type
+## Submit Type ##
 
 This is a special property for checkboxes that will determine how your data will be submitted to your success function. The choices are as follows:
 
@@ -96,10 +96,10 @@ This is a special property for checkboxes that will determine how your data will
 ```
 
  - array - sends back all checked options as an array
- 
+
 ```javascript
 [
-    "value1", "value2"   
+    "value1", "value2"
 ]
 ```
 

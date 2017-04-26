@@ -1,6 +1,6 @@
 {
   "name": "nos-forms-jquery",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "./src/nosform-jquery.js",
   "author": {
     "name": "IBI Data",
@@ -24,9 +24,6 @@
     "type": "git",
     "url": "https://github.com/IBIData/nos-forms-jquery.git"
   },
-  "scripts": {
-    "test": "grunt travis --verbose"
-  },
   "keywords": [
     "jquery",
     "plugin",
@@ -39,6 +36,9 @@
     "validation",
     "builder"
   ],
+  "dependencies": {
+    "jquery": ">=1.9.0"
+  },
   "devDependencies": {
     "grunt": "^1.0.1",
     "grunt-cli": "^1.2.0",

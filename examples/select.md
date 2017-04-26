@@ -1,7 +1,7 @@
-#Type
-##select
+# Type #
+## select ##
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -22,7 +22,7 @@
     "title": "Select Example",
     "multiple": false,
     "selected": "", // by setting the selected option to a blank string, we are selecting the blank value in the options object below
-    "options": { 
+    "options": {
         "": "Select One...",
         "value1": "First Value",
         "value2": "Second Value",   // accepts an object or an array of objects
@@ -32,7 +32,7 @@
 }
 ```
 
-####More practical example
+#### More practical example ####
 
 ```javascript
 {
@@ -41,7 +41,7 @@
     "label": "Select Example",
     "required": true,
     "selected": "", // by setting the selected option to a blank string, we are selecting the blank value in the options object below
-    "options": { 
+    "options": {
         "": "Select One...",
         "value1": "First Value",
         "value2": "Second Value",   // accepts an object, array, or an array of objects
@@ -51,7 +51,7 @@
 }
 ```
 
-##Select Options
+## Select Options ##
 
 There are a few ways to enter your select options.
 
@@ -69,7 +69,7 @@ There are a few ways to enter your select options.
 ```javascript
 "options": [
     {
-        "value1": "First Value"   
+        "value1": "First Value"
     },
     {
         "value2": "Second Value"
@@ -82,6 +82,6 @@ There are a few ways to enter your select options.
 ```javascript
 "options": [
     "First Value",
-    "Second Value"   
+    "Second Value"
 ]
 ```

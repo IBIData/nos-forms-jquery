@@ -1,5 +1,5 @@
-#Type
-##buttonGroup
+# Type #
+## buttonGroup ##
 
 ```javascript
 {
@@ -7,7 +7,7 @@
     "type": "buttonGroup",
     "classname": "", // assigns class to the buttonGroup div
     "vertical": false, // stack buttons vertically
-    "formGroup": true, 
+    "formGroup": true,
     "label": "Button Groups",
     "buttons": [
         {

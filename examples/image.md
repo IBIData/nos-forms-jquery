@@ -1,5 +1,5 @@
-#Type
-##image
+# Type #
+## image ##
 
 ```javascript
 {

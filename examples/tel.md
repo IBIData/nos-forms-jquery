@@ -1,9 +1,9 @@
-#Type
-##tel
+# Type #
+## tel ##
 
 Has built-in US telephone number validation enabled by default. If you don't require this, you can disable it with the 'validate' property.
 
-####tel
+#### tel ####
 ```javascript
 {
     "name": "telExample",
@@ -37,7 +37,7 @@ Has built-in US telephone number validation enabled by default. If you don't req
 }
 ```
 
-####tel
+#### tel ####
 ```javascript
 {
     "name": "telExample",

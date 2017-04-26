@@ -1,7 +1,7 @@
-#Type
-##color
+# Type #
+## color ##
 
-####Example with all options
+#### Example with all options ####
 ```javascript
 {
     "name": "colorexample",
@@ -22,7 +22,7 @@
 }
 ```
 
-####More practical example
+#### More practical example ####
 ```javascript
 {
     "name": "colorexample",

@@ -1,9 +1,9 @@
-#Type
-##clone
+# Type #
+## clone ##
 
 A clone field is basically a set of text boxes with add/remove buttons. This allows users to dynamically generate their own fields. This could be useful when a user has to submit an undetermined amount of information, such as recipe ingredients, book titles, etc.
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {

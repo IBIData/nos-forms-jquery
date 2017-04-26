@@ -1,9 +1,9 @@
-#Type
-##file
+# Type #
+## file ##
 
 Because the handling of file uploads can vary, your files will submitted to your success function as a filelist. From there, you are free to handle them appropriately.
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -27,7 +27,7 @@ Because the handling of file uploads can vary, your files will submitted to your
 }
 ```
 
-####More practical example
+#### More practical example ####
 
 ```javascript
 {
@@ -41,7 +41,7 @@ Because the handling of file uploads can vary, your files will submitted to your
 }
 ```
 
-###Submitting files to server
+### Submitting files to server ###
 
 The easiest way to submit form fields and files simultaneously. Although you will have to delete any unnecessary fields (eg: buttons, honeypots, etc).
 
@@ -65,7 +65,7 @@ submit: function (formdata) {
 }
 ```
 
-####Submitting files to server - Single file
+#### Submitting files to server - Single file ####
 
 Sometimes it's just easier to manually append file names to a FormData object.
 
@@ -92,7 +92,7 @@ submit: function (formdata) {
 }
 ```
 
-####Submitting files to server - Multiple files
+#### Submitting files to server - Multiple files ####
 ```javascript
 submit: function (formdata) {
     var fd = new FormData();
@@ -104,7 +104,7 @@ submit: function (formdata) {
     delete formdata.myfilefield;
     // loop through the fields and append them to the formData object
     $.each(formdata, function (k, v) {
-        fd.append(k, v); 
+        fd.append(k, v);
     });
     $.ajax({
         url: './upload',

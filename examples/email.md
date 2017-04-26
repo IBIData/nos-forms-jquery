@@ -1,9 +1,9 @@
-#Type
-##email
+# Type #
+## email ##
 
 Has built-in email validation enabled by default. If you don't require this, you can disable it with the 'validate' property.
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -31,13 +31,13 @@ Has built-in email validation enabled by default. If you don't require this, you
     "readonly": false,
     "size": 100,
     "messages": {
-        "required": "Email Address is required",  
+        "required": "Email Address is required",
         "invalid": "Your email must be valid"
     }
 }
 ```
 
-####More practical example
+#### More practical example ####
 
 ```javascript
 {

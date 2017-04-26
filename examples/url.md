@@ -1,7 +1,7 @@
-#Type
-##url
+# Type #
+## url ##
 
-####Example with all options
+#### Example with all options ####
 ```javascript
 {
     "name": "urlExample",
@@ -26,7 +26,7 @@
 }
 ```
 
-####More practical example
+#### More practical example ####
 ```javascript
 {
     "name": "urlExample",

@@ -29,7 +29,7 @@
     <script>
         $(function() {
 
-                $.get('signup-form.json', function (data) {
+                $.get('login-form.json', function (data) {
 
                     var form = $("#myform").nosForm({
                         fields: data,
@@ -47,14 +47,19 @@
                             bottom: true
                         },
                         submit: function (formdata, form, evt) {
-                            console.log(formdata);
-                            console.log(form);
-                            console.log(evt);
+                            console.log('regular submit');
+                            // console.log(formdata);
+                            // console.log(form);
+                            // console.log(evt);
                         },
                         init: function (form) {
-                            console.log(form);
+                            // console.log(form);
                         },
                         onlySubmitWithValue: true
+                    })
+
+                    .on('nos.submit', function (e, data) {
+                        console.log(data.formdata);
                     });
 
 

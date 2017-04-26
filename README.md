@@ -1,4 +1,4 @@
-#Nos-Forms-jQuery
+# Nos-Forms-jQuery #
 
 **Quickly generate and validate html forms with jQuery, Bootstrap and json.**
 
@@ -8,14 +8,14 @@ This plugin is intended for people who spend a lot of time building tedious form
 
 - IE 8 supported
 
-##Dependencies
+## Dependencies ##
 ----------------------------------------
 
 - [jQuery](http://jquery.com/download/) - minimum version 1.9
 
 - [Bootstrap](http://getbootstrap.com/getting-started/) - minimum version 3.0
 
-##Getting Started
+## Getting Started ##
 ----------------------------------------
 
 1. Include js and css file from 'dist' directory
@@ -24,12 +24,12 @@ This plugin is intended for people who spend a lot of time building tedious form
 
 3. Call nosForm function, specifying your data and options
 
-##Quick Example
+## Quick Example ##
 ----------------------------------------
 
 A simple contact form built with [Bootstrap](http://getbootstrap.com). This form will be sanitized and validated.
 
-####index.html
+#### index.html ####
 
 ```html
 <form id="myform" class="form">
@@ -37,7 +37,7 @@ A simple contact form built with [Bootstrap](http://getbootstrap.com). This form
 </form>
 ```
 
-####js file
+#### js file ####
 
 ```javascript
 $.get('contact-form.json', function (jsonData) {
@@ -53,7 +53,7 @@ $.get('contact-form.json', function (jsonData) {
 
 })
 ```
-####contact-form.json
+#### contact-form.json ####
 
 > Note: you don't have to store your config in a json file. You can just write this in your plugin initilization as JavaScript.
 
@@ -98,7 +98,7 @@ $.get('contact-form.json', function (jsonData) {
 ]
 ```
 
-##Options
+## Options ##
 ----------------------------------------
 
 All options with default values
@@ -131,53 +131,60 @@ $("#myform").nosForm({
 });
 ```
 
-###**fields**
+### **fields** ###
 
  Accepts an object with your form element structure. This was originally intended to be imported from a json file (for easy reuse of forms), but you can write the object in your js file as well. This allows you to write your own functions that return the correct values to individual fields.
 
-###**ajax**
+### **ajax** ###
 
  Accepts a boolean value. If set to true, your form will send a serialized object to your submit function, where you will be responsible for sending an ajax request with your form data. If set to false, a classic form submit will occur and your submit function will not be necessary. If you set ajax to false and a submit function is still present, you will still receive the form data as usual and you will have to manually submit the form. This can be useful for deleting out fields you don't want to send to the server (e.g.: confirm password fields) or if you need to manually check something before sending the form. **Worth noting:**: never name your submit button 'submit' or your form will not submit properly.
 
-###**validate**
+### **validate** ###
 
  Accepts a boolean value. Toggles the build-in validation on or off. If for some reason you don't need validation, turn this off.
 
-###**htmlValidate**
+### **htmlValidate** ###
 
  Accepts a boolean value. Toggles the html5 validation on or off. Basically, this is just adding and removing a 'novalidate' tag from the form.
 
-###**animationSpeed**
+### **animationSpeed** ###
 
  Accepts a number value (milliseconds). Controls the speed of the validation messages popping in and out of form fields.
 
-###**honeypot**
+### **honeypot** ###
 
  Accepts a boolean. Optionally, there are two honeypot text fields rendered on each form (one is empty and one has a preset value). Both are hidden by CSS and JS. If either are modified, the form data will be ignored and the plugin will submit an object instead: **{ honeypot: true }**. You are free to handle this however needed in your submit function.
 
-###**onlySubmitWithValue**
+### **onlySubmitWithValue** ###
 
  Accepts a boolean. When this field is set to true, only fields that have a value will be sent to your submit function. This essentially will ignore any field that a user has not filled out. This can be useful when you have a lot of optional fields and you don't want to post all of them all the time.
 
-###**messages**
+### **messages** ###
 
  Accepts two properties with string values: 'required' and 'invalid'. These are the two messages that are positioned below each form. On an unsuccessful form submit, the appropriate message will be displayed to the user. If not modified, they will display the default values shown above.
 
-###**messageLocation**
+### **messageLocation** ###
  Accepts two properties with boolean values: 'top' and 'bottom'. These settings determine the location of the user error messages to be displayed on an invalid form submit attempt.
 
-###**submit**
+### **submit** ###
 
  Accepts a function that receives the form data passed to it. Passes three arguments: the form data, the form, and the original submit event.
 
-###**init**
+### **init** ###
 
  Function that will fire as soon as the form renders. Passes the form as it's only argument.
 
-##Structure
- ---
+## Events ##
+-----
 
-##Single Columns
+### **nos.submit** ###
+
+Triggered on submit. Callback parameters are the event, followed by an object containing the formdata, form element, and original submit event.
+
+## Structure ##
+ -----
+
+## Single Columns ##
 
 These are pretty standard.
 
@@ -192,7 +199,7 @@ These are pretty standard.
 ]
 ```
 
-##Multiple Columns
+## Multiple Columns ##
 
 If you would like a form to work with multiple columns, you just have to format your json data a little different.
 
@@ -225,7 +232,7 @@ If you would like a form to work with multiple columns, you just have to format 
 ]
 ```
 
-##Nesting Columns
+## Nesting Columns ##
 
 Nesting columns can be accomplished by declaring a row where needed.
 
@@ -281,7 +288,7 @@ Nesting columns can be accomplished by declaring a row where needed.
 
 This format allows you to create your form elements in blocks. Adding Bootstrap classes makes it easy for you to display your form in a column layout. Add as many columns and nest them as deep as you like.
 
-##Types
+## Types ##
 
 ---
 
@@ -319,7 +326,7 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 | [zip]('./examples/zip.md)             | HTML text input with zip code validation built in, but optional.
 
 
-##Properties
+## Properties ##
 
 ---
 
@@ -380,7 +387,7 @@ This format allows you to create your form elements in blocks. Adding Bootstrap 
 | wrap              | string        | *Used with type 'textarea'* - Sets HTML wrap attribute.
 
 
-##Validation
+## Validation ##
 ---
 
 By default, validation will happen when you specify certain properties in your json file. All fields will be checked for values and sanitized. Error messages will be generated, and it will basically take care of itself.
@@ -399,7 +406,7 @@ By default, validation will happen when you specify certain properties in your j
 
 - ***match*** - enter in the id of an element to check against. This will check that these values match (Mostly for password confirmation). You can customize the error message with the 'invalid' message.
 
-###Validation Messages
+### Validation Messages ###
 
 ----------------------------------------
 
@@ -431,7 +438,7 @@ There are five specific types of message that can appear for each field:
 
 There are also some default form messages that will display on the bottom of the form if the user tries to submit unsuccessfully. These can be customized in the plugin initilization, as mentioned in the 'Options' section.
 
-##Destroy Method
+## Destroy Method ##
 
 ------------------------------------------
 

@@ -1,7 +1,7 @@
-#Type
-##number
+# Type #
+## number ##
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -26,12 +26,12 @@
     "step": 1,
     "messages": {
         "min": "Your number must have a minimum value of 5",
-        "max": "Your number must be no greater than 10"   
+        "max": "Your number must be no greater than 10"
     }
 }
 ```
 
-####More practical example
+#### More practical example ####
 
 ```javascript
 {
@@ -44,7 +44,7 @@
     "step": 1,
     "messages": {
         "min": "Your number must have a minimum value of 5",
-        "max": "Your number must be no greater than 10"   
+        "max": "Your number must be no greater than 10"
     }
 }
 ```

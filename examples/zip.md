@@ -1,9 +1,9 @@
-#Type
-##zip
+# Type #
+## zip ##
 
 Has built-in US zip code validation by default. If you don't require it, you can disable it with the 'validate' property.
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -29,7 +29,7 @@ Has built-in US zip code validation by default. If you don't require it, you can
 }
 ```
 
-####More practical example
+#### More practical example ####
 
 ```javascript
 {

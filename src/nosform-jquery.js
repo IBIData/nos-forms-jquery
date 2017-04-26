@@ -26,10 +26,8 @@
             bottom: true
         },
         onlySubmitWithValue: false,
-        init: function () {
-            return null;
-        },
-        submit: null
+        init: function () { },
+        submit: function () { }
     };
 
     // The plugin constructor
@@ -1089,6 +1087,13 @@
                     if ($($form + ' .nos-text-css').val() === '' && $($form + ' .nos-email-js').val() === 'validemail@email.com') {
                         if (self.settings.ajax) {
                             self.settings.submit(formdata, $($form), evt);
+                            self.form.trigger('nos.submit', [
+                                {
+                                    formdata: formdata,
+                                    form: $($form),
+                                    submitEvent: evt
+                                }
+                            ]);
                         } else {
                             $('div.nos-div-hp-css').remove();
                             $('div.nos-div-hp-js').remove();
@@ -1097,6 +1102,13 @@
                     } else {
                         if (self.settings.ajax) {
                             self.settings.submit({ honeypot: true }, $($form), evt);
+                            self.form.trigger('nos.submit', [
+                                {
+                                    formdata: formdata,
+                                    form: $($form),
+                                    submitEvent: evt
+                                }
+                            ]);
                         } else {
                             self.form.empty();
                             self.form.append('<input type="text" value="true" name="honeypot">');
@@ -1107,6 +1119,13 @@
                 else {
                     if (self.settings.ajax) {
                         self.settings.submit(formdata, $($form), evt);
+                        self.form.trigger('nos.submit', [
+                            {
+                                formdata: formdata,
+                                form: $($form),
+                                submitEvent: evt
+                            }
+                        ]);
                     } else {
                         classicSubmit();
                     }
@@ -1147,7 +1166,7 @@
             var self = this;
 
             // Init event
-            self.form.on('init.nos', function () {
+            self.form.on('nos.init', function () {
                 self.settings.init(self.form);
             });
 
@@ -1438,7 +1457,7 @@
             this._bindEvents();
 
             // Trigger init event
-            this.form.trigger('init.nos');
+            this.form.trigger('nos.init');
 
             // run validation
             if (this.settings.validate) {

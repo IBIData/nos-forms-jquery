@@ -1,7 +1,7 @@
-#Type
-##password
+# Type #
+## password ##
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -32,9 +32,9 @@
 }
 ```
 
-##Repeat password example
+## Repeat password example ##
 
-Used mainly for signup forms, this will allow you to easily verify passwords. 
+Used mainly for signup forms, this will allow you to easily verify passwords.
 
 Using the match property, you can pass in the id of the first password field to make sure they are identical.
 
@@ -62,6 +62,6 @@ Using the match property, you can pass in the id of the first password field to 
     "messages": {
         "required": "You must enter your password again!",
         "invalid": "Your passwords do not match!"
-    }   
+    }
 }
 ```

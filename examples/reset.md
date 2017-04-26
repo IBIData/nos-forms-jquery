@@ -1,9 +1,9 @@
-#Type
-##reset
+# Type #
+## reset ##
 
 By default, the reset button will reset your form.
 
-####Example with all options
+#### Example with all options ####
 
 ```javascript
 {
@@ -21,7 +21,7 @@ By default, the reset button will reset your form.
 }
 ```
 
-####More practical example
+#### More practical example ####
 
 ```javascript
 {
