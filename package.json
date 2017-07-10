@@ -1,6 +1,6 @@
 {
   "name": "nos-forms-jquery",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "main": "./src/nosform-jquery.js",
   "author": {
     "name": "IBI Data",
