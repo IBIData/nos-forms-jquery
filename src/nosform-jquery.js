@@ -26,8 +26,8 @@
             bottom: true
         },
         onlySubmitWithValue: false,
-        init: function () { },
-        submit: function () { }
+        init: null,
+        submit: null
     };
 
     // The plugin constructor
@@ -1134,11 +1134,17 @@
 
             // classic submit (no ajax)
             function classicSubmit() {
+
+                // Unbind submit event
+                self.form.off('submit nos.submit');
+
+                // If there is a submit handler, just call it.
+                // Gives user opportunity to do some processing before manually submitting the form
                 if (self.settings.submit) {
-                    self.form.off('submit');
                     self.settings.submit(formdata, $($form), evt);
+                } else {
+                    self.form.submit();
                 }
-                else self.form.off('submit').submit();
             }
 
             if (clone.length) buildClone();
