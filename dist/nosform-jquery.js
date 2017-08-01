@@ -1,5 +1,5 @@
 /*
- *  nos-forms-jquery - v2.0.1
+ *  nos-forms-jquery - v2.0.2
  *  Build and validate DRY html forms in minutes with JSON, jQuery and Bootstrap
  *  http://ibidata.github.io/nos-forms-jquery/
  *
@@ -1181,7 +1181,7 @@
 
             // Init event
             self.form.on('nos.init', function () {
-                self.settings.init(self.form);
+                if (self.settings.init) self.settings.init(self.form);
             });
 
 

@@ -1173,7 +1173,7 @@
 
             // Init event
             self.form.on('nos.init', function () {
-                self.settings.init(self.form);
+                if (self.settings.init) self.settings.init(self.form);
             });
 
 
