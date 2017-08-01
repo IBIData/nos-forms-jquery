@@ -1,5 +1,5 @@
 /*
- *  nos-forms-jquery - v2.0.2
+ *  nos-forms-jquery - v2.0.3
  *  Build and validate DRY html forms in minutes with JSON, jQuery and Bootstrap
  *  http://ibidata.github.io/nos-forms-jquery/
  *
@@ -596,7 +596,10 @@
             },
 
             zipcode: function (zip) {
-                return /^\d{5}(-\d{4})?$/.test(zip);
+                var usZip = /^\d{5}(-\d{4})?$/.test(zip);
+                var mexicoZip = /^\\d{5}$/.test(zip);
+                var canadaZip = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(zip);
+                return usZip || mexicoZip || canadaZip;
             },
 
             // sanitizes text-based form inputs

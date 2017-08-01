@@ -588,7 +588,10 @@
             },
 
             zipcode: function (zip) {
-                return /^\d{5}(-\d{4})?$/.test(zip);
+                var usZip = /^\d{5}(-\d{4})?$/.test(zip);
+                var mexicoZip = /^\\d{5}$/.test(zip);
+                var canadaZip = /^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(zip);
+                return usZip || mexicoZip || canadaZip;
             },
 
             // sanitizes text-based form inputs
